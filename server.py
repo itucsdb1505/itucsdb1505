@@ -3,10 +3,11 @@ import os
 
 from flask import Flask
 from flask import render_template
+from DataBaseSetup import *
 
 
 app = Flask(__name__)
-
+dataBaseSetup = DataBaseSetup()
 
 @app.route('/')
 def home():
@@ -15,10 +16,20 @@ def home():
 
 
 if __name__ == '__main__':
-    VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
-    if VCAP_APP_PORT is not None:
-        port, debug = int(VCAP_APP_PORT), False
-    else:
-        port, debug = 5000, True
+    try:
+        VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
 
-    app.run(host='0.0.0.0', port=port, debug=debug)
+        if VCAP_APP_PORT is not None:
+            port, debug = int(VCAP_APP_PORT), False
+        else:
+            port, debug = 5000, True
+
+
+        dataBaseSetup.makeConnection(VCAP_APP_PORT)
+
+        app.run(host='0.0.0.0', port=port, debug= True)
+
+    except:
+        print("Error in server setup. Exception: ")
+        print(sys.exc_info()[0])
+
