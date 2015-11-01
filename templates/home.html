@@ -1,19 +1,57 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Home</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-  </head>
-  <body>
-    <h1>Hello, Flask!</h1>
-    <h1>Hello, I am Emre!</h1>
-    <h1>Hello, I am Nurullah...</h1>
-    <h1>Hello, I am an Alien!!</h1>
-    <h1>Git commit for emin</h1>
-    <h1>Sry for latency, caghan</h1>
-    <footer>
-      <div id="datetime">{{ current_time }}</div>
-    </footer>
-  </body>
+<head>
+<meta charset="utf-8" />
+<title>Home</title>
+<link rel="stylesheet"
+	href="{{ url_for('static', filename='style.css') }}" />
+
+
+
+   <meta charset='utf-8'>
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="{{ url_for('static', filename='cssmenu/styles.css') }}"/>
+   <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+   <script src="{{ url_for('static', filename='/cssmenu/script.js') }}"></script>
+</head>
+<body>
+	{% extends "layout.html" %} {% block header %}
+	<header>
+		<div id='cssmenu'>
+			<ul>
+				<li class='active'><a href='#'><span>Home</span></a></li>
+				<li class='has-sub'><a href='#'><span>Products</span></a>
+					<ul>
+						<li><a href='#'><span>Product 1</span></a></li>
+						<li><a href='#'><span>Product 2</span></a></li>
+						<li class='last'><a href='#'><span>Product 3</span></a></li>
+					</ul></li>
+				<li class='has-sub'><a href='#'><span>About</span></a>
+					<ul>
+						<li><a href='#'><span>Company</span></a></li>
+						<li class='last'><a href='#'><span>Contact</span></a></li>
+					</ul></li>
+				<li class='last'><a href='#'><span>Contact</span></a></li>
+			</ul>
+		</div>
+	</header>
+	{% endblock %} {% block content %}
+	<hr>
+	<h1>Hello, Flask!</h1>
+	<h1>Hello, I am Emre!</h1>
+	<h1>Hello, I am Nurullah...</h1>
+	<h1>Hello, I am an Alien!!</h1>
+	<h1>Git commit for emin</h1>
+	<h1>Sry for latency, caghan</h1>
+
+	</br> Database check
+	</br> {{ data }}
+	<hr>
+	{% endblock %} {% block footer %}
+	<footer>
+		<div id="datetime">{{ current_time }}</div>
+	</footer>
+	{% endblock %}
+</body>
 </html>
