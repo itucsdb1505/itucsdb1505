@@ -1,4 +1,6 @@
 applications:
+- services:
+  - ElephantSQL-4m
 - disk_quota: 1024M
   host: itucsdb1505
   name: itucsdb1505
