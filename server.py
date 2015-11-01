@@ -12,7 +12,8 @@ dataBaseSetup = DataBaseSetup()
 @app.route('/')
 def home():
     now = datetime.datetime.now()
-    return render_template('home.html', current_time=now.ctime())
+
+    return render_template('home.html', current_time=now.ctime(), data = dataBaseSetup.initiateDataBase())
 
 
 if __name__ == '__main__':
@@ -23,7 +24,6 @@ if __name__ == '__main__':
             port, debug = int(VCAP_APP_PORT), False
         else:
             port, debug = 5000, True
-
 
         dataBaseSetup.makeConnection(VCAP_APP_PORT)
 

@@ -5,9 +5,9 @@ import os
 class DataBaseSetup:
 
     def __init__(self):
-        pass
+        self.cursor = None
 
-    def initiateDataBase(self, cursor):
+    def initiateDataBase(self):
         try:
             #read sqlFile commands from SQLFile
             with open("initialDB.sql") as SQLFile:
@@ -15,12 +15,11 @@ class DataBaseSetup:
 
                 #execute commands readed
                 for transaction in sqlFile:
-                    cursor.execute(transaction)
+                    self.cursor.execute(transaction)
 
-
-            cursor.execute("""select * from test""")
-            data = cursor.fetchall();
-            print(data);
+            self.cursor.execute("""select * from test""")
+            data = self.cursor.fetchall();
+            return data
         except:
             print("Database could not initialized.")
 
@@ -37,12 +36,9 @@ class DataBaseSetup:
             connection = psycopg2.connect(connection_info)
 
             # connection.cursor will return a cursor object, you can use this cursor to perform queries
-            cursor = connection.cursor()
+            self.cursor = connection.cursor()
 
             print("Connected!\n")
-
-            if VCAP_APP_PORT is None:
-                self.initiateDataBase(cursor)
 
         except:
             print("Could not connected to database.")
