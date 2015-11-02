@@ -22,6 +22,7 @@ class DataBaseSetup:
 
                 self.connection.commit()
 
+                print("Database initialized.")
         except:
             print("Database could not initialized.")
 
