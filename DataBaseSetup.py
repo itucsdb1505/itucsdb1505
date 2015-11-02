@@ -4,7 +4,7 @@ import os
 
 class DataBaseSetup:
 
-    cursor = None
+    connection = None
 
     def __init__(self):
         pass
@@ -14,11 +14,13 @@ class DataBaseSetup:
             #read sqlFile commands from SQLFile
             with open("initialDB.sql") as SQLFile:
                 sqlFile = SQLFile.readlines()
-
+                cursor = self.connection.cursor()
                 #execute commands readed
                 for transaction in sqlFile:
                     if transaction != '\n':
-                        self.cursor.execute(transaction)
+                        cursor.execute(transaction)
+
+                self.connection.commit()
 
         except:
             print("Database could not initialized.")
@@ -33,10 +35,7 @@ class DataBaseSetup:
                 connection_info = "host='localhost' dbname='itucsdb' user='postgres' password='12345'"
 
              # get a connection, if a connect cannot be made an exception will be raised here
-            connection = psycopg2.connect(connection_info)
-
-            # connection.cursor will return a cursor object, you can use this cursor to perform queries
-            self.cursor = connection.cursor()
+            self.connection = psycopg2.connect(connection_info)
 
             print("Connected!\n")
 

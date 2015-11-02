@@ -18,10 +18,9 @@ def home():
 
 @app.route('/userManagement')
 def userManagement():
-
-    #dataBaseSetup.cursor.execute("""select * from USERS;""")
-    #USERLIST = dataBaseSetup.cursor.fetchall();
-    return render_template('userManagement.html', locals())
+    cursor = dataBaseSetup.connection.cursor()
+    cursor.execute("""select * from USERS;""")
+    return render_template('userManagement.html', userList = cursor.fetchall())
 
 
 @app.route('/addUser' , methods = ['POST'])
@@ -35,9 +34,10 @@ def addUser():
 @app.route('/initiateDB')
 def initiateDB():
     dataBaseSetup.initiateDataBase()
-    dataBaseSetup.cursor.execute("""select * from test;""")
+    cursor = dataBaseSetup.connection.cursor()
+    cursor.execute("""select * from test;""")
     now = datetime.datetime.now()
-    return render_template('initiateDB.html', current_time=now.ctime(), data = dataBaseSetup.cursor.fetchall())
+    return render_template('initiateDB.html', current_time=now.ctime(), data = cursor.fetchall())
 
 
 if __name__ == '__main__':
