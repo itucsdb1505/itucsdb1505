@@ -4,8 +4,10 @@ import os
 
 class DataBaseSetup:
 
+    cursor = None
+
     def __init__(self):
-        self.cursor = None
+        pass
 
     def initiateDataBase(self):
         try:
@@ -15,11 +17,9 @@ class DataBaseSetup:
 
                 #execute commands readed
                 for transaction in sqlFile:
-                    self.cursor.execute(transaction)
+                    if transaction != '\n':
+                        self.cursor.execute(transaction)
 
-            self.cursor.execute("""select * from test""")
-            data = self.cursor.fetchall();
-            return data
         except:
             print("Database could not initialized.")
 
