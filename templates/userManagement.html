@@ -7,11 +7,35 @@
 	href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-	{% extends "layout.html" %}{% block content %}
+	{% extends "layout.html" %}{% block content %} {% if user4Update is not
+	none %}
+	<p>
+		<b>User Update</b>
+	</p>
+	<form action="/userUpdate" method=post>
+		<dl>
+			<dt>Name:
+			<dd>
+				<input type=text name=name value={{user4Update.0}}>
+			<dt>Age:
+			<dd>
+				<input type=text name=age value={{user4Update.1}}>
+			<dd>
+			<dt>E-mail:
+			<dd>
+				<input type=text name=email value={{user4Update.2}}>
+			<dd>
+			<dt>Auth:
+			<dd>
+				<input type=text name=auth value={{user4Update.3}}>
+			<dd>
+				<br /> <input type=submit value=Update>
+		</dl>
+	</form>
+	{% else %}
 	<p>
 		<b>User Add</b>
 	</p>
-
 	<form action="/addUser" method=post>
 		<dl>
 			<dt>Name:
@@ -32,14 +56,19 @@
 				<br /> <input type=submit value=Add>
 		</dl>
 	</form>
+	{% endif %}
 	<p>
 		<b>User List</b>
+	</p>
+	<p>
 	<table border=1>
 		<tr>
 			<th>Name</th>
 			<th>Age</th>
 			<th>E-Mail</th>
 			<th>Auth</th>
+			<th>Update</th>
+			<th>Delete</th>
 		</tr>
 		{% for user in userList %}
 		<tr>
@@ -47,11 +76,23 @@
 			<td>{{ user.1 }}</td>
 			<td>{{ user.2 }}</td>
 			<td>{{ user.3 }}</td>
+			<td>
+				<form action="/updateUser" method=post>
+					<input type=text name=email value={{user.2}} hidden="true">
+					<input type=submit value=Update>
+				</form>
+			</td>
+			<td>
+				<form action="/deleteUser" method=post>
+					<input type=text name=email value={{user.2}} hidden="true">
+					<input type=submit value=Delete>
+				</form>
+			</td>
 		</tr>
 		{% endfor %}
 	</table>
-
 	</p>
 	{% endblock %}
+
 </body>
 </html>
