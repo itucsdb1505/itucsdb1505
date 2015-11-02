@@ -38,7 +38,7 @@ class DataBaseSetup:
             self.connection = psycopg2.connect(connection_info)
 
             print("Connected!\n")
-            
+
 
         except:
             print("Could not connected to database.")
