@@ -44,6 +44,16 @@ def initiateDB():
     now = datetime.datetime.now()
     return render_template('initiateDB.html', current_time=now.ctime(), data = cursor.fetchall())
 
+@app.route('/Pools')
+def pool_list():
+    now = datetime.datetime.now()
+    return render_template('pools.html', current_time=now.ctime())
+
+@app.route('/AddPool')
+def pool_edit():
+    now = datetime.datetime.now()
+    return render_template('pool_edit.html', current_time=now.ctime())
+
 
 if __name__ == '__main__':
     try:
