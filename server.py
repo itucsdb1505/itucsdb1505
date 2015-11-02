@@ -3,6 +3,7 @@ import os
 
 from flask import Flask
 from flask import render_template
+from flask import request, redirect
 from DataBaseSetup import *
 
 
@@ -29,6 +30,10 @@ def addUser():
     age = request.form['age']
     email = request.form['email']
     auth = request.form['auth']
+    cursor = dataBaseSetup.connection.cursor()
+    query = """INSERT INTO USERS values('""" + username + """',""" +  age + """,'""" + email + """','""" + auth + """')"""
+    cursor.execute(query)
+    dataBaseSetup.connection.commit()
     return redirect('/userManagement')
 
 @app.route('/initiateDB')
