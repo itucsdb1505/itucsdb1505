@@ -68,6 +68,15 @@ def updateUser():
         userListAsList.append(list(user))
     return render_template('userManagement.html', userList=userListAsList, user4Update=user4Update)
 
+@app.route('/deleteUser' , methods=['POST'])
+def deleteUser():
+    email = request.form['email']
+    cursor = dataBaseSetup.connection.cursor()
+    query = """DELETE FROM USERS WHERE email='""" + email + """';"""
+    cursor.execute(query)
+    dataBaseSetup.connection.commit()
+    return redirect('/userManagement')
+
 @app.route('/initiateDB')
 def initiateDB():
     dataBaseSetup.initiateDataBase()
@@ -75,16 +84,6 @@ def initiateDB():
     cursor.execute("""select * from test;""")
     now = datetime.datetime.now()
     return render_template('initiateDB.html', current_time=now.ctime(), data=cursor.fetchall())
-
-@app.route('/Pools')
-def pool_list():
-    now = datetime.datetime.now()
-    return render_template('pools.html', current_time=now.ctime())
-
-@app.route('/AddPool')
-def pool_edit():
-    now = datetime.datetime.now()
-    return render_template('pool_edit.html', current_time=now.ctime())
 
 @app.route('/Pools')
 def pool_list():
