@@ -14,9 +14,9 @@
 
 	<form action="/addUser" method=post>
 		<dl>
-			<dt>Username:
+			<dt>Name:
 			<dd>
-				<input type=text name=username>
+				<input type=text name=name>
 			<dt>Age:
 			<dd>
 				<input type=text name=age>
@@ -34,7 +34,23 @@
 	</form>
 	<p>
 		<b>User List</b>
-		{{ userList }}
+	<table border=1>
+		<tr>
+			<th>Name</th>
+			<th>Age</th>
+			<th>E-Mail</th>
+			<th>Auth</th>
+		</tr>
+		{% for user in userList %}
+		<tr>
+			<td>{{ user.0 }}</td>
+			<td>{{ user.1 }}</td>
+			<td>{{ user.2 }}</td>
+			<td>{{ user.3 }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
 	</p>
 	{% endblock %}
 </body>

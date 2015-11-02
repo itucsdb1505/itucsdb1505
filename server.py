@@ -20,18 +20,23 @@ def home():
 @app.route('/userManagement')
 def userManagement():
     cursor = dataBaseSetup.connection.cursor()
-    cursor.execute("""select * from USERS;""")
-    return render_template('userManagement.html', userList = cursor.fetchall())
+    cursor.execute("""select name, age, email, auth from USERS;""")
+    userListAsTuple = cursor.fetchall()
+    userListAsList = []
+    for user in userListAsTuple:
+        userListAsList.append(list(user))
+
+    return render_template('userManagement.html', userList = userListAsList)
 
 
 @app.route('/addUser' , methods = ['POST'])
 def addUser():
-    username = request.form['username']
+    name = request.form['name']
     age = request.form['age']
     email = request.form['email']
     auth = request.form['auth']
     cursor = dataBaseSetup.connection.cursor()
-    query = """INSERT INTO USERS values('""" + username + """',""" +  age + """,'""" + email + """','""" + auth + """')"""
+    query = """INSERT INTO USERS values('""" + name + """',""" +  age + """,'""" + email + """','""" + auth + """')"""
     cursor.execute(query)
     dataBaseSetup.connection.commit()
     return redirect('/userManagement')
