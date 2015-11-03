@@ -15,15 +15,6 @@ dataBaseSetup = DataBaseSetup()
 
 
 
-def get_elephantsql_dsn(vcap_services):
-    """Returns the data source name for ElephantSQL."""
-    parsed = json.loads(vcap_services)
-    uri = parsed["elephantsql"][0]["credentials"]["uri"]
-    match = re.match('postgres://(.*?):(.*?)@(.*?)(:(\d+))?/(.*)', uri)
-    user, password, host, _, port, dbname = match.groups()
-    dsn = """user='{}' password='{}' host='{}' port={}
-             dbname='{}'""".format(user, password, host, port, dbname)
-    return dsn
 
 
 @app.route('/')
@@ -56,9 +47,8 @@ def addUser():
     cursor.execute(query)
     dataBaseSetup.connection.commit()
     return redirect('/userManagement')
-import json
-import os
-import re
+
+
 @app.route('/userUpdate', methods=['POST'])
 def userUpdate():
     name = request.form['name']
@@ -168,19 +158,6 @@ def addPlayer():
     dataBaseSetup.connection.commit()
     return redirect('/players')
 
-
-def get_elephantsql_dsn(vcap_services):
-    """Returns the data source name for ElephantSQL."""
-    parsed = json.loads(vcap_services)
-    uri = parsed["elephantsql"][0]["credentials"]["uri"]
-    match = re.match('postgres://(.*?):(.*?)@(.*?)(:(\d+))?/(.*)', uri)
-    user, password, host, _, port, dbname = match.groups()
-    dsn = """user='{}' password='{}' host='{}' port={}
-             dbname='{}'""".format(user, password, host, port, dbname)
-    return dsn
-    return redirect('/players')
-
-
 @app.route('/deletePlayer' , methods=['POST'])
 def deletePlayer():
     id = request.form['id']
@@ -258,6 +235,17 @@ def deleteCountry():
     cursor.execute(query)
     dataBaseSetup.connection.commit()
     return redirect('/countries')
+
+
+def get_elephantsql_dsn(vcap_services):
+    """Returns the data source name for ElephantSQL."""
+    parsed = json.loads(vcap_services)
+    uri = parsed["elephantsql"][0]["credentials"]["uri"]
+    match = re.match('postgres://(.*?):(.*?)@(.*?)(:(\d+))?/(.*)', uri)
+    user, password, host, _, port, dbname = match.groups()
+    dsn = """user='{}' password='{}' host='{}' port={}
+             dbname='{}'""".format(user, password, host, port, dbname)
+    return dsn
 
 if __name__ == '__main__':
     try:
