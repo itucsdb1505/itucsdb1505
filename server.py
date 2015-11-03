@@ -135,15 +135,6 @@ def players():
 
     return render_template('players.html', playerList=playerListAsList, current_time=now.ctime())
     
-    
-    
-    
-    
-    cursor = dataBaseSetup.connection.cursor()
-    query="""select id, name, age, nation, team, field from PLAYERS;"""
-    cursor.execute(query)
-    return render_template('players.html', playerList = cursor.fetchall())
-
 
 @app.route('/addPlayer' , methods = ['POST'])
 def addPlayer():
