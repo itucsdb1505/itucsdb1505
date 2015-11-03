@@ -25,6 +25,7 @@ def get_elephantsql_dsn(vcap_services):
              dbname='{}'""".format(user, password, host, port, dbname)
     return dsn
 
+
 @app.route('/')
 def home():
     now = datetime.datetime.now()
