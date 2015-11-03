@@ -14,22 +14,25 @@
 	</p>
 	<form action="/userUpdate" method=post>
 		<dl>
-			<dt>Name:
+			<dt>Name:</dt>
 			<dd>
 				<input type=text name=name value={{user4Update.0}}>
-			<dt>Age:
+			</dd>
+			<dt>Age:</dt>
 			<dd>
 				<input type=text name=age value={{user4Update.1}}>
 			<dd>
-			<dt>E-mail:
+			<dt>E-mail:</dt>
 			<dd>
 				<input type=text name=email value={{user4Update.2}}>
 			<dd>
-			<dt>Auth:
+			<dt>Auth:</dt>
 			<dd>
 				<input type=text name=auth value={{user4Update.3}}>
+			</dd>
 			<dd>
 				<br /> <input type=submit value=Update>
+			</dd>
 		</dl>
 	</form>
 	{% else %}
