@@ -1,5 +1,8 @@
 import datetime
 import os
+import json
+import os
+import re
 
 from flask import Flask
 from flask import render_template
@@ -10,6 +13,17 @@ from DataBaseSetup import *
 app = Flask(__name__)
 dataBaseSetup = DataBaseSetup()
 
+
+
+def get_elephantsql_dsn(vcap_services):
+    """Returns the data source name for ElephantSQL."""
+    parsed = json.loads(vcap_services)
+    uri = parsed["elephantsql"][0]["credentials"]["uri"]
+    match = re.match('postgres://(.*?):(.*?)@(.*?)(:(\d+))?/(.*)', uri)
+    user, password, host, _, port, dbname = match.groups()
+    dsn = """user='{}' password='{}' host='{}' port={}
+             dbname='{}'""".format(user, password, host, port, dbname)
+    return dsn
 
 @app.route('/')
 def home():
@@ -41,7 +55,9 @@ def addUser():
     cursor.execute(query)
     dataBaseSetup.connection.commit()
     return redirect('/userManagement')
-
+import json
+import os
+import re
 @app.route('/userUpdate', methods=['POST'])
 def userUpdate():
     name = request.form['name']
@@ -87,7 +103,7 @@ def initiateDB():
     now = datetime.datetime.now()
     return render_template('initiateDB.html', current_time=now.ctime(), data=cursor.fetchall())
 
-@app.route('/Pools',methods=['GET','POST'])
+@app.route('/Pools', methods=['GET', 'POST'])
 def pool_list():
     if request.method == 'GET':
         cursor = dataBaseSetup.connection.cursor()
@@ -98,7 +114,7 @@ def pool_list():
         for pool in poolfetch:
             PoolListForm.append(list(pool))
         now = datetime.datetime.now()
-        return render_template('pools.html', current_time=now.ctime(),list=PoolListForm)
+        return render_template('pools.html', current_time=now.ctime(), list=PoolListForm)
     elif 'deletePoolbyname' in request.form:
         name = request.form['deletePoolbyname']
         cursor = dataBaseSetup.connection.cursor()
@@ -108,18 +124,18 @@ def pool_list():
         return redirect('/Pools')
 
 
-@app.route('/AddPool',methods=['GET','POST'])
+@app.route('/AddPool', methods=['GET', 'POST'])
 def pool_edit():
     if request.method == 'GET':
         now = datetime.datetime.now()
-        return render_template('pool_edit.html',current_time=now.ctime())
+        return render_template('pool_edit.html', current_time=now.ctime())
     else:
         name = request.form['name']
         city = request.form['city']
         capacity = request.form['capacity']
         built = request.form['built']
         cursor = dataBaseSetup.connection.cursor()
-        query = """insert into pool values('""" + name + """','""" +  city + """',""" + capacity + """,""" + built + """);"""
+        query = """insert into pool values('""" + name + """','""" + city + """',""" + capacity + """,""" + built + """);"""
         cursor.execute(query)
         dataBaseSetup.connection.commit()
         return redirect('/Pools')
@@ -128,7 +144,7 @@ def pool_edit():
 def players():
     now = datetime.datetime.now()
     cursor = dataBaseSetup.connection.cursor()
-    query="""select id, name, age, nation, team, field from PLAYERS;"""
+    query = """select id, name, age, nation, team, field from PLAYERS;"""
     cursor.execute(query)
     playerListAsTuple = cursor.fetchall()
     playerListAsList = []
@@ -138,9 +154,9 @@ def players():
     return render_template('players.html', playerList=playerListAsList, current_time=now.ctime())
 
 
-@app.route('/addPlayer' , methods = ['POST'])
+@app.route('/addPlayer' , methods=['POST'])
 def addPlayer():
-    id= request.form['id']
+    id = request.form['id']
     name = request.form['name']
     age = request.form['age']
     nation = request.form['nation']
@@ -149,6 +165,18 @@ def addPlayer():
     cursor = dataBaseSetup.connection.cursor()
     cursor.execute("INSERT INTO PLAYERS (id, name, age, nation, team, field) VALUES (%s, %s, %s, %s, %s, %s)", (id, name, age, nation, team, field))
     dataBaseSetup.connection.commit()
+    return redirect('/players')
+
+
+def get_elephantsql_dsn(vcap_services):
+    """Returns the data source name for ElephantSQL."""
+    parsed = json.loads(vcap_services)
+    uri = parsed["elephantsql"][0]["credentials"]["uri"]
+    match = re.match('postgres://(.*?):(.*?)@(.*?)(:(\d+))?/(.*)', uri)
+    user, password, host, _, port, dbname = match.groups()
+    dsn = """user='{}' password='{}' host='{}' port={}
+             dbname='{}'""".format(user, password, host, port, dbname)
+    return dsn
     return redirect('/players')
 
 
@@ -165,7 +193,7 @@ def deletePlayer():
 def leagues():
     now = datetime.datetime.now()
     cursor = dataBaseSetup.connection.cursor()
-    query="""select id, name, classification, nation from LEAGUES;"""
+    query = """select id, name, classification, nation from LEAGUES;"""
     cursor.execute(query)
     leagueListAsTuple = cursor.fetchall()
     leagueListAsList = []
@@ -175,9 +203,9 @@ def leagues():
     return render_template('leagues.html', leagueList=leagueListAsList, current_time=now.ctime())
 
 
-@app.route('/addLeague' , methods = ['POST'])
+@app.route('/addLeague' , methods=['POST'])
 def addLeague():
-    id= request.form['id']
+    id = request.form['id']
     name = request.form['name']
     classification = request.form['classification']
     nation = request.form['nation']
@@ -200,7 +228,7 @@ def deleteLeague():
 def countries():
     now = datetime.datetime.now()
     cursor = dataBaseSetup.connection.cursor()
-    query="""select id, name, population from COUNTRIES;"""
+    query = """select id, name, population from COUNTRIES;"""
     cursor.execute(query)
     countryListAsTuple = cursor.fetchall()
     countryListAsList = []
@@ -210,13 +238,13 @@ def countries():
     return render_template('countries.html', countryList=countryListAsList, current_time=now.ctime())
 
 
-@app.route('/addCountry' , methods = ['POST'])
+@app.route('/addCountry' , methods=['POST'])
 def addCountry():
-    id= request.form['id']
+    id = request.form['id']
     name = request.form['name']
     population = request.form['population']
     cursor = dataBaseSetup.connection.cursor()
-    cursor.execute("INSERT INTO COUNTRIES (id, name, population) VALUES (%s, %s, %s)", (id, name,population))
+    cursor.execute("INSERT INTO COUNTRIES (id, name, population) VALUES (%s, %s, %s)", (id, name, population))
     dataBaseSetup.connection.commit()
     return redirect('/countries')
 
@@ -239,7 +267,15 @@ if __name__ == '__main__':
         else:
             port, debug = 5000, True
 
-        dataBaseSetup.makeConnection(VCAP_APP_PORT)
+        VCAP_SERVICES = os.getenv('VCAP_SERVICES')
+        if VCAP_SERVICES is not None:
+            app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
+        else:
+            app.config['dsn'] = "host='localhost' dbname='itucsdb' user='postgres' password='12345'"
+
+
+
+        dataBaseSetup.makeConnection(app)
         app.run(host='0.0.0.0', port=port, debug=True)
 
     except:

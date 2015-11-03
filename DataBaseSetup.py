@@ -27,16 +27,18 @@ class DataBaseSetup:
             print("Database could not initialized.")
 
 
-    def makeConnection(self, VCAP_APP_PORT):
+    def makeConnection(self, app):
         try:
+            self.connection = psycopg2.connect(app.config['dsn'])
+
              #Define our connection string
-            if VCAP_APP_PORT is not None:
-                connection_info = "host=" + VCAP_APP_PORT + " dbname='itucsdb' user='postgres' password='12345'"
-            else:
-                connection_info = "host='localhost' dbname='itucsdb' user='postgres' password='12345'"
+           # if VCAP_APP_PORT is not None:
+             #   connection_info = "host=" + VCAP_APP_PORT + " dbname='itucsdb' user='postgres' password='12345'"
+            #else:
+            #    connection_info = "host='localhost' dbname='itucsdb' user='postgres' password='12345'"
 
              # get a connection, if a connect cannot be made an exception will be raised here
-            self.connection = psycopg2.connect(connection_info)
+            #self.connection = psycopg2.connect(connection_info)
 
             print("Connected!\n")
 
