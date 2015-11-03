@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Leagues</title>
+	<link rel="stylesheet"
+	href="{{ url_for('static', filename='style.css') }}" />
+</head>
+
+<body>
+	{% extends "layout.html" %}{% block content %}
+	<p><b>League Add</b></p>
+
+	<form action="/addLeague" method=post>
+		<dl>
+			<dt>Id:
+			<dd>
+				<input type=text name=id>
+			<dt>Name:
+			<dd>
+				<input type=text name=name>
+			<dt>Classification:
+			<dd>
+				<input type=text name=classification>
+			<dt>Nation:
+			<dd>
+				<input type=text name=nation>
+
+				<br /> <input type=submit value=Add>
+		</dl>
+	</form>
+
+
+	<TABLE WIDTH="60%"   CELLPADDING="2" CELLSPACING="4">
+		   <TR>
+		      <TH COLSPAN="2"><BR><H3>LEAGUES</H3></TH>
+		   </TR>
+		   <TR>
+		      <TH>ID</TH>
+		      <TH>Name</TH>
+		      <TH>Classification</TH>
+		      <TH>Nation</TH>
+		   </TR>
+		{% for league in leagueList %}
+			<tr>
+				<td>{{ league.0 }}</td>
+				<td>{{ league.1 }}</td>
+				<td>{{ league.2 }}</td>
+				<td>{{ league.3 }}</td>
+				<td>
+					<form action="/deleteLeague" method=post>
+						<input type=text name=id value={{league.0}} hidden="true">
+						<input type=submit value=Delete>
+					</form>
+				</td>
+			</tr>
+		{% endfor %}
+	</TABLE>
+	{% endblock %}
+
+</body>
+</html>
