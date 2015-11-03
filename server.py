@@ -123,43 +123,6 @@ def pool_edit():
         cursor.execute(query)
         dataBaseSetup.connection.commit()
         return redirect('/Pools')
-    
-@app.route('/players')
-def players():
-    now = datetime.datetime.now()
-    cursor = dataBaseSetup.connection.cursor()
-    query="""select id, name, age, nation, team, field from PLAYERS;"""
-    cursor.execute(query)
-    playerListAsTuple = cursor.fetchall()
-    playerListAsList = []
-    for player in playerListAsTuple:
-        playerListAsList.append(list(player))
-
-    return render_template('players.html', playerList=playerListAsList, current_time=now.ctime())
-    
-
-@app.route('/addPlayer' , methods = ['POST'])
-def addPlayer():
-    id= request.form['id']
-    name = request.form['name']
-    age = request.form['age']
-    nation = request.form['nation']
-    team = request.form['team']
-    field = request.form['field']
-    cursor = dataBaseSetup.connection.cursor()
-    cursor.execute("INSERT INTO PLAYERS (id, name, age, nation, team, field) VALUES (%s, %s, %s, %s, %s, %s)", (id, name, age, nation, team, field))
-    dataBaseSetup.connection.commit()
-    return redirect('/players')
-
-
-@app.route('/deletePlayer' , methods=['POST'])
-def deletePlayer():
-    id = request.form['id']
-    cursor = dataBaseSetup.connection.cursor()
-    query = """DELETE FROM PLAYERS WHERE id=""" + id + """;"""
-    cursor.execute(query)
-    dataBaseSetup.connection.commit()
-    return redirect('/players')
 
 @app.route('/players')
 def players():
@@ -173,7 +136,7 @@ def players():
         playerListAsList.append(list(player))
 
     return render_template('players.html', playerList=playerListAsList, current_time=now.ctime())
-    
+
 
 @app.route('/addPlayer' , methods = ['POST'])
 def addPlayer():
