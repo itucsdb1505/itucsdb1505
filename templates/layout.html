@@ -13,26 +13,21 @@
 	<header>
 		<div id='cssmenu'>
 			<ul>
-				<li class='active'><a href='#'><span>Home</span></a></li>
+				<li class='active'><a href="{{ url_for('home') }}"><span>Home</span></a></li>
 				<li class='has-sub'><a href='#'><span>General</span></a>
 					<ul>
-						<li><a href='#'><span>Players</span></a></li>
+						<li><a href="{{ url_for('players') }}"><span>Players</span></a></li>
 						<li><a href='#'><span>Coaches</span></a></li>
-						<li class='last'><a href='#'><span>Referees</span></a></li>
+						<li><a href='#'><span>Referees</span></a></li>
+						<li class='last'><a href="{{ url_for('pool_list') }}"><span>Pools</span></a></li>
 					</ul></li>
 				<li class='has-sub'><a href='#'><span>About</span></a>
 					<ul>
-						<li><a href='#'><span>Company</span></a></li>
-						<li class='last'><a href='#'><span>Contact</span></a></li>
-					</ul></li>
-				<li class='has-sub'><a href='#'><span>About</span></a>
-					<ul>
-						<li><a href='#'><span>Company</span></a></li>
-						<li class='last'><a href='#'><span>Contact</span></a></li>
+						<li class='last'><a href='#'><span>Water Polo</span></a></li>
 					</ul></li>
 				<li class='has-sub'><a href='#'><span>Administration</span></a>
 					<ul>
-						<li><a href='#'><span>User Management</span></a></li>
+						<li><a href="{{ url_for('userManagement') }}"><span>User Management</span></a></li>
 					</ul></li>
 			</ul>
 		</div>

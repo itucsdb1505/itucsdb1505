@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Pools</title>
+		<link rel="stylesheet" href="/static/style.css" />
+	</head>
+	<body>
+	{% extends "layout.html" %}
+	{% block content %}
+		<h2> Pool list</h2>
+			<form action="{{ url_for('pool_list') }}" method="post">
+				<table border=2>
+					<tr>
+						<th>Delete Pool</th>
+						<th>Name</th>
+						<th>City</th>
+						<th>Capacity</th>
+						<th>Built</th>
+					</tr>
+					{% for pool in list %}
+					<tr>
+						<td><input type="checkbox" name="pool_to_delete"
+						value="{{ pool.0 }}" /></td>
+						<td>{{ pool.0 }}</td>
+						<td>{{ pool.1 }}</td>
+						<td>{{ pool.2 }}</td>
+						<td>{{ pool.3 }}</td>
+					</tr>
+					{% endfor %}
+				</table>
+				<input type="submit" value="Delete" name="delete" />
+			</form>
+			<ul>
+				<ul>
+					<a href="{{ url_for('pool_edit') }}">Add New Pool</a>
+				</ul>
+			</ul>
+
+
+	{% endblock %}
+	</body>
+</html>
