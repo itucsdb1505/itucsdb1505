@@ -38,10 +38,47 @@
 				<br /> <input type=submit value=Add>
 		</dl>
 	</form>
-	<p>
-		<b>Player List</b>
-		{{ playerList }}
+	
+	
+	
+	<TABLE BORDER="5"    WIDTH="50%"   CELLPADDING="4" CELLSPACING="3">
+		   <TR>
+		      <TH COLSPAN="2"><BR><H3>PLAYER LIST</H3>
+		      </TH>
+		   </TR>
+		   <TR>
+		      <TH>ID</TH>
+		      <TH>Name</TH>
+		      <TH>Age</TH>
+		      <TH>Nation</TH>
+		      <TH>Team</TH>
+		      <TH>Field</TH>
+		      
+		   </TR>
+		   {% for player in playerList %}
+			<tr>
+				<td>{{ player.0 }}</td>
+				<td>{{ player.1 }}</td>
+				<td>{{ player.2 }}</td>
+				<td>{{ player.3 }}</td>
+				<td>{{ player.4 }}</td>
+				<td>{{ player.5 }}</td>
+				
+				<td>
+					<form action="/deletePlayer" method=post>
+						<input type=text name=id value={{player.0}} hidden="true">
+						<input type=submit value=Delete>
+					</form>
+				</td>
+			
+			</tr>
+		{% endfor %}
+	</TABLE>
+	
+	
+	
 	</p>
 	{% endblock %}
+
 </body>
 </html>
