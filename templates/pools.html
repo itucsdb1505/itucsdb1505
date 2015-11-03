@@ -10,24 +10,34 @@
 	{% block content %}
 		<h2> Pool list</h2>
 			<form action="{{ url_for('pool_list') }}" method="post">
-				<table>
-					{% for key, name in pool %}
+				<table border=2>
 					<tr>
-						<td><input type="checkbox" name="pools_to_delete"
-							value="{{ key }}" /></td>
-						<td>
-						<a href="{{ url_for('pool_list', key=key) }}">
-						{{ pool.name }} ({{ pool.country }})
-						</a>
-						</td>
+						<th>Delete Pool</th>
+						<th>Name</th>
+						<th>City</th>
+						<th>Capacity</th>
+						<th>Built</th>
+					</tr>
+					{% for pool in list %}
+					<tr>
+						<td><input type="checkbox" name="pool_to_delete"
+						value="{{ pool.0 }}" /></td>
+						<td>{{ pool.0 }}</td>
+						<td>{{ pool.1 }}</td>
+						<td>{{ pool.2 }}</td>
+						<td>{{ pool.3 }}</td>
 					</tr>
 					{% endfor %}
 				</table>
 				<input type="submit" value="Delete" name="delete" />
 			</form>
 			<ul>
-				<li><a href="{{ url_for('pool_edit') }}">Add New Pool</a></li>
+				<ul>
+					<a href="{{ url_for('pool_edit') }}">Add New Pool</a>
+				</ul>
 			</ul>
+
+
 	{% endblock %}
 	</body>
 </html>

@@ -13,3 +13,8 @@ INSERT INTO USERS values('Emre EROĞLU', 28, 'emreeroglu@itu.edu.tr', 'a');
 INSERT INTO USERS values('abcd', 45, 'abcd@itu.edu.tr', 'u');
 INSERT INTO USERS values('efgh', 85, 'efgh@itu.edu.tr', 'm');
 INSERT INTO USERS values('jklm', 20, 'jklm@itu.edu.tr', 'a');
+
+DROP TABLE IF EXISTS POOL;
+CREATE TABLE POOL(NAME TEXT, CITY TEXT, CAPACITY INT, BUILT INT);
+INSERT INTO POOL values('Colesium','Rome', 25000, 1985);
+INSERT INTO POOL values('Itu','Istanbul', 27500, 2010);

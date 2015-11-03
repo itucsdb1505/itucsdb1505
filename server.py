@@ -19,6 +19,7 @@ def home():
 
 @app.route('/userManagement')
 def userManagement():
+    now = datetime.datetime.now()
     cursor = dataBaseSetup.connection.cursor()
     cursor.execute("""select name, age, email, auth from USERS;""")
     userListAsTuple = cursor.fetchall()
@@ -26,7 +27,7 @@ def userManagement():
     for user in userListAsTuple:
         userListAsList.append(list(user))
 
-    return render_template('userManagement.html', userList=userListAsList, user4Update=None)
+    return render_template('userManagement.html', userList=userListAsList, user4Update=None, current_time=now.ctime())
 
 
 @app.route('/addUser' , methods=['POST'])
@@ -55,6 +56,7 @@ def userUpdate():
 
 @app.route('/updateUser', methods=['POST'])
 def updateUser():
+    now = datetime.datetime.now()
     cursor = dataBaseSetup.connection.cursor()
     email = request.form['email']
     query = """select name, age, email, auth from users where email='""" + email + """';"""
@@ -66,7 +68,7 @@ def updateUser():
     userListAsList = []
     for user in userListAsTuple:
         userListAsList.append(list(user))
-    return render_template('userManagement.html', userList=userListAsList, user4Update=user4Update)
+    return render_template('userManagement.html', userList=userListAsList, user4Update=user4Update, current_time=now.ctime())
 
 @app.route('/deleteUser' , methods=['POST'])
 def deleteUser():
@@ -87,13 +89,38 @@ def initiateDB():
 
 @app.route('/Pools')
 def pool_list():
+    cursor = dataBaseSetup.connection.cursor()
+    query = """select name,city,capacity,built from pool;"""
+    cursor.execute(query)
+    poolfetch = cursor.fetchall()
+    PoolListForm = []
+    for pool in poolfetch:
+        PoolListForm.append(list(pool))
     now = datetime.datetime.now()
-    return render_template('pools.html', current_time=now.ctime())
+    return render_template('pools.html', current_time=now.ctime(),list=PoolListForm)
 
-@app.route('/AddPool')
+@app.route('/AddPool',methods=['GET','POST'])
 def pool_edit():
-    now = datetime.datetime.now()
-    return render_template('pool_edit.html', current_time=now.ctime())
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        return render_template('pool_edit.html',current_time=now.ctime())
+    elif 'pool_to_delete' in request.form:
+        name = request.form['pool_to_delete']
+        cursor = dataBaseSetup.connection.cursor()
+        query = """delete from pool where name='""" + name + """';"""
+        cursor.execute(query)
+        dataBaseSetup.connection.commit()
+        return redirect('/Pools')
+    else:
+        name = request.form['name']
+        city = request.form['city']
+        capacity = request.form['capacity']
+        built = request.form['built']
+        cursor = dataBaseSetup.connection.cursor()
+        query = """insert into pool values('""" + name + """','""" +  city + """',""" + capacity + """,""" + built + """);"""
+        cursor.execute(query)
+        dataBaseSetup.connection.commit()
+        return redirect('/Pools')
 
 
 if __name__ == '__main__':
