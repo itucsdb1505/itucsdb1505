@@ -13,7 +13,7 @@
 	<header>
 		<div id='cssmenu'>
 			<ul>
-				<li class='active'><a href='#'><span>Home</span></a></li>
+				<li class='active'><a href="{{ url_for('home') }}"><span>Home</span></a></li>
 				<li class='has-sub'><a href='#'><span>General</span></a>
 					<ul>
 						<li><a href='#'><span>Players</span></a></li>
@@ -33,7 +33,7 @@
 					</ul></li>
 				<li class='has-sub'><a href='#'><span>Administration</span></a>
 					<ul>
-						<li><a href='#'><span>User Management</span></a></li>
+						<li><a href="{{ url_for('userManagement') }}"><span>User Management</span></a></li>
 					</ul></li>
 			</ul>
 		</div>
