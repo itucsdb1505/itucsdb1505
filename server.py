@@ -19,6 +19,7 @@ def home():
 
 @app.route('/userManagement')
 def userManagement():
+    now = datetime.datetime.now()
     cursor = dataBaseSetup.connection.cursor()
     cursor.execute("""select name, age, email, auth from USERS;""")
     userListAsTuple = cursor.fetchall()
@@ -26,7 +27,7 @@ def userManagement():
     for user in userListAsTuple:
         userListAsList.append(list(user))
 
-    return render_template('userManagement.html', userList=userListAsList, user4Update=None)
+    return render_template('userManagement.html', userList=userListAsList, user4Update=None, current_time=now.ctime())
 
 
 @app.route('/addUser' , methods=['POST'])
@@ -55,6 +56,7 @@ def userUpdate():
 
 @app.route('/updateUser', methods=['POST'])
 def updateUser():
+    now = datetime.datetime.now()
     cursor = dataBaseSetup.connection.cursor()
     email = request.form['email']
     query = """select name, age, email, auth from users where email='""" + email + """';"""
@@ -66,7 +68,7 @@ def updateUser():
     userListAsList = []
     for user in userListAsTuple:
         userListAsList.append(list(user))
-    return render_template('userManagement.html', userList=userListAsList, user4Update=user4Update)
+    return render_template('userManagement.html', userList=userListAsList, user4Update=user4Update, current_time=now.ctime())
 
 @app.route('/deleteUser' , methods=['POST'])
 def deleteUser():
