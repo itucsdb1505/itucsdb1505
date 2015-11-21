@@ -1,57 +1,48 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8" />
-	<title>Countries</title>
-	<link rel="stylesheet"
-	href="{{ url_for('static', filename='style.css') }}" />
-</head>
+{% extends "eminLayout.html" %}
 
-<body>
-	{% extends "layout.html" %}{% block content %}
-	<p><b>Country Add</b></p>
+{%block title%}Countries{%endblock%}
 
-	<form action="/addCountry" method=post>
-		<dl>
-			<dt>Id:
-			<dd>
-				<input type=text name=id>
-			<dt>Name:
-			<dd>
-				<input type=text name=name>
-			<dt>Population:
-			<dd>
-				<input type=text name=population>
+{%block navigator %}
+                <nav class="codrops-demos">
+                	<a href="{{url_for('home')}}" title="Main Page">Main Page</a>
+					<a class="current-demo" href="{{ url_for('countries') }}" title="Country">Country</a>
+					<a href="#" title="League">League</a>
+					<a href="#" title="Message">Message</a>
+				</nav>
+                <nav class="codrops-demos">
+					<a href="{{ url_for('add_country') }}" title="Add Country">Add Country</a>
+				</nav>
+{%endblock%}
 
-				<br /> <input type=submit value=Add>
-		</dl>
-	</form>
+{%block content%}
+			<div class="component">
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Population</th>
+							<th>Coordinates</th>
+						</tr>
+					</thead>
+					<tbody>
+							 {% for country in countryList %}
+								<tr>
+									<td class="user-name">{{ country.1 }}
+										<p>
+										<a href="#" title="Edit Country">
+											<img src="{{url_for('static',filename='emin/gfx/Pencil-icon.png')}}" width="40" height="40" alt="update">
+										</a>
+										<a href="{{url_for('delete_country',id=country.0) }}" title="Delete Country">
+											<img src="{{url_for('static',filename='emin/gfx/delete.png')}}" width="40" height="40" alt="delete">
+										</a>
+										</p>
+									</td>
+									<td class="user-email">{{ country.2 }}</td>
+									<td class="user-phone">{{ country.3 }}</td>
+								</tr>
+							{% endfor %}
+					</tbody>
+				</table>
+			</div>
+{%endblock%}
 
-
-	<TABLE WIDTH="60%"   CELLPADDING="2" CELLSPACING="4">
-		   <TR>
-		      <TH COLSPAN="2"><BR><H3>COUNTRIES</H3></TH>
-		   </TR>
-		   <TR>
-		      <TH>ID</TH>
-		      <TH>Name</TH>
-		      <TH>Population</TH>
-		   </TR>
-		{% for country in countryList %}
-			<tr>
-				<td>{{ country.0 }}</td>
-				<td>{{ country.1 }}</td>
-				<td>{{ country.2 }}</td>
-				<td>
-					<form action="/deleteCountry" method=post>
-						<input type=text name=id value={{country.0}} hidden="true">
-						<input type=submit value=Delete>
-					</form>
-				</td>
-			</tr>
-		{% endfor %}
-	</TABLE>
-	{% endblock %}
-
-</body>
-</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="keywords" content="Waterpolo" />
+		<meta name="author" content="Emin Ocak, eminnocak@gmail.com" />
+		<link rel="shortcut icon" href="../favicon.ico">
+		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="css/component.css" />
+	</head>
+	<body>
+		<div class="container">
+			<!-- Top Navigation -->
+			<header>
+				<h1>Pages of <em>Emin OCAK</em> <span>040100040</span></h1>	
+				<nav class="codrops-demos">
+					<a href="countries.html" title="Country">Country</a>
+					<a class="current-demo" href="leagues.html" title="League">League</a>                    
+					<a href="messages.html" title="Message">Message</a>
+				</nav>
+                <nav class="codrops-demos">
+					<a href="add_league.html" title="Add League">Add League</a>
+				</nav>
+			</header>
+			<div class="component">
+				<table>
+					<thead>
+						<tr>
+							<th>Nation</th>
+							<th>Classification</th>
+                            <th>Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+                            <td class="user-name">Türkiye</td>
+                            <td class="user-email">Spor toto<p>Açıklama 1</p></td>
+                            <td class="user-phone">Süper Lig<p>Açıklama 2</p></td>
+                        </tr>
+						<tr>
+                            <td class="user-name">Türkiye<p>Açıklama 31</p></td>
+                            <td class="user-email">Spor toto</td>
+                            <td class="user-phone">1. lig<p>Açıklama 31</p></td>
+                        </tr>
+						<tr>
+                            <td class="user-name">Türkiye</td>
+                            <td class="user-email">Spor toto</td>
+                            <td class="user-phone">2.lig<p>Açıklama 31</p></td>
+                            <!--<td class="user-mobile">(207)-516-4474<p>Açıklama 31</p></td>-->
+                        </tr>
+					</tbody>
+				</table>
+			</div>
+		</div><!-- /container -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+		<script src="js/jquery.stickyheader.js"></script>
+        <script type="text/javascript">
+		  $(document).ready(
+		  function() {
+		  $('td p').slideUp();
+			$('td').click(
+			  function(){
+			   $(this).closest('tr').find('p').slideToggle();
+			  }
+			  );
+		  }
+		  );
+    	</script>
+	</body>
+</html>

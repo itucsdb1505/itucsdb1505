@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="keywords" content="Waterpolo" />
+		<meta name="author" content="Emin Ocak, eminnocak@gmail.com" />
+		<link rel="shortcut icon" href="../favicon.ico">
+		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="css/component.css" />
+	</head>
+	<body>
+		<div class="container">
+			<!-- Top Navigation -->
+			<header>
+				<h1>Pages of <em>Emin OCAK</em> <span>040100040</span></h1>	
+                <nav class="codrops-demos">
+					<a class="current-demo" href="countries.html" title="Country">Country</a>
+					<a href="leagues.html" title="League">League</a>                    
+					<a href="messages.html" title="Message">Message</a>
+				</nav>
+                <nav class="codrops-demos">
+					<a href="add_country.html" title="Add Country">Add Country</a>
+				</nav>
+			</header>
+			<div class="component">
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Population</th>
+							<th>Coordinates</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+                            <td class="user-name">gary coleman<p><a href="edit_country.html" title="Edit Country"><img src="gfx/Pencil-icon.png" width="40" height="40" alt="update"></a><a href="delete_country.html" title="Delete Country"><img src="gfx/delete.png" width="40" height="40" alt="delete"></a></p></td>
+                            <td class="user-email">gary.coleman21@example.com<p>Açıklama 1</p></td>
+                            <td class="user-phone">(398)-332-5385<p>Açıklama 2</p></td>
+                        </tr>
+						<tr>
+                            <td class="user-name">rose parker<p><a href="edit_country.html" title="Edit Country"><img src="gfx/Pencil-icon.png" width="40" height="40" alt="update"></a><a href="delete_country.html" title="Delete Country"><img src="gfx/delete.png" width="40" height="40" alt="delete"></a></p></td>
+                            <td class="user-email">rose.parker16@example.com</td>
+                            <td class="user-phone">(293)-873-2247<p>Açıklama 31</p></td>
+                        </tr>
+						<tr>
+                            <td class="user-name">chloe nelson<p><a href="edit_country.html" title="Edit Country"><img src="gfx/Pencil-icon.png" width="40" height="40" alt="update"></a><a href="delete_country.html" title="Delete Country"><img src="gfx/delete.png" width="40" height="40" alt="delete"></a></p></td>
+                            <td class="user-email">chloe.nelson18@example.com</td>
+                            <td class="user-phone">(957)-213-3499<p>Açıklama 31</p></td>
+                            <!--<td class="user-mobile">(207)-516-4474<p>Açıklama 31</p></td>-->
+                        </tr>
+					</tbody>
+				</table>
+			</div>
+		</div><!-- /container -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+		<script src="js/jquery.stickyheader.js"></script>
+        <script type="text/javascript">
+		  $(document).ready(
+		  function() {
+		  $('td p').slideUp();
+			$('td').click(
+			  function(){
+			   $(this).closest('tr').find('p').slideToggle();
+			  }
+			  );
+		  }
+		  );
+    	</script>
+	</body>
+</html>

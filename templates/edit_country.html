@@ -1,0 +1,38 @@
+{% extends "eminLayout.html" %}
+
+{%block title%}Edit Country{%endblock%}
+
+{%block navigator %}
+                <nav class="codrops-demos">
+                	<a href="{{url_for('home')}}" title="Main Page">Main Page</a>
+					<a href="{{ url_for('countries') }}" title="Country">Country</a>
+					<a href="#" title="League">League</a>
+					<a href="#" title="Message">Message</a>
+				</nav>
+                <nav class="codrops-demos">
+					<a href="{{ url_for('add_country') }}" title="Add Country">Add Country</a>
+				</nav>
+{%endblock%}
+
+{%block content%}
+	<div class="wrapper">
+		<form id="form" class="blocks" method="post" action="/edit_country">
+			<p>
+				<label>Name:</label>
+				<input type="text" class="text" name="name"  value="" required autofocus/>
+			</p>
+			<p>
+				<label>Population:</label>
+				<input type="text" class="text" name="population" required />
+			</p>
+			<p>
+				<label>Coordinates:</label>
+				<input type="text" class="text" name="coordinates" value="0"/>
+			</p>
+			<p>
+				<label>&nbsp;</label>
+				<input type="submit" class="btn" value="Submit" />
+			</p>
+		</form>
+	</div>
+{%endblock%}

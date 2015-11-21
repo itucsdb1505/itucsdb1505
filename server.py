@@ -167,75 +167,39 @@ def deletePlayer():
     dataBaseSetup.connection.commit()
     return redirect('/players')
 
-@app.route('/leagues')
-def leagues():
-    now = datetime.datetime.now()
-    cursor = dataBaseSetup.connection.cursor()
-    query = """select id, name, classification, nation from LEAGUES;"""
-    cursor.execute(query)
-    leagueListAsTuple = cursor.fetchall()
-    leagueListAsList = []
-    for league in leagueListAsTuple:
-        leagueListAsList.append(list(league))
-
-    return render_template('leagues.html', leagueList=leagueListAsList, current_time=now.ctime())
-
-
-@app.route('/addLeague' , methods=['POST'])
-def addLeague():
-    id = request.form['id']
-    name = request.form['name']
-    classification = request.form['classification']
-    nation = request.form['nation']
-    cursor = dataBaseSetup.connection.cursor()
-    cursor.execute("INSERT INTO LEAGUES (id, name, classification, nation) VALUES (%s, %s, %s, %s)", (id, name, classification, nation))
-    dataBaseSetup.connection.commit()
-    return redirect('/leagues')
-
-
-@app.route('/deleteLeague' , methods=['POST'])
-def deleteLeague():
-    id = request.form['id']
-    cursor = dataBaseSetup.connection.cursor()
-    query = """DELETE FROM LEAGUES WHERE id=""" + id + """;"""
-    cursor.execute(query)
-    dataBaseSetup.connection.commit()
-    return redirect('/leagues')
-
-@app.route('/countries')
+@app.route('/countries' , methods=['GET', 'POST'])
 def countries():
-    now = datetime.datetime.now()
+        now = datetime.datetime.now()
+        cursor = dataBaseSetup.connection.cursor()
+        query = """SELECT * FROM COUNTRIES;"""
+        cursor.execute(query)
+        countryListAsTuple = cursor.fetchall()
+        countryListAsList = []
+        for country in countryListAsTuple:
+            countryListAsList.append(list(country))
+        return render_template('countries.html', countryList=countryListAsList, current_time=now.ctime())
+
+@app.route('/add_country' , methods=['GET', 'POST'])
+def add_country():
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        return render_template('add_country.html', current_time=now.ctime())
+    else:
+        name = request.form['name']
+        population = request.form['population']
+        coordinates = request.form['coordinates']
+        cursor = dataBaseSetup.connection.cursor()
+        cursor.execute("INSERT INTO COUNTRIES(NAME, POPULATION, COORDINATES) VALUES(%s, %s, %s)",(name, population, coordinates))
+        dataBaseSetup.connection.commit()
+        return redirect('/countries')
+
+@app.route('/delete_country/<id>', methods=['GET'])
+def delete_country(id):
     cursor = dataBaseSetup.connection.cursor()
-    query = """select id, name, population from COUNTRIES;"""
+    query = """DELETE FROM COUNTRIES WHERE ID=""" + id + """;"""
     cursor.execute(query)
-    countryListAsTuple = cursor.fetchall()
-    countryListAsList = []
-    for country in countryListAsTuple:
-        countryListAsList.append(list(country))
-
-    return render_template('countries.html', countryList=countryListAsList, current_time=now.ctime())
-
-
-@app.route('/addCountry' , methods=['POST'])
-def addCountry():
-    id = request.form['id']
-    name = request.form['name']
-    population = request.form['population']
-    cursor = dataBaseSetup.connection.cursor()
-    cursor.execute("INSERT INTO COUNTRIES (id, name, population) VALUES (%s, %s, %s)", (id, name, population))
     dataBaseSetup.connection.commit()
     return redirect('/countries')
-
-
-@app.route('/deleteCountry' , methods=['POST'])
-def deleteCountry():
-    id = request.form['id']
-    cursor = dataBaseSetup.connection.cursor()
-    query = """DELETE FROM COUNTRIES WHERE id=""" + id + """;"""
-    cursor.execute(query)
-    dataBaseSetup.connection.commit()
-    return redirect('/countries')
-
 
 def get_elephantsql_dsn(vcap_services):
     """Returns the data source name for ElephantSQL."""
