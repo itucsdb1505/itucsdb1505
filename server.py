@@ -213,6 +213,20 @@ def search():
             countryListAsList.append(list(country))
         return render_template('search.html', countryList=countryListAsList, current_time=now.ctime())
 
+@app.route('/edit_country/<id>', methods=['GET','POST'])
+def edit_country(id):
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        name = request.form['name']
+        population = request.form['population']
+        coordinates = request.form['coordinates']
+        return render_template('edit_country.html', current_time=now.ctime())
+    else:
+        cursor = dataBaseSetup.connection.cursor()
+        query = """SELECT NAME, POPULATION, COORDINATES FROM COUNTRIES WHERE ID=""" + id + """;"""
+        cursor.execute(query)
+        return redirect('/countries')
+
 def get_elephantsql_dsn(vcap_services):
     """Returns the data source name for ElephantSQL."""
     parsed = json.loads(vcap_services)

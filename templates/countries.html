@@ -12,16 +12,14 @@
                 <nav class="codrops-demos">
 					<a href="{{ url_for('add_country') }}" title="Add Country">Add Country</a>
 				</nav>
-				<nav class="codrops-demos">
-					<form action="/search" method="post">
-					    <input type=text name=search value="{{ request.form.search}}" placeholder="Search Country" style="text-align: center;"></br>
-					    <input type=submit value="Search">
-					</form>
-				</nav>
 
 {%endblock%}
 
 {%block content%}
+					<form class="form-wrapper cf" action="/search" method="post">
+					    <input type=text name=search placeholder="Search Country" style="text-align: center;" autofocus>
+					    <button type=submit>Search</button>
+					</form>
 			<div class="component">
 				<table>
 					<thead>
