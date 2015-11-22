@@ -171,8 +171,7 @@ def deletePlayer():
 def countries():
         now = datetime.datetime.now()
         cursor = dataBaseSetup.connection.cursor()
-        query = """SELECT * FROM COUNTRIES;"""
-        cursor.execute(query)
+        cursor.execute("SELECT * FROM COUNTRIES;")
         countryListAsTuple = cursor.fetchall()
         countryListAsList = []
         for country in countryListAsTuple:
@@ -200,6 +199,19 @@ def delete_country(id):
     cursor.execute(query)
     dataBaseSetup.connection.commit()
     return redirect('/countries')
+
+@app.route('/search' , methods=['POST'])
+def search():
+    if request.method == 'POST':
+        now = datetime.datetime.now()
+        cursor = dataBaseSetup.connection.cursor()
+        query="""SELECT * FROM COUNTRIES WHERE LOWER(NAME) LIKE LOWER('%"""+ request.form['search'] +"""%');"""
+        cursor.execute(query)
+        countryListAsTuple = cursor.fetchall()
+        countryListAsList = []
+        for country in countryListAsTuple:
+            countryListAsList.append(list(country))
+        return render_template('search.html', countryList=countryListAsList, current_time=now.ctime())
 
 def get_elephantsql_dsn(vcap_services):
     """Returns the data source name for ElephantSQL."""
