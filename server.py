@@ -200,8 +200,8 @@ def delete_country(id):
     dataBaseSetup.connection.commit()
     return redirect('/countries')
 
-@app.route('/search' , methods=['POST'])
-def search():
+@app.route('/search_country' , methods=['POST'])
+def search_country():
     if request.method == 'POST':
         now = datetime.datetime.now()
         cursor = dataBaseSetup.connection.cursor()
@@ -211,21 +211,77 @@ def search():
         countryListAsList = []
         for country in countryListAsTuple:
             countryListAsList.append(list(country))
-        return render_template('search.html', countryList=countryListAsList, current_time=now.ctime())
+        return render_template('search_country.html', countryList=countryListAsList, current_time=now.ctime())
 
-@app.route('/edit_country/<id>', methods=['GET','POST'])
-def edit_country(id):
+# @app.route('/edit_country/<id>', methods=['GET','POST'])
+# def edit_country(id):
+#     if request.method == 'GET':
+#         now = datetime.datetime.now()
+#         name = request.form['name']
+#         population = request.form['population']
+#         coordinates = request.form['coordinates']
+#         return render_template('edit_country.html', current_time=now.ctime())
+#     else:
+#         cursor = dataBaseSetup.connection.cursor()
+#         query = """SELECT NAME, POPULATION, COORDINATES FROM COUNTRIES WHERE ID=""" + id + """;"""
+#         cursor.execute(query)
+#         return redirect('/countries')
+
+@app.route('/leagues' , methods=['GET', 'POST'])
+def leagues():
+        now = datetime.datetime.now()
+        cursor = dataBaseSetup.connection.cursor()
+        cursor.execute("SELECT * FROM LEAGUES;")
+        leagueListAsTuple = cursor.fetchall()
+        leagueListAsList = []
+        for league in leagueListAsTuple:
+            leagueListAsList.append(list(league))
+        return render_template('leagues.html', leagueList=leagueListAsList, current_time=now.ctime())
+
+@app.route('/add_league' , methods=['GET', 'POST'])
+def add_league():
     if request.method == 'GET':
         now = datetime.datetime.now()
-        name = request.form['name']
-        population = request.form['population']
-        coordinates = request.form['coordinates']
-        return render_template('edit_country.html', current_time=now.ctime())
+        return render_template('add_league.html', current_time=now.ctime())
     else:
+        name = request.form['name']
+        nation = request.form['nation']
+        classification = request.form['classification']
         cursor = dataBaseSetup.connection.cursor()
-        query = """SELECT NAME, POPULATION, COORDINATES FROM COUNTRIES WHERE ID=""" + id + """;"""
+        cursor.execute("INSERT INTO LEAGUES(NAME, NATION, CLASSIFICATION) VALUES(%s, %s, %s)",(name, nation, classification))
+        dataBaseSetup.connection.commit()
+        return redirect('/leagues')
+
+@app.route('/delete_league/<id>', methods=['GET'])
+def delete_league(id):
+    cursor = dataBaseSetup.connection.cursor()
+    query = """DELETE FROM LEAGUES WHERE ID=""" + id + """;"""
+    cursor.execute(query)
+    dataBaseSetup.connection.commit()
+    return redirect('/leagues')
+
+@app.route('/search_league' , methods=['POST'])
+def search_league():
+    if request.method == 'POST':
+        now = datetime.datetime.now()
+        cursor = dataBaseSetup.connection.cursor()
+        query="""SELECT * FROM LEAGUES WHERE LOWER(NAME) LIKE LOWER('%"""+ request.form['search'] +"""%');"""
         cursor.execute(query)
-        return redirect('/countries')
+        leagueListAsTuple = cursor.fetchall()
+        leagueListAsList = []
+        for league in leagueListAsTuple:
+            leagueListAsList.append(list(league))
+        return render_template('search_league.html', leagueList=leagueListAsList, current_time=now.ctime())
+
+
+
+
+
+
+
+
+
+
 
 def get_elephantsql_dsn(vcap_services):
     """Returns the data source name for ElephantSQL."""

@@ -8,7 +8,7 @@ font-size:11px;
 }
 
 .wrapper {
-margin:200px auto 0;
+margin:50px 50px;
 width:1000px;
 }
 
@@ -30,6 +30,8 @@ font-weight:bold;
 font-size:11px;
 border:1px solid #e1e0df;
 outline:none;
+margin-left: 80px;
+margin-top: 20px;
 }
 
 .text,

@@ -1,6 +1,6 @@
 {% extends "eminLayout.html" %}
 
-{%block title%}Leagues{%endblock%}
+{%block title%}Search Leagues{%endblock%}
 
 {%block navigator %}
                 <nav class="codrops-demos">
@@ -20,7 +20,8 @@
 					    <input type=text name=search placeholder="Search League" style="text-align: center;" autofocus>
 					    <button type=submit>Search</button>
 					</form>
-			<div class="component">
+				<div class="component">
+					<p>Meanings of "<em><b>{{ request.form.search}}</b></em>" in Leagues : result(s)</p>
 				<table>
 					<thead>
 						<tr>
