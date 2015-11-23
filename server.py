@@ -113,6 +113,14 @@ def pool_list():
         cursor.execute(query)
         dataBaseSetup.connection.commit()
         return redirect('/Pools')
+    elif 'updatepool' in request.form:
+        name = request.form['updatepool']
+        cursor = dataBaseSetup.connection.cursor()
+        query = """select * from pool where name='""" + name + """';"""
+        cursor.execute(query)
+        poolupdated = list(cursor.fetchall()[0])
+        now = datetime.datetime.now()
+        return render_template('pool_update.html', current_time=now.ctime(), element=poolupdated)
 
 
 @app.route('/AddPool', methods=['GET', 'POST'])
@@ -127,6 +135,37 @@ def pool_edit():
         built = request.form['built']
         cursor = dataBaseSetup.connection.cursor()
         query = """insert into pool values('""" + name + """','""" + city + """',""" + capacity + """,""" + built + """);"""
+        cursor.execute(query)
+        dataBaseSetup.connection.commit()
+        return redirect('/Pools')
+
+@app.route('/SearchPool' , methods=['POST'])
+def pool_search():
+        name = request.form['searchbyname']
+        cursor = dataBaseSetup.connection.cursor()
+        query = """select * from pool where (name like '%""" + name + """%');"""
+        cursor.execute(query)
+        poolfetch = cursor.fetchall()
+        PoolListForm = []
+        for pool in poolfetch:
+            PoolListForm.append(list(pool))
+        now = datetime.datetime.now()
+        return render_template('pools.html', current_time=now.ctime(), list=PoolListForm)
+
+@app.route('/UpdatePool', methods=['GET', 'POST'])
+def pool_update():
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        return render_template('pool_update.html', current_time=now.ctime())
+    else:
+        name = request.form['name']
+        city = request.form['city']
+        capacity = request.form['capacity']
+        built = request.form['built']
+        oldname=request.form['oldname']
+        oldcity=request.form['oldcity']
+        cursor = dataBaseSetup.connection.cursor()
+        query = """update pool set name='""" + name + """',city='""" + city + """',capacity=""" + capacity + """,built=""" + built + """ where name='""" + oldname + """' and city='""" + oldcity + """';"""
         cursor.execute(query)
         dataBaseSetup.connection.commit()
         return redirect('/Pools')
