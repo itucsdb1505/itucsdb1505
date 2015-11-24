@@ -6,7 +6,7 @@
                 <nav class="codrops-demos">
                 	<a href="{{url_for('home')}}" title="Main Page">Main Page</a>
 					<a href="{{ url_for('countries') }}" title="Country">Country</a>
-					<a href="#" title="League">League</a>
+					<a href="{{ url_for('leagues') }}" title="League">League</a>
 					<a href="#" title="Message">Message</a>
 				</nav>
                 <nav class="codrops-demos">
@@ -16,23 +16,24 @@
 
 {%block content%}
 	<div class="wrapper">
-		<form id="form" class="blocks" method="post" action="/edit_country">
+		<form class="blocks" method="post" action="/update_country">
 			<p>
 				<label>Name:</label>
-				<input type="text" class="text" name="name"  required />
+				<input type="text" class="text" name="name"  value={{name}} required />
 			</p>
 			<p>
 				<label>Population:</label>
-				<input type="text" class="text" name="population" required />
+				<input type="text" class="text" name="population" value={{population}} required />
 			</p>
 			<p>
 				<label>Coordinates:</label>
-				<input type="text" class="text" name="coordinates" />
+				<input type="text" class="text" name="coordinates" value={{coordinates}} />
 			</p>
 			<p>
 				<label>&nbsp;</label>
 				<input type="submit" class="btn" value="Submit" />
 			</p>
+				<input type="hidden" name="id" value={{id}} />
 		</form>
 	</div>
 {%endblock%}
