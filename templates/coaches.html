@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Coaches</title>
+	<link rel="stylesheet"
+	href="{{ url_for('static', filename='style.css') }}" />
+</head>
+
+<body>
+	{% extends "layout.html" %}{% block content %}
+
+	<p>
+		<b>Search Coach</b>
+	</p>
+
+
+	<form method="post" action="/searchCoach" >
+		<table cellpadding="0px" cellspacing="0px">
+			<tr>
+				<td style="border-style:solid none solid solid;border-color:#4B7B9F;border-width:1px;">
+				<input type="text" name="search_coach" style="width:100px; border:0px solid; height:17px; padding:0px 3px; position:relative;">
+				</td>
+				<td style="border-style:solid;border-color:#4B7B9F;border-width:1px;">
+				<input type="submit" value="" style="border-style: none; background: url('static/images/search.gif') no-repeat; width: 24px; height: 20px;">
+				</td>
+			</tr>
+		</table>
+	</form>
+
+	<p>
+		<b>Add Coach</b>
+	</p>
+
+	<form action="/addCoach" method=post>
+		<dl>
+			<dt>Id:
+			<dd>
+				<input type=text name=id>
+			<dt>Name:
+			<dd>
+				<input type=text name=name>
+			<dt>Nation:
+			<dd>
+				<input type=text name=nation>
+			<dt>Team:
+			<dd>
+				<input type=text name=team>
+
+				<br /> <input type=submit value=Add>
+		</dl>
+	</form>
+
+
+
+	<TABLE BORDER="5"    WIDTH="50%"   CELLPADDING="4" CELLSPACING="3">
+		   <TR>
+		      <TH COLSPAN="2"><BR><H3>COACH LIST</H3>
+		      </TH>
+		   </TR>
+		   <TR>
+		      <TH>ID</TH>
+		      <TH>Name</TH>
+		      <TH>Nation</TH>
+		      <TH>Team</TH>
+
+		   </TR>
+		   {% for coach in coachList %}
+			<tr>
+				<td>{{ coach.0 }}</td>
+				<td>{{ coach.1 }}</td>
+				<td>{{ coach.2 }}</td>
+				<td>{{ coach.3 }}</td>
+
+				<td>
+					<form action="/deleteCoach" method=post>
+						<input type=text name=id value={{coach.0}} hidden="true">
+						<input type=submit value=Delete>
+					</form>
+				</td>
+
+				<td>
+					<form action="/updateCoach" method=post>
+						<input type=text name=id value={{coach.0}} hidden="true">
+						<input type=submit value=Update>
+					</form>
+				</td>
+
+			</tr>
+		{% endfor %}
+	</TABLE>
+
+
+
+	</p>
+	{% endblock %}
+
+</body>
+</html>

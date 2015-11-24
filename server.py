@@ -333,6 +333,81 @@ def searchPlayer():
 
         return render_template('player_search.html', playerList=playerListAsList, current_time=now.ctime())
 
+#*************************************************************************
+@app.route('/coaches')
+def coaches():
+    now = datetime.datetime.now()
+    cursor = dataBaseSetup.connection.cursor()
+    query = """select id, name, nation, team from COACHES;"""
+    cursor.execute(query)
+    coachListAsTuple = cursor.fetchall()
+    coachListAsList = []
+    for coach in coachListAsTuple:
+        coachListAsList.append(list(coach))
+
+    return render_template('coaches.html', coachList=coachListAsList, current_time=now.ctime())
+
+@app.route('/addCoach' , methods=['POST'])
+def addCoach():
+    id = request.form['id']
+    name = request.form['name']
+    nation = request.form['nation']
+    team = request.form['team']
+    cursor = dataBaseSetup.connection.cursor()
+    cursor.execute("INSERT INTO COACHES (id, name, nation, team) VALUES (%s, %s, %s, %s)", (id, name, nation, team))
+    dataBaseSetup.connection.commit()
+    return redirect('/coaches')
+
+@app.route('/deleteCoach' , methods=['POST'])
+def deleteCoach():
+    id = request.form['id']
+    cursor = dataBaseSetup.connection.cursor()
+    query = """DELETE FROM COACHES WHERE id=""" + id + """;"""
+    cursor.execute(query)
+    dataBaseSetup.connection.commit()
+    return redirect('/coaches')
+
+@app.route('/updateCoach' , methods=['POST'])
+def updateCoach():
+    if request.method == 'POST':
+        now = datetime.datetime.now()
+        cursor = dataBaseSetup.connection.cursor()
+        id = request.form['id']
+        query = """select id, name, nation, team from COACHES where id='""" + id + """';"""
+        cursor.execute(query)
+        update = list(cursor.fetchall()[0])
+        return render_template('coach_update.html', current_time=now.ctime(), updatedlist=update)
+
+@app.route('/update_Coach' , methods=['POST'])
+def update_Coach():
+        id = request.form['id']
+        name = request.form['name']
+        nation = request.form['nation']
+        team = request.form['team']
+        cursor = dataBaseSetup.connection.cursor()
+        query = """UPDATE COACHES SET NAME='""" + name + """' ,NATION='""" + nation + """',TEAM='""" + team + """' where ID=""" + id + """;"""
+        cursor.execute(query)
+        dataBaseSetup.connection.commit()
+        return redirect('/coaches')
+
+@app.route('/searchCoach' , methods=['POST'])
+def searchCoach():
+    if request.method == 'POST':
+        search = request.form['search_coach']
+        now = datetime.datetime.now()
+        cursor = dataBaseSetup.connection.cursor()
+        query="""SELECT * FROM COACHES WHERE (NAME LIKE '%""" + search + """%');"""
+        cursor.execute(query)
+        coachListAsTuple = cursor.fetchall()
+        coachListAsList = []
+        for coach in coachListAsTuple:
+            coachListAsList.append(list(coach))
+
+        return render_template('coach_search.html', coachList=coachListAsList, current_time=now.ctime())
+
+
+#*************************************************************************
+
 @app.route('/countries' , methods=['GET', 'POST'])
 def countries():
     now = datetime.datetime.now()
