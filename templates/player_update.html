@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		{% block title %}<title>Player Update</title>{% endblock %}
+
+	</head>
+	<body>
+	{% extends "layout.html" %}
+	{% block content %}
+		<h2>Update Player</h2>
+		<form action="/update_Player" method=post>
+		<dl>
+			<dd>
+				<input type=hidden name=id value={{updatedlist.0}}>
+			</dd>
+			<dt>Name:</dt>
+			<dd>
+				<input type=text name=name value={{updatedlist.1}}>
+			<dd>
+			<dt>Age:</dt>
+			<dd>
+				<input type=text name=age value={{updatedlist.2}}>
+			<dd>
+			<dt>Nation:</dt>
+			<dd>
+				<input type=text name=nation value={{updatedlist.3}}>
+			</dd>
+			<dd>
+			<dt>Team:</dt>
+			<dd>
+				<input type=text name=team value={{updatedlist.4}}>
+			</dd>
+			<dd>
+			<dt>Field:</dt>
+			<dd>
+				<input type=text name=field value={{updatedlist.5}}>
+			</dd>
+			<dd>
+				<br /> <input type=submit value=Update>
+			</dd>
+		</dl>
+	</form>
+
+
+
+	{% endblock %}
+	</body>
+</html>

@@ -9,8 +9,27 @@
 
 <body>
 	{% extends "layout.html" %}{% block content %}
+
 	<p>
-		<b>Player Add</b>
+		<b>Search Player</b>
+	</p>
+
+
+	<form method="post" action="/searchPlayer" >
+		<table cellpadding="0px" cellspacing="0px">
+			<tr>
+				<td style="border-style:solid none solid solid;border-color:#4B7B9F;border-width:1px;">
+				<input type="text" name="search_player" style="width:100px; border:0px solid; height:17px; padding:0px 3px; position:relative;">
+				</td>
+				<td style="border-style:solid;border-color:#4B7B9F;border-width:1px;">
+				<input type="submit" value="" style="border-style: none; background: url('static/images/search.gif') no-repeat; width: 24px; height: 20px;">
+				</td>
+			</tr>
+		</table>
+	</form>
+
+	<p>
+		<b>Add Player</b>
 	</p>
 
 	<form action="/addPlayer" method=post>
@@ -34,13 +53,13 @@
 			<dd>
 				<input type=text name=field>
 			<dd>
-			
+
 				<br /> <input type=submit value=Add>
 		</dl>
 	</form>
-	
-	
-	
+
+
+
 	<TABLE BORDER="5"    WIDTH="50%"   CELLPADDING="4" CELLSPACING="3">
 		   <TR>
 		      <TH COLSPAN="2"><BR><H3>PLAYER LIST</H3>
@@ -53,7 +72,7 @@
 		      <TH>Nation</TH>
 		      <TH>Team</TH>
 		      <TH>Field</TH>
-		      
+
 		   </TR>
 		   {% for player in playerList %}
 			<tr>
@@ -63,20 +82,27 @@
 				<td>{{ player.3 }}</td>
 				<td>{{ player.4 }}</td>
 				<td>{{ player.5 }}</td>
-				
+
 				<td>
 					<form action="/deletePlayer" method=post>
 						<input type=text name=id value={{player.0}} hidden="true">
 						<input type=submit value=Delete>
 					</form>
 				</td>
-			
+
+				<td>
+					<form action="/updatePlayer" method=post>
+						<input type=text name=id value={{player.0}} hidden="true">
+						<input type=submit value=Update>
+					</form>
+				</td>
+
 			</tr>
 		{% endfor %}
 	</TABLE>
-	
-	
-	
+
+
+
 	</p>
 	{% endblock %}
 
