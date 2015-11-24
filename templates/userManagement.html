@@ -21,15 +21,16 @@
 			<dt>Age:</dt>
 			<dd>
 				<input type=text name=age value={{user4Update.1}}>
-			<dd>
+			</dd>
 			<dt>E-mail:</dt>
 			<dd>
 				<input type=text name=email value={{user4Update.2}}>
-			<dd>
+			</dd>
 			<dt>Auth:</dt>
 			<dd>
 				<input type=text name=auth value={{user4Update.3}}>
 			</dd>
+
 			<dd>
 				<br /> <input type=submit value=Update>
 			</dd>
@@ -70,6 +71,7 @@
 			<th>Age</th>
 			<th>E-Mail</th>
 			<th>Auth</th>
+			<th>Country</th>
 			<th>Update</th>
 			<th>Delete</th>
 		</tr>
@@ -79,6 +81,7 @@
 			<td>{{ user.1 }}</td>
 			<td>{{ user.2 }}</td>
 			<td>{{ user.3 }}</td>
+			<td>{{ user.4 }}</td>
 			<td>
 				<form action="/updateUser" method=post>
 					<input type=text name=email value={{user.2}} hidden="true">

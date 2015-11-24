@@ -27,7 +27,8 @@ def home():
 def userManagement():
     now = datetime.datetime.now()
     cursor = dataBaseSetup.connection.cursor()
-    cursor.execute("""select name, age, email, auth from USERS;""")
+    cursor.execute("""select users.name, users.age, users.email, users.auth, countries.name from USERS join countries on users.country_id = countries.id;
+;""")
     userListAsTuple = cursor.fetchall()
     userListAsList = []
     for user in userListAsTuple:
