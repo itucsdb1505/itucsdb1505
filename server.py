@@ -293,6 +293,46 @@ def deletePlayer():
     dataBaseSetup.connection.commit()
     return redirect('/players')
 
+@app.route('/updatePlayer' , methods=['POST'])
+def updatePlayer():
+    if request.method == 'POST':
+        now = datetime.datetime.now()
+        cursor = dataBaseSetup.connection.cursor()
+        id = request.form['id']
+        query = """select id, name, age, nation, team, field from players where id='""" + id + """';"""
+        cursor.execute(query)
+        update = list(cursor.fetchall()[0])
+        return render_template('player_update.html', current_time=now.ctime(), updatedlist=update)
+
+@app.route('/update_Player' , methods=['POST'])
+def update_Player():
+        id = request.form['id']
+        name = request.form['name']
+        age = request.form['age']
+        nation = request.form['nation']
+        team = request.form['team']
+        field =request.form['field']
+        cursor = dataBaseSetup.connection.cursor()
+        query = """UPDATE PLAYERS SET NAME='""" + name + """',AGE=""" + age + """,NATION='""" + nation + """',TEAM='""" + team + """', FIELD='""" + field + """' where ID=""" + id + """;"""
+        cursor.execute(query)
+        dataBaseSetup.connection.commit()
+        return redirect('/players')
+
+@app.route('/searchPlayer' , methods=['POST'])
+def searchPlayer():
+    if request.method == 'POST':
+        search = request.form['search_player']
+        now = datetime.datetime.now()
+        cursor = dataBaseSetup.connection.cursor()
+        query="""SELECT * FROM PLAYERS WHERE (NAME LIKE '%""" + search + """%');"""
+        cursor.execute(query)
+        playerListAsTuple = cursor.fetchall()
+        playerListAsList = []
+        for player in playerListAsTuple:
+            playerListAsList.append(list(player))
+
+        return render_template('player_search.html', playerList=playerListAsList, current_time=now.ctime())
+
 @app.route('/countries' , methods=['GET', 'POST'])
 def countries():
     now = datetime.datetime.now()
