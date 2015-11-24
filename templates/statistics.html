@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Statistics</title>
+		<link rel="stylesheet" href="/static/style.css" />
+	</head>
+	<body>
+	{% extends "layout.html" %}
+	{% block content %}
+<form action="{{ url_for('statistics') }}" method="post">
+	<table border=2>
+		<tr>
+			<th style="width:80px">League</th>
+			<th style="width:80px">Statistic type</th>
+		</tr>
+		<td><select name="league">
+		  <option value="Super">Super League</option>
+		  <option value="Second">2nd League</option>
+		  <option value="Amateur">Amateur league</option>
+		</select></td>
+		<td><select name="stattype" >
+		  <option value="goal">Goal</option>
+		  <option value="assist">Assist</option>
+		  <option value="save">Save</option>
+		</select></td>
+		<td><input value="show" type="submit" /></td>
+	</table>
+</form>
+	<table border=2>
+		<tr>
+			<th>Name</th>
+			<th>Surname</th>
+			<th>Team</th>
+			<th>League</th>
+			<th>Goal</th>
+			<th>Assist</th>
+			<th>Save</th>
+		</tr>
+			{% for stats in list %}
+		<tr>
+			<td>{{ stats.0 }}</td>
+			<td>{{ stats.1 }}</td>
+			<td>{{ stats.2 }}</td>
+			<td>{{ stats.3 }}</td>
+			<td>{{ stats.4 }}</td>
+			<td>{{ stats.5 }}</td>
+			<td>{{ stats.6 }}</td>
+		</tr>
+			{% endfor %}
+	</table>
+	{% endblock %}
+	</body>
+</html>

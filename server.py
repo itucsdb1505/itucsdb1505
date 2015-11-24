@@ -170,6 +170,26 @@ def pool_update():
         dataBaseSetup.connection.commit()
         return redirect('/Pools')
 
+@app.route('/Statistics',methods=['GET', 'POST'])
+def statistics():
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        StatsListForm = []
+        return render_template('statistics.html', current_time=now.ctime(),list=StatsListForm)
+    else:
+        league=request.form['league']
+        stattype=request.form['stattype']
+        cursor = dataBaseSetup.connection.cursor()
+        query = """select * from stats where league='"""+league+"""' order by """+stattype+""" desc;"""
+        cursor.execute(query)
+        statsfetch = cursor.fetchall()
+        StatsListForm = []
+        for stats in statsfetch:
+            StatsListForm.append(list(stats))
+        now = datetime.datetime.now()
+        return render_template('statistics.html', current_time=now.ctime(), list=StatsListForm)
+
+
 @app.route('/players')
 def players():
     now = datetime.datetime.now()

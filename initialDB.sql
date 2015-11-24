@@ -17,6 +17,9 @@ DROP TABLE IF EXISTS POOL;
 CREATE TABLE POOL(NAME TEXT, CITY TEXT, CAPACITY INT, BUILT INT);
 INSERT INTO POOL values('Colesium','Rome', 25000, 1985);
 INSERT INTO POOL values('Itu','Istanbul', 27500, 2010);
+INSERT INTO POOL values('Arena','Sao Paolo', 35000, 1995);
+INSERT INTO POOL values('Mikees','London', 14500, 2005);
+INSERT INTO POOL values('Haka','New Zealand', 7000, 2001);
 
 DROP TABLE IF EXISTS PLAYERS;
 CREATE TABLE PLAYERS(ID INT, NAME TEXT, AGE INT, NATION TEXT, TEAM TEXT, FIELD TEXT);
@@ -28,3 +31,18 @@ INSERT INTO COUNTRIES values('ANKARA',3000000,1);
 INSERT INTO COUNTRIES values('ISTANBUL',7000000,3);
 INSERT INTO COUNTRIES values('TRABZON',800000,5);
 
+DROP TABLE IF EXISTS STATS;
+CREATE TABLE STATS(NAME TEXT,SURNAME TEXT,TEAM TEXT,LEAGUE TEXT, GOAL INT, ASSIST INT,SAVE INT);
+INSERT INTO STATS values('Can','Eren','Detroit','Super',30,12,0);
+INSERT INTO STATS values('Kaan','Orhan','Detroit','Super',23,11,0);
+INSERT INTO STATS values('Peter','Yankee','Miami','Super',0,7,10);
+INSERT INTO STATS values('Xavi','Xennon','Miami','Super',11,24,0);
+INSERT INTO STATS values('Berk','Aygun','Bristol','Super',5,7,0);
+INSERT INTO STATS values('Ali','Alie','Reds','Second',43,15,0);
+INSERT INTO STATS values('Mike','Mucho','Reds','Second',12,6,0);
+INSERT INTO STATS values('Jean','Tella','Coco','Second',15,3,0);
+INSERT INTO STATS values('David','Sanchez','Tacho','Second',12,16,0);
+INSERT INTO STATS values('Damien','Rilly','Blues','Amateur',2,8,6);
+INSERT INTO STATS values('Steve','Hudson','Kirks Team','Amateur',4,12,0);
+INSERT INTO STATS values('Gerald','Patty','Eagles','Amateur',1,3,0);
+INSERT INTO STATS values('George','Suffo','Attackers','Amateur',0,6,3);
