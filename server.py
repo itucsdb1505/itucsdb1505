@@ -27,7 +27,7 @@ def home():
 def userManagement():
     now = datetime.datetime.now()
     cursor = dataBaseSetup.connection.cursor()
-    cursor.execute("""select users.name, users.age, users.email, users.auth, countries.name from USERS join countries on users.country_id = countries.id;;""")
+    cursor.execute("""select users.name, users.age, users.email, users.auth, countries.name from USERS join countries on users.country_id = countries.id;""")
     userListAsTuple = cursor.fetchall()
     userListAsList = []
     for user in userListAsTuple:
@@ -66,11 +66,11 @@ def updateUser():
     now = datetime.datetime.now()
     cursor = dataBaseSetup.connection.cursor()
     email = request.form['email']
-    query = """select name, age, email, auth from users where email='""" + email + """';"""
+
+    query = """select users.name, users.age, users.email, users.auth, countries.name from USERS join countries on users.country_id = countries.id where email='""" + email + """';"""
     cursor.execute(query)
     user4Update = list(cursor.fetchall()[0])
-
-    cursor.execute("""select name, age, email, auth from USERS;""")
+    cursor.execute("""select users.name, users.age, users.email, users.auth, countries.name from USERS join countries on users.country_id = countries.id;""")
     userListAsTuple = cursor.fetchall()
     userListAsList = []
     for user in userListAsTuple:
@@ -621,7 +621,6 @@ if __name__ == '__main__':
         dataBaseSetup.makeConnection(app)
 
         dataBaseSetup.initiateDataBase()
-
         app.run(host='0.0.0.0', port=port, debug=True)
 
     except:
