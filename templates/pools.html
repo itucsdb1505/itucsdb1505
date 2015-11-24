@@ -27,7 +27,7 @@
 					</tr>
 					{% for pool in list %}
 					<tr>
-						<td><input type="checkbox" name="deletePoolbyname" value="{{ pool.0 }}" /></td>
+						<td><input type="radio" name="deletePoolbyname" value="{{ pool.0 }}" /></td>
 						<td><input type="radio" name="updatepool" value="{{ pool.0 }}"/></td>
 						<td>{{ pool.0 }}</td>
 						<td>{{ pool.1 }}</td>

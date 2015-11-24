@@ -170,13 +170,62 @@ def pool_update():
         dataBaseSetup.connection.commit()
         return redirect('/Pools')
 
-@app.route('/Statistics',methods=['GET', 'POST'])
+@app.route('/SearchStat' , methods=['POST'])
+def stat_search():
+        name = request.form['searchbyname']
+        cursor = dataBaseSetup.connection.cursor()
+        query = """select * from stats where (name like '%""" + name + """%');"""
+        cursor.execute(query)
+        statfetch = cursor.fetchall()
+        StatListForm = []
+        for stat in statfetch:
+            StatListForm.append(list(stat))
+        now = datetime.datetime.now()
+        return render_template('statistics.html', current_time=now.ctime(), list=StatListForm)
+
+@app.route('/UpdateStats', methods=['GET', 'POST'])
+def stat_update():
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        return render_template('stat_update.html', current_time=now.ctime())
+    else:
+        name = request.form['name']
+        surname = request.form['surname']
+        team = request.form['team']
+        league = request.form['league']
+        goal = request.form['goal']
+        assist = request.form['assist']
+        save = request.form['save']
+        oldname=request.form['oldname']
+        oldsurname=request.form['oldsurname']
+        cursor = dataBaseSetup.connection.cursor()
+        query = """update stats set name='""" + name + """',surname='""" + surname + """',team='""" + team + """',league='""" + league + """',goal=""" + goal + """,assist=""" + assist + """,save=""" + save + """ where name='""" + oldname + """' and surname='""" + surname + """';"""
+        cursor.execute(query)
+        dataBaseSetup.connection.commit()
+        return redirect('/Statistic')
+
+@app.route('/Statistic',methods=['GET', 'POST'])
 def statistics():
     if request.method == 'GET':
         now = datetime.datetime.now()
         StatsListForm = []
         return render_template('statistics.html', current_time=now.ctime(),list=StatsListForm)
-    else:
+    elif 'deletestatbyname' in request.form:
+        name = request.form['deletestatbyname']
+        cursor = dataBaseSetup.connection.cursor()
+        query = """delete from stats where name='""" + name + """';"""
+        cursor.execute(query)
+        dataBaseSetup.connection.commit()
+        return redirect('/Statistic')
+    elif 'updatestat' in request.form:
+        name = request.form['updatestat']
+        cursor = dataBaseSetup.connection.cursor()
+        query = """select * from stats where name='""" + name + """';"""
+        cursor.execute(query)
+        statupdated = list(cursor.fetchall()[0])
+        now = datetime.datetime.now()
+        return render_template('stat_update.html', current_time=now.ctime(), element=statupdated)
+    elif 'stattype' in request.form:
         league=request.form['league']
         stattype=request.form['stattype']
         cursor = dataBaseSetup.connection.cursor()
@@ -189,6 +238,24 @@ def statistics():
         now = datetime.datetime.now()
         return render_template('statistics.html', current_time=now.ctime(), list=StatsListForm)
 
+@app.route('/AddStat', methods=['GET', 'POST'])
+def stat_add():
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        return render_template('stat_add.html', current_time=now.ctime())
+    else:
+        name = request.form['name']
+        surname = request.form['surname']
+        team = request.form['team']
+        league = request.form['league']
+        goal = request.form['goal']
+        assist = request.form['assist']
+        save = request.form['save']
+        cursor = dataBaseSetup.connection.cursor()
+        query = """insert into stats values('""" + name + """','""" + surname + """','""" + team + """','""" + league + """',""" + goal + """,""" + assist + """,""" + save +""");"""
+        cursor.execute(query)
+        dataBaseSetup.connection.commit()
+        return redirect('/Statistic')
 
 @app.route('/players')
 def players():

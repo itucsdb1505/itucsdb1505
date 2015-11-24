@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		{% block title %}<title>Stat Add</title>{% endblock %}
+		<link rel="stylesheet" href="/static/style.css" />
+	</head>
+	<body>
+	{% extends "layout.html" %}
+	{% block content %}
+		<h2>Add Statistics</h2>
+		<form action="{{ url_for('stat_add') }}" method="post">
+			<table>
+				<tr>
+						<th>Player name:</th>
+				<td>
+					<input type="text" name="name"  />
+				</td>
+				</tr>
+				<tr>
+						<th>Player surname:</th>
+				<td>
+					<input type="text" name="surname" />
+				</td>
+				</tr>
+				<tr>
+					<th>Player's Team:</th>
+				<td>
+					<input type="text" name="team" />
+				</td>
+				</tr>
+				<tr>
+					<th>Team League</th>
+				<td>
+					<input type="text" name="league" />
+				</td>
+				</tr>
+				<tr>
+					<th>Goals</th>
+				<td>
+					<input type="text" name="goal" />
+				</td>
+				</tr>
+				<tr>
+					<th>Assists</th>
+				<td>
+					<input type="text" name="assist"  />
+				</td>
+				</tr>
+				<tr>
+					<th>Saves</th>
+				<td>
+					<input type="text" name="save"  />
+				</td>
+				</tr>
+			</table>
+		<input value="Add" type="submit" />
+	</form>
+	{% endblock %}
+	</body>
+</html>

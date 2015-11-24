@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		{% block title %}<title>Stat Update</title>{% endblock %}
+		<link rel="stylesheet" href="/static/style.css" />
+	</head>
+	<body>
+	{% extends "layout.html" %}
+	{% block content %}
+		<h2>Update Statistics</h2>
+		<form action="{{ url_for('stat_update') }}" method="post">
+			<table>
+				<tr>
+						<th>Player name:</th>
+				<td>
+					<input type="text" name="name" value={{element.0}} 	/>
+				</td>
+				</tr>
+				<tr>
+						<th>Player surname:</th>
+				<td>
+					<input type="text" name="surname" value={{element.1}} />
+				</td>
+				</tr>
+				<tr>
+					<th>Player's Team:</th>
+				<td>
+					<input type="text" name="team" value={{element.2}} />
+				</td>
+				</tr>
+				<tr>
+					<th>Team League</th>
+				<td>
+					<input type="text" name="league" value={{element.3}} />
+				</td>
+				</tr>
+				<tr>
+					<th>Goals</th>
+				<td>
+					<input type="text" name="goal" value={{element.4}} />
+				</td>
+				</tr>
+				<tr>
+					<th>Assists</th>
+				<td>
+					<input type="text" name="assist" value={{element.5}} />
+				</td>
+				</tr>
+				<tr>
+					<th>Saves</th>
+				<td>
+					<input type="text" name="save" value={{element.6}} />
+				</td>
+				</tr>
+				<tr>
+				<td>
+					<input type="hidden" name="oldname" value={{element.0}} />
+					<input type="hidden" name="oldsurname" value={{element.1}} />
+				</td>
+				</tr>
+			</table>
+			<input value="Update" type="submit" />
+		</form>
+	{% endblock %}
+	</body>
+</html>

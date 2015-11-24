@@ -8,11 +8,16 @@
 	<body>
 	{% extends "layout.html" %}
 	{% block content %}
+<form action="{{ url_for('stat_search') }}" method="post">
+			<input type=text name=searchbyname >
+					    <input type=submit value="Search by name" >
+</form>
+<ul></ul>
 <form action="{{ url_for('statistics') }}" method="post">
 	<table border=2>
 		<tr>
 			<th style="width:80px">League</th>
-			<th style="width:80px">Statistic type</th>
+			<th style="width:80px">Statistics according to</th>
 		</tr>
 		<td><select name="league">
 		  <option value="Super">Super League</option>
@@ -27,8 +32,12 @@
 		<td><input value="show" type="submit" /></td>
 	</table>
 </form>
+
+<form action="{{ url_for('statistics') }}" method="post">
 	<table border=2>
 		<tr>
+			<th style="width:80px">Delete</th>
+			<th style="width:80px">Update</th>
 			<th>Name</th>
 			<th>Surname</th>
 			<th>Team</th>
@@ -39,6 +48,8 @@
 		</tr>
 			{% for stats in list %}
 		<tr>
+			<td><input type="radio" name="deletestatbyname" value="{{ stats.0 }}" /></td>
+			<td><input type="radio" name="updatestat" value="{{ stats.0 }}"/></td>
 			<td>{{ stats.0 }}</td>
 			<td>{{ stats.1 }}</td>
 			<td>{{ stats.2 }}</td>
@@ -49,6 +60,13 @@
 		</tr>
 			{% endfor %}
 	</table>
+		<input type="submit" value="Delete" style="width:85px" />
+		<input type="submit" value="Update" style="width:80px"/>
+</form>
+<ul>
+	<ul><a href="{{ url_for('stat_add') }}">Add New Stat</a></ul>
+</ul>
+
 	{% endblock %}
 	</body>
 </html>
