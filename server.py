@@ -228,14 +228,14 @@ def deletePlayer():
 
 @app.route('/countries' , methods=['GET', 'POST'])
 def countries():
-        now = datetime.datetime.now()
-        cursor = dataBaseSetup.connection.cursor()
-        cursor.execute("SELECT * FROM COUNTRIES;")
-        countryListAsTuple = cursor.fetchall()
-        countryListAsList = []
-        for country in countryListAsTuple:
-            countryListAsList.append(list(country))
-        return render_template('countries.html', countryList=countryListAsList, current_time=now.ctime())
+    now = datetime.datetime.now()
+    cursor = dataBaseSetup.connection.cursor()
+    cursor.execute("SELECT * FROM COUNTRIES ORDER BY NAME;")
+    countryListAsTuple = cursor.fetchall()
+    countryListAsList = []
+    for country in countryListAsTuple:
+        countryListAsList.append(list(country))
+    return render_template('countries.html', countryList=countryListAsList, current_time=now.ctime())
 
 @app.route('/add_country' , methods=['GET', 'POST'])
 def add_country():
@@ -264,33 +264,42 @@ def search_country():
     if request.method == 'POST':
         now = datetime.datetime.now()
         cursor = dataBaseSetup.connection.cursor()
-        query="""SELECT * FROM COUNTRIES WHERE LOWER(NAME) LIKE LOWER('%"""+ request.form['search'] +"""%');"""
+        query="""SELECT * FROM COUNTRIES WHERE LOWER(NAME) LIKE LOWER('%"""+ request.form['search'] +"""%') ORDER BY NAME;"""
         cursor.execute(query)
         countryListAsTuple = cursor.fetchall()
         countryListAsList = []
         for country in countryListAsTuple:
             countryListAsList.append(list(country))
-        return render_template('search_country.html', countryList=countryListAsList, current_time=now.ctime())
+        return render_template('search_country.html', countryList=countryListAsList, count=len(countryListAsList), current_time=now.ctime())
 
-# @app.route('/edit_country/<id>', methods=['GET','POST'])
-# def edit_country(id):
-#     if request.method == 'GET':
-#         now = datetime.datetime.now()
-#         name = request.form['name']
-#         population = request.form['population']
-#         coordinates = request.form['coordinates']
-#         return render_template('edit_country.html', current_time=now.ctime())
-#     else:
-#         cursor = dataBaseSetup.connection.cursor()
-#         query = """SELECT NAME, POPULATION, COORDINATES FROM COUNTRIES WHERE ID=""" + id + """;"""
-#         cursor.execute(query)
-#         return redirect('/countries')
+@app.route('/edit_country/<id>', methods=['GET','POST'])
+def edit_country(id):
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        cursor = dataBaseSetup.connection.cursor()
+        query = """SELECT NAME, POPULATION, COORDINATES FROM COUNTRIES WHERE ID=""" + id + """;"""
+        cursor.execute(query)
+        name, population, coordinates = cursor.fetchone()
+        return render_template('edit_country.html', current_time=now.ctime(),id=id, name=name , population=population , coordinates=coordinates)
+
+@app.route('/update_country', methods=['GET','POST'])
+def update_country():
+    if request.method == 'POST':
+        id = request.form['id']
+        name = request.form['name']
+        population = request.form['population']
+        coordinates = request.form['coordinates']
+        cursor = dataBaseSetup.connection.cursor()
+        query="""UPDATE COUNTRIES SET NAME='"""+name+"""', POPULATION="""+population+""", COORDINATES="""+coordinates+""" WHERE ID="""+id+""";"""
+        cursor.execute(query)
+        dataBaseSetup.connection.commit()
+        return redirect('/countries')
 
 @app.route('/leagues' , methods=['GET', 'POST'])
 def leagues():
         now = datetime.datetime.now()
         cursor = dataBaseSetup.connection.cursor()
-        cursor.execute("SELECT * FROM LEAGUES;")
+        cursor.execute("SELECT * FROM LEAGUES ORDER BY NAME;")
         leagueListAsTuple = cursor.fetchall()
         leagueListAsList = []
         for league in leagueListAsTuple:
@@ -324,15 +333,36 @@ def search_league():
     if request.method == 'POST':
         now = datetime.datetime.now()
         cursor = dataBaseSetup.connection.cursor()
-        query="""SELECT * FROM LEAGUES WHERE LOWER(NAME) LIKE LOWER('%"""+ request.form['search'] +"""%');"""
+        query="""SELECT * FROM LEAGUES WHERE LOWER(NAME) LIKE LOWER('%"""+ request.form['search'] +"""%') ORDER BY NAME;"""
         cursor.execute(query)
         leagueListAsTuple = cursor.fetchall()
         leagueListAsList = []
         for league in leagueListAsTuple:
             leagueListAsList.append(list(league))
-        return render_template('search_league.html', leagueList=leagueListAsList, current_time=now.ctime())
+        return render_template('search_league.html', leagueList=leagueListAsList, count=len(leagueListAsList), current_time=now.ctime())
 
+@app.route('/edit_league/<id>', methods=['GET','POST'])
+def edit_league(id):
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        cursor = dataBaseSetup.connection.cursor()
+        query = """SELECT NAME, NATION, CLASSIFICATION FROM LEAGUES WHERE ID=""" + id + """;"""
+        cursor.execute(query)
+        name, nation, classification = cursor.fetchone()
+        return render_template('edit_league.html', current_time=now.ctime(),id=id, name=name , nation=nation , classification=classification)
 
+@app.route('/update_league', methods=['GET','POST'])
+def update_league():
+    if request.method == 'POST':
+        id = request.form['id']
+        name = request.form['name']
+        nation = request.form['nation']
+        classification = request.form['classification']
+        cursor = dataBaseSetup.connection.cursor()
+        query="""UPDATE LEAGUES SET NAME='"""+name+"""', NATION='"""+nation+"""', CLASSIFICATION="""+classification+""" WHERE ID="""+id+""";"""
+        cursor.execute(query)
+        dataBaseSetup.connection.commit()
+        return redirect('/leagues')
 
 
 

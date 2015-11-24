@@ -58,3 +58,5 @@ target/
 
 # Vagrant
 .vagrant/
+/server.py
+/initialDB.sql~

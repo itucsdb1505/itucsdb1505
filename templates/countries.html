@@ -6,7 +6,7 @@
                 <nav class="codrops-demos">
                 	<a href="{{url_for('home')}}" title="Main Page">Main Page</a>
 					<a class="current-demo" href="{{ url_for('countries') }}" title="Country">Country</a>
-					<a href='#' title="League">League</a>
+					<a href="{{ url_for('leagues') }}" title="League">League</a>
 					<a href="#" title="Message">Message</a>
 				</nav>
                 <nav class="codrops-demos">
@@ -34,7 +34,7 @@
 								<tr>
 									<td class="user-name">{{ country.1 }}
 										<p>
-										<a href="#" title="Edit Country">
+										<a href="{{url_for('edit_country',id=country.0) }}" title="Edit Country">
 											<img src="{{url_for('static',filename='emin/gfx/Pencil-icon.png')}}" width="40" height="40" alt="update">
 										</a>
 										<a href="{{url_for('delete_country',id=country.0) }}" title="Delete Country">
