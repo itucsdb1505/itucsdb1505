@@ -43,7 +43,7 @@ def addUser():
     email = request.form['email']
     auth = request.form['auth']
     cursor = dataBaseSetup.connection.cursor()
-    query = """INSERT INTO USERS values('""" + name + """',""" + age + """,'""" + email + """','""" + auth + """')"""
+    query = """INSERT INTO USERS(NAME, AGE, EMAIL, AUTH) values('""" + name + """',""" + age + """,'""" + email + """','""" + auth + """')"""
     cursor.execute(query)
     dataBaseSetup.connection.commit()
     return redirect('/userManagement')
@@ -619,6 +619,7 @@ if __name__ == '__main__':
 
 
         dataBaseSetup.makeConnection(app)
+
         app.run(host='0.0.0.0', port=port, debug=True)
 
     except:

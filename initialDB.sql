@@ -7,11 +7,11 @@ INSERT INTO test values(4);
 INSERT INTO test values(5);
 
 DROP TABLE IF EXISTS USERS;
-CREATE TABLE USERS(NAME TEXT, AGE INT, EMAIL CHAR(50), AUTH CHAR);
-INSERT INTO USERS values('Emre EROĞLU', 28, 'emreeroglu@itu.edu.tr', 'a');
-INSERT INTO USERS values('abcd', 45, 'abcd@itu.edu.tr', 'u');
-INSERT INTO USERS values('efgh', 85, 'efgh@itu.edu.tr', 'm');
-INSERT INTO USERS values('jklm', 20, 'jklm@itu.edu.tr', 'a');
+CREATE TABLE USERS(ID SERIAL PRIMARY KEY, NAME TEXT, AGE INT, EMAIL CHAR(50), AUTH CHAR);
+INSERT INTO USERS(NAME, AGE, EMAIL, AUTH) values('Emre EROĞLU', 28, 'emreeroglu@itu.edu.tr', 'a');
+INSERT INTO USERS(NAME, AGE, EMAIL, AUTH) values('abcd', 45, 'abcd@itu.edu.tr', 'u');
+INSERT INTO USERS(NAME, AGE, EMAIL, AUTH) values('efgh', 85, 'efgh@itu.edu.tr', 'm');
+INSERT INTO USERS(NAME, AGE, EMAIL, AUTH) values('jklm', 20, 'jklm@itu.edu.tr', 'a');
 
 DROP TABLE IF EXISTS POOL;
 CREATE TABLE POOL(NAME TEXT, CITY TEXT, CAPACITY INT, BUILT INT);
