@@ -21,15 +21,21 @@
 			<dt>Age:</dt>
 			<dd>
 				<input type=text name=age value={{user4Update.1}}>
-			<dd>
+			</dd>
 			<dt>E-mail:</dt>
 			<dd>
 				<input type=text name=email value={{user4Update.2}}>
-			<dd>
+			</dd>
 			<dt>Auth:</dt>
 			<dd>
 				<input type=text name=auth value={{user4Update.3}}>
 			</dd>
+
+			<dt>Country:</dt>
+			<dd>
+				<input type=text name=country value={{user4Update.4}}>
+			</dd>
+
 			<dd>
 				<br /> <input type=submit value=Update>
 			</dd>
@@ -56,7 +62,12 @@
 			<dd>
 				<input type=text name=auth>
 			<dd>
+			<dt>Country:
+			<dd>
+				<input type=text name=country_id>
+			<dd>
 				<br /> <input type=submit value=Add>
+
 		</dl>
 	</form>
 	{% endif %}
@@ -64,12 +75,14 @@
 		<b>User List</b>
 	</p>
 	<p>
+
 	<table border=1>
 		<tr>
 			<th>Name</th>
 			<th>Age</th>
 			<th>E-Mail</th>
 			<th>Auth</th>
+			<th>Country</th>
 			<th>Update</th>
 			<th>Delete</th>
 		</tr>
@@ -79,6 +92,7 @@
 			<td>{{ user.1 }}</td>
 			<td>{{ user.2 }}</td>
 			<td>{{ user.3 }}</td>
+			<td>{{ user.4 }}</td>
 			<td>
 				<form action="/updateUser" method=post>
 					<input type=text name=email value={{user.2}} hidden="true">

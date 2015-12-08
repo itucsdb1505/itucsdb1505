@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		{% block title %}<title>Coach Update</title>{% endblock %}
+
+	</head>
+	<body>
+	{% extends "layout.html" %}
+	{% block content %}
+		<h2>Update Coach</h2>
+		<form action="/update_Coach" method=post>
+		<dl>
+			<dd>
+				<input type=hidden name=id value={{updatedlist.0}}>
+			</dd>
+			<dt>Name:</dt>
+			<dd>
+				<input type=text name=name value={{updatedlist.1}}>
+			<dd>
+			<dt>Nation:</dt>
+			<dd>
+				<input type=text name=nation value={{updatedlist.2}}>
+			</dd>
+			<dd>
+			<dt>Team:</dt>
+			<dd>
+				<input type=text name=team value={{updatedlist.3}}>
+			</dd>
+
+			<dd>
+				<br /> <input type=submit value=Update>
+			</dd>
+		</dl>
+	</form>
+
+
+
+	{% endblock %}
+	</body>
+</html>
