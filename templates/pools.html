@@ -8,11 +8,12 @@
 	<body>
 	{% extends "layout.html" %}
 	{% block content %}
-
-		<form action="/SearchPool" method="post">
-			<input type=text name=searchbyname >
-					    <input type=submit value="Search by name" >
-		</form>
+		<div style="text-align:right; margin-bottom:20px">
+			<form action="/SearchPool" method="post">
+				<input type=text name=searchbyname >
+						    <input type=submit value="Search by name" >
+			</form>
+		</div>
 		<h2> Pool list</h2>
 			<form action="{{ url_for('pool_list') }}" method="post">
 				<table border=2>
@@ -37,8 +38,10 @@
 					</tr>
 					{% endfor %}
 				</table>
-				<input type="submit" value="Delete" name="delete" style="width:85px" />
-				<input type="submit" value="Update" name="Update" style="width:80px"/>
+				{%if list%}
+					<input type="submit" value="Delete" name="delete" style="width:85px" />
+					<input type="submit" value="Update" name="Update" style="width:80px"/>
+				{% endif %}
 			</form>
 			<ul>
 				<ul><a href="{{ url_for('pool_edit') }}">Add New Pool</a></ul>

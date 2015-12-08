@@ -96,20 +96,7 @@ def initiateDB():
 
 @app.route('/Pools', methods=['GET', 'POST'])
 def pool_list():
-        if request.method == 'GET':
-            try:
-                cursor=dataBaseSetup.connection.cursor()
-                query = """select * from pool;"""
-                cursor.execute(query)
-                poolfetch = cursor.fetchall()
-                PoolListForm = []
-                for pool in poolfetch:
-                    PoolListForm.append(list(pool))
-                now = datetime.datetime.now()
-                return render_template('pools.html', current_time=now.ctime(), list=PoolListForm)
-            except :
-                return redirect('/Pools')
-        elif 'deletePoolbyname' in request.form:
+        if 'deletePoolbyname' in request.form:
             try:
                 cursor=dataBaseSetup.connection.cursor()
                 name = request.form['deletePoolbyname']
@@ -128,6 +115,19 @@ def pool_list():
                 poolupdated = list(cursor.fetchall()[0])
                 now = datetime.datetime.now()
                 return render_template('pool_update.html', current_time=now.ctime(), element=poolupdated)
+            except :
+                return redirect('/Pools')
+        else:
+            try:
+                cursor=dataBaseSetup.connection.cursor()
+                query = """select * from pool;"""
+                cursor.execute(query)
+                poolfetch = cursor.fetchall()
+                PoolListForm = []
+                for pool in poolfetch:
+                    PoolListForm.append(list(pool))
+                now = datetime.datetime.now()
+                return render_template('pools.html', current_time=now.ctime(), list=PoolListForm)
             except :
                 return redirect('/Pools')
 
@@ -155,15 +155,16 @@ def pool_edit():
 def pool_search():
     try:
         cursor=dataBaseSetup.connection.cursor()
-
+        PoolListForm = []
+        now = datetime.datetime.now()
         name = request.form['searchbyname']
+        if len(name)==0:
+            return render_template('pools.html', current_time=now.ctime(), list=PoolListForm)
         query = """select * from pool where (name like '%""" + name + """%');"""
         cursor.execute(query)
         poolfetch = cursor.fetchall()
-        PoolListForm = []
         for pool in poolfetch:
             PoolListForm.append(list(pool))
-        now = datetime.datetime.now()
         return render_template('pools.html', current_time=now.ctime(), list=PoolListForm)
     except :
         return redirect('/Pools')
@@ -194,8 +195,9 @@ def pool_update():
 def stat_search():
     try:
         cursor=dataBaseSetup.connection.cursor()
-
         name = request.form['searchbyname']
+        if len(name)==0:
+            return redirect('/Statistic')
         query = """select * from stats where (name like '%""" + name + """%');"""
         cursor.execute(query)
         statfetch = cursor.fetchall()
@@ -235,11 +237,7 @@ def stat_update():
 
 @app.route('/Statistic',methods=['GET', 'POST'])
 def statistics():
-        if request.method == 'GET':
-            now = datetime.datetime.now()
-            StatsListForm = []
-            return render_template('statistics.html', current_time=now.ctime(),list=StatsListForm)
-        elif 'deletestatbyname' in request.form:
+        if 'deletestatbyname' in request.form:
             try:
                 cursor=dataBaseSetup.connection.cursor()
                 name = request.form['deletestatbyname']
@@ -275,6 +273,10 @@ def statistics():
                 return render_template('statistics.html', current_time=now.ctime(), list=StatsListForm)
             except :
                 return redirect('/Statistic')
+        else:
+            now = datetime.datetime.now()
+            StatsListForm = []
+            return render_template('statistics.html', current_time=now.ctime(),list=StatsListForm)
 
 @app.route('/AddStat', methods=['GET', 'POST'])
 def stat_add():
