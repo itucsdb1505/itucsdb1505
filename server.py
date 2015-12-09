@@ -1,8 +1,9 @@
 import datetime
+import psycopg2
 import os
 import json
-import os
 import re
+import sys
 
 from flask import Flask
 from flask import render_template
@@ -26,9 +27,11 @@ def home():
 @app.route('/userManagement')
 def userManagement():
     now = datetime.datetime.now()
-    cursor = dataBaseSetup.connection.cursor()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     cursor.execute("""select users.name, users.age, users.email, users.auth, countries.name from USERS join countries on users.country_id = countries.id;""")
     userListAsTuple = cursor.fetchall()
+    connection.close()
     userListAsList = []
     for user in userListAsTuple:
         userListAsList.append(list(user))
@@ -42,10 +45,12 @@ def addUser():
     age = request.form['age']
     email = request.form['email']
     auth = request.form['auth']
-    cursor = dataBaseSetup.connection.cursor()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     query = """INSERT INTO USERS(NAME, AGE, EMAIL, AUTH) values('""" + name + """',""" + age + """,'""" + email + """','""" + auth + """')"""
     cursor.execute(query)
-    dataBaseSetup.connection.commit()
+    connection.commit()
+    connection.close()
     return redirect('/userManagement')
 
 
@@ -55,23 +60,26 @@ def userUpdate():
     age = request.form['age']
     email = request.form['email']
     auth = request.form['auth']
-    cursor = dataBaseSetup.connection.cursor()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     query = """UPDATE users SET name='""" + name + """',age=""" + age + """,email='""" + email + """',auth='""" + auth + """' WHERE email='""" + email + """';"""
     cursor.execute(query)
-    dataBaseSetup.connection.commit()
+    connection.commit()
+    connection.close()
     return redirect('/userManagement')
 
 @app.route('/updateUser', methods=['POST'])
 def updateUser():
     now = datetime.datetime.now()
-    cursor = dataBaseSetup.connection.cursor()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     email = request.form['email']
-
     query = """select users.name, users.age, users.email, users.auth, countries.name from USERS join countries on users.country_id = countries.id where email='""" + email + """';"""
     cursor.execute(query)
     user4Update = list(cursor.fetchall()[0])
     cursor.execute("""select users.name, users.age, users.email, users.auth, countries.name from USERS join countries on users.country_id = countries.id;""")
     userListAsTuple = cursor.fetchall()
+    connection.close()
     userListAsList = []
     for user in userListAsTuple:
         userListAsList.append(list(user))
@@ -80,49 +88,60 @@ def updateUser():
 @app.route('/deleteUser' , methods=['POST'])
 def deleteUser():
     email = request.form['email']
-    cursor = dataBaseSetup.connection.cursor()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     query = """DELETE FROM USERS WHERE email='""" + email + """';"""
     cursor.execute(query)
-    dataBaseSetup.connection.commit()
+    connection.commit()
+    connection.close()
     return redirect('/userManagement')
 
 @app.route('/initiateDB')
 def initiateDB():
-    dataBaseSetup.initiateDataBase()
-    cursor = dataBaseSetup.connection.cursor()
+    dataBaseSetup.initiateDataBase(app)
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     cursor.execute("""select * from test;""")
     now = datetime.datetime.now()
-    return render_template('initiateDB.html', current_time=now.ctime(), data=cursor.fetchall())
+    data=cursor.fetchall()
+    connection.close()
+    return render_template('initiateDB.html', current_time=now.ctime(), data=data)
 
 @app.route('/Pools', methods=['GET', 'POST'])
 def pool_list():
         if 'deletePoolbyname' in request.form:
             try:
-                cursor=dataBaseSetup.connection.cursor()
+                connection = psycopg2.connect(app.config['dsn'])
+                cursor=connection.cursor()
                 name = request.form['deletePoolbyname']
                 query = """delete from pool where name='""" + name + """';"""
                 cursor.execute(query)
-                dataBaseSetup.connection.commit()
+                connection.commit()
+                connection.close()
                 return redirect('/Pools')
             except :
                 return redirect('/Pools')
         elif 'updatepool' in request.form:
             try:
-                cursor=dataBaseSetup.connection.cursor()
+                connection = psycopg2.connect(app.config['dsn'])
+                cursor=connection.cursor()
                 name = request.form['updatepool']
                 query = """select * from pool where name='""" + name + """';"""
                 cursor.execute(query)
                 poolupdated = list(cursor.fetchall()[0])
+                connection.close()
                 now = datetime.datetime.now()
                 return render_template('pool_update.html', current_time=now.ctime(), element=poolupdated)
             except :
                 return redirect('/Pools')
         else:
             try:
-                cursor=dataBaseSetup.connection.cursor()
+                connection = psycopg2.connect(app.config['dsn'])
+                cursor=connection.cursor()
                 query = """select * from pool;"""
                 cursor.execute(query)
                 poolfetch = cursor.fetchall()
+                connection.close()
                 PoolListForm = []
                 for pool in poolfetch:
                     PoolListForm.append(list(pool))
@@ -138,14 +157,16 @@ def pool_edit():
             return render_template('pool_edit.html', current_time=now.ctime())
         else:
             try:
-                cursor=dataBaseSetup.connection.cursor()
+                connection = psycopg2.connect(app.config['dsn'])
+                cursor=connection.cursor()
                 name = request.form['name']
                 city = request.form['city']
                 capacity = request.form['capacity']
                 built = request.form['built']
                 query = """insert into pool values('""" + name + """','""" + city + """',""" + capacity + """,""" + built + """);"""
                 cursor.execute(query)
-                dataBaseSetup.connection.commit()
+                connection.commit()
+                connection.close()
                 return redirect('/Pools')
             except:
                 return redirect('/Pools')
@@ -154,7 +175,8 @@ def pool_edit():
 @app.route('/SearchPool' , methods=['POST'])
 def pool_search():
     try:
-        cursor=dataBaseSetup.connection.cursor()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor=connection.cursor()
         PoolListForm = []
         now = datetime.datetime.now()
         name = request.form['searchbyname']
@@ -163,6 +185,7 @@ def pool_search():
         query = """select * from pool where (name like '%""" + name + """%');"""
         cursor.execute(query)
         poolfetch = cursor.fetchall()
+        connection.close()
         for pool in poolfetch:
             PoolListForm.append(list(pool))
         return render_template('pools.html', current_time=now.ctime(), list=PoolListForm)
@@ -177,7 +200,8 @@ def pool_update():
             return render_template('pool_update.html', current_time=now.ctime())
         else:
             try:
-                cursor=dataBaseSetup.connection.cursor()
+                connection = psycopg2.connect(app.config['dsn'])
+                cursor=connection.cursor()
                 name = request.form['name']
                 city = request.form['city']
                 capacity = request.form['capacity']
@@ -186,7 +210,8 @@ def pool_update():
                 oldcity=request.form['oldcity']
                 query = """update pool set name='""" + name + """',city='""" + city + """',capacity=""" + capacity + """,built=""" + built + """ where name='""" + oldname + """' and city='""" + oldcity + """';"""
                 cursor.execute(query)
-                dataBaseSetup.connection.commit()
+                connection.commit()
+                connection.close()
                 return redirect('/Pools')
             except:
                 return redirect('/Pools')
@@ -194,13 +219,15 @@ def pool_update():
 @app.route('/SearchStat' , methods=['POST'])
 def stat_search():
     try:
-        cursor=dataBaseSetup.connection.cursor()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor=connection.cursor()
         name = request.form['searchbyname']
         if len(name)==0:
             return redirect('/Statistic')
         query = """select * from stats where (name like '%""" + name + """%');"""
         cursor.execute(query)
         statfetch = cursor.fetchall()
+        connection.close()
         StatListForm = []
         for stat in statfetch:
             StatListForm.append(list(stat))
@@ -218,7 +245,8 @@ def stat_update():
             return render_template('stat_update.html', current_time=now.ctime())
         else:
             try:
-                cursor=dataBaseSetup.connection.cursor()
+                connection = psycopg2.connect(app.config['dsn'])
+                cursor=connection.cursor()
                 name = request.form['name']
                 surname = request.form['surname']
                 team = request.form['team']
@@ -230,7 +258,8 @@ def stat_update():
                 oldsurname=request.form['oldsurname']
                 query = """update stats set name='""" + name + """',surname='""" + surname + """',team='""" + team + """',league='""" + league + """',goal=""" + goal + """,assist=""" + assist + """,save=""" + save + """ where name='""" + oldname + """' and surname='""" + surname + """';"""
                 cursor.execute(query)
-                dataBaseSetup.connection.commit()
+                connection.commit()
+                connection.close()
                 return redirect('/Statistic')
             except :
                 return redirect('/Statistic')
@@ -239,33 +268,39 @@ def stat_update():
 def statistics():
         if 'deletestatbyname' in request.form:
             try:
-                cursor=dataBaseSetup.connection.cursor()
+                connection = psycopg2.connect(app.config['dsn'])
+                cursor=connection.cursor()
                 name = request.form['deletestatbyname']
                 query = """delete from stats where name='""" + name + """';"""
                 cursor.execute(query)
-                dataBaseSetup.connection.commit()
+                connection.commit()
+                connection.close()
                 return redirect('/Statistic')
             except :
                 return redirect('/Statistic')
         elif 'updatestat' in request.form:
             try:
-                cursor=dataBaseSetup.connection.cursor()
+                connection = psycopg2.connect(app.config['dsn'])
+                cursor=connection.cursor()
                 name = request.form['updatestat']
                 query = """select * from stats where name='""" + name + """';"""
                 cursor.execute(query)
                 statupdated = list(cursor.fetchall()[0])
+                connection.close()
                 now = datetime.datetime.now()
                 return render_template('stat_update.html', current_time=now.ctime(), element=statupdated)
             except :
                 return redirect('/Statistic')
         elif 'stattype' in request.form:
             try:
-                cursor=dataBaseSetup.connection.cursor()
+                connection = psycopg2.connect(app.config['dsn'])
+                cursor=connection.cursor()
                 league=request.form['league']
                 stattype=request.form['stattype']
                 query = """select * from stats where league='"""+league+"""' order by """+stattype+""" desc;"""
                 cursor.execute(query)
                 statsfetch = cursor.fetchall()
+                connection.close()
                 StatsListForm = []
                 for stats in statsfetch:
                     StatsListForm.append(list(stats))
@@ -285,7 +320,8 @@ def stat_add():
             return render_template('stat_add.html', current_time=now.ctime())
         else:
             try:
-                cursor=dataBaseSetup.connection.cursor()
+                connection = psycopg2.connect(app.config['dsn'])
+                cursor=connection.cursor()
                 name = request.form['name']
                 surname = request.form['surname']
                 team = request.form['team']
@@ -295,7 +331,8 @@ def stat_add():
                 save = request.form['save']
                 query = """insert into stats values('""" + name + """','""" + surname + """','""" + team + """','""" + league + """',""" + goal + """,""" + assist + """,""" + save +""");"""
                 cursor.execute(query)
-                dataBaseSetup.connection.commit()
+                connection.commit()
+                connection.close()
                 return redirect('/Statistic')
             except :
                  return redirect('/Statistic')
@@ -304,10 +341,12 @@ def stat_add():
 @app.route('/players')
 def players():
     now = datetime.datetime.now()
-    cursor = dataBaseSetup.connection.cursor()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     query = """select id, name, age, nation, team, field from PLAYERS;"""
     cursor.execute(query)
     playerListAsTuple = cursor.fetchall()
+    connection.close()
     playerListAsList = []
     for player in playerListAsTuple:
         playerListAsList.append(list(player))
@@ -323,29 +362,35 @@ def addPlayer():
     nation = request.form['nation']
     team = request.form['team']
     field = request.form['field']
-    cursor = dataBaseSetup.connection.cursor()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     cursor.execute("INSERT INTO PLAYERS (id, name, age, nation, team, field) VALUES (%s, %s, %s, %s, %s, %s)", (id, name, age, nation, team, field))
-    dataBaseSetup.connection.commit()
+    connection.commit()
+    connection.close()
     return redirect('/players')
 
 @app.route('/deletePlayer' , methods=['POST'])
 def deletePlayer():
     id = request.form['id']
-    cursor = dataBaseSetup.connection.cursor()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     query = """DELETE FROM PLAYERS WHERE id=""" + id + """;"""
     cursor.execute(query)
-    dataBaseSetup.connection.commit()
+    connection.commit()
+    connection.close()
     return redirect('/players')
 
 @app.route('/updatePlayer' , methods=['POST'])
 def updatePlayer():
     if request.method == 'POST':
         now = datetime.datetime.now()
-        cursor = dataBaseSetup.connection.cursor()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
         id = request.form['id']
         query = """select id, name, age, nation, team, field from players where id='""" + id + """';"""
         cursor.execute(query)
         update = list(cursor.fetchall()[0])
+        connection.close()
         return render_template('player_update.html', current_time=now.ctime(), updatedlist=update)
 
 @app.route('/update_Player' , methods=['POST'])
@@ -356,10 +401,12 @@ def update_Player():
         nation = request.form['nation']
         team = request.form['team']
         field =request.form['field']
-        cursor = dataBaseSetup.connection.cursor()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
         query = """UPDATE PLAYERS SET NAME='""" + name + """',AGE=""" + age + """,NATION='""" + nation + """',TEAM='""" + team + """', FIELD='""" + field + """' where ID=""" + id + """;"""
         cursor.execute(query)
-        dataBaseSetup.connection.commit()
+        connection.commit()
+        connection.close()
         return redirect('/players')
 
 @app.route('/searchPlayer' , methods=['POST'])
@@ -367,10 +414,12 @@ def searchPlayer():
     if request.method == 'POST':
         search = request.form['search_player']
         now = datetime.datetime.now()
-        cursor = dataBaseSetup.connection.cursor()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
         query="""SELECT * FROM PLAYERS WHERE (NAME LIKE '%""" + search + """%');"""
         cursor.execute(query)
         playerListAsTuple = cursor.fetchall()
+        connection.close()
         playerListAsList = []
         for player in playerListAsTuple:
             playerListAsList.append(list(player))
@@ -381,10 +430,12 @@ def searchPlayer():
 @app.route('/coaches')
 def coaches():
     now = datetime.datetime.now()
-    cursor = dataBaseSetup.connection.cursor()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     query = """select id, name, nation, team from COACHES;"""
     cursor.execute(query)
     coachListAsTuple = cursor.fetchall()
+    connection.close()
     coachListAsList = []
     for coach in coachListAsTuple:
         coachListAsList.append(list(coach))
@@ -397,29 +448,35 @@ def addCoach():
     name = request.form['name']
     nation = request.form['nation']
     team = request.form['team']
-    cursor = dataBaseSetup.connection.cursor()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     cursor.execute("INSERT INTO COACHES (id, name, nation, team) VALUES (%s, %s, %s, %s)", (id, name, nation, team))
-    dataBaseSetup.connection.commit()
+    connection.commit()
+    connection.close()
     return redirect('/coaches')
 
 @app.route('/deleteCoach' , methods=['POST'])
 def deleteCoach():
     id = request.form['id']
-    cursor = dataBaseSetup.connection.cursor()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     query = """DELETE FROM COACHES WHERE id=""" + id + """;"""
     cursor.execute(query)
-    dataBaseSetup.connection.commit()
+    connection.commit()
+    connection.close()
     return redirect('/coaches')
 
 @app.route('/updateCoach' , methods=['POST'])
 def updateCoach():
     if request.method == 'POST':
         now = datetime.datetime.now()
-        cursor = dataBaseSetup.connection.cursor()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
         id = request.form['id']
         query = """select id, name, nation, team from COACHES where id='""" + id + """';"""
         cursor.execute(query)
         update = list(cursor.fetchall()[0])
+        connection.close()
         return render_template('coach_update.html', current_time=now.ctime(), updatedlist=update)
 
 @app.route('/update_Coach' , methods=['POST'])
@@ -428,10 +485,12 @@ def update_Coach():
         name = request.form['name']
         nation = request.form['nation']
         team = request.form['team']
-        cursor = dataBaseSetup.connection.cursor()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
         query = """UPDATE COACHES SET NAME='""" + name + """' ,NATION='""" + nation + """',TEAM='""" + team + """' where ID=""" + id + """;"""
         cursor.execute(query)
-        dataBaseSetup.connection.commit()
+        connection.commit()
+        connection.close()
         return redirect('/coaches')
 
 @app.route('/searchCoach' , methods=['POST'])
@@ -439,10 +498,12 @@ def searchCoach():
     if request.method == 'POST':
         search = request.form['search_coach']
         now = datetime.datetime.now()
-        cursor = dataBaseSetup.connection.cursor()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
         query="""SELECT * FROM COACHES WHERE (NAME LIKE '%""" + search + """%');"""
         cursor.execute(query)
         coachListAsTuple = cursor.fetchall()
+        connection.close()
         coachListAsList = []
         for coach in coachListAsTuple:
             coachListAsList.append(list(coach))
@@ -455,9 +516,11 @@ def searchCoach():
 @app.route('/countries' , methods=['GET', 'POST'])
 def countries():
     now = datetime.datetime.now()
-    cursor = dataBaseSetup.connection.cursor()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     cursor.execute("SELECT * FROM COUNTRIES ORDER BY NAME;")
     countryListAsTuple = cursor.fetchall()
+    connection.close()
     countryListAsList = []
     for country in countryListAsTuple:
         countryListAsList.append(list(country))
@@ -472,27 +535,33 @@ def add_country():
         name = request.form['name']
         population = request.form['population']
         coordinates = request.form['coordinates']
-        cursor = dataBaseSetup.connection.cursor()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
         cursor.execute("INSERT INTO COUNTRIES(NAME, POPULATION, COORDINATES) VALUES(%s, %s, %s)",(name, population, coordinates))
-        dataBaseSetup.connection.commit()
+        connection.commit()
+        connection.close()
         return redirect('/countries')
 
 @app.route('/delete_country/<id>', methods=['GET'])
 def delete_country(id):
-    cursor = dataBaseSetup.connection.cursor()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     query = """DELETE FROM COUNTRIES WHERE ID=""" + id + """;"""
     cursor.execute(query)
-    dataBaseSetup.connection.commit()
+    connection.commit()
+    connection.close()
     return redirect('/countries')
 
 @app.route('/search_country' , methods=['POST'])
 def search_country():
     if request.method == 'POST':
         now = datetime.datetime.now()
-        cursor = dataBaseSetup.connection.cursor()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
         query="""SELECT * FROM COUNTRIES WHERE LOWER(NAME) LIKE LOWER('%"""+ request.form['search'] +"""%') ORDER BY NAME;"""
         cursor.execute(query)
         countryListAsTuple = cursor.fetchall()
+        connection.close()
         countryListAsList = []
         for country in countryListAsTuple:
             countryListAsList.append(list(country))
@@ -502,10 +571,12 @@ def search_country():
 def edit_country(id):
     if request.method == 'GET':
         now = datetime.datetime.now()
-        cursor = dataBaseSetup.connection.cursor()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
         query = """SELECT NAME, POPULATION, COORDINATES FROM COUNTRIES WHERE ID=""" + id + """;"""
         cursor.execute(query)
         name, population, coordinates = cursor.fetchone()
+        connection.close()
         return render_template('edit_country.html', current_time=now.ctime(),id=id, name=name , population=population , coordinates=coordinates)
 
 @app.route('/update_country', methods=['GET','POST'])
@@ -515,18 +586,22 @@ def update_country():
         name = request.form['name']
         population = request.form['population']
         coordinates = request.form['coordinates']
-        cursor = dataBaseSetup.connection.cursor()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
         query="""UPDATE COUNTRIES SET NAME='"""+name+"""', POPULATION="""+population+""", COORDINATES="""+coordinates+""" WHERE ID="""+id+""";"""
         cursor.execute(query)
-        dataBaseSetup.connection.commit()
+        connection.commit()
+        connection.close()
         return redirect('/countries')
 
 @app.route('/leagues' , methods=['GET', 'POST'])
 def leagues():
         now = datetime.datetime.now()
-        cursor = dataBaseSetup.connection.cursor()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
         cursor.execute("SELECT * FROM LEAGUES ORDER BY NAME;")
         leagueListAsTuple = cursor.fetchall()
+        connection.close()
         leagueListAsList = []
         for league in leagueListAsTuple:
             leagueListAsList.append(list(league))
@@ -541,27 +616,33 @@ def add_league():
         name = request.form['name']
         nation = request.form['nation']
         classification = request.form['classification']
-        cursor = dataBaseSetup.connection.cursor()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
         cursor.execute("INSERT INTO LEAGUES(NAME, NATION, CLASSIFICATION) VALUES(%s, %s, %s)",(name, nation, classification))
-        dataBaseSetup.connection.commit()
+        connection.commit()
+        connection.close()
         return redirect('/leagues')
 
 @app.route('/delete_league/<id>', methods=['GET'])
 def delete_league(id):
-    cursor = dataBaseSetup.connection.cursor()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     query = """DELETE FROM LEAGUES WHERE ID=""" + id + """;"""
     cursor.execute(query)
-    dataBaseSetup.connection.commit()
+    connection.commit()
+    connection.close()
     return redirect('/leagues')
 
 @app.route('/search_league' , methods=['POST'])
 def search_league():
     if request.method == 'POST':
+        connection = psycopg2.connect(app.config['dsn'])
         now = datetime.datetime.now()
-        cursor = dataBaseSetup.connection.cursor()
+        cursor = connection.cursor()
         query="""SELECT * FROM LEAGUES WHERE LOWER(NAME) LIKE LOWER('%"""+ request.form['search'] +"""%') ORDER BY NAME;"""
         cursor.execute(query)
         leagueListAsTuple = cursor.fetchall()
+        connection.close()
         leagueListAsList = []
         for league in leagueListAsTuple:
             leagueListAsList.append(list(league))
@@ -570,24 +651,28 @@ def search_league():
 @app.route('/edit_league/<id>', methods=['GET','POST'])
 def edit_league(id):
     if request.method == 'GET':
+        connection = psycopg2.connect(app.config['dsn'])
         now = datetime.datetime.now()
-        cursor = dataBaseSetup.connection.cursor()
+        cursor = connection.cursor()
         query = """SELECT NAME, NATION, CLASSIFICATION FROM LEAGUES WHERE ID=""" + id + """;"""
         cursor.execute(query)
         name, nation, classification = cursor.fetchone()
+        connection.close()
         return render_template('edit_league.html', current_time=now.ctime(),id=id, name=name , nation=nation , classification=classification)
 
 @app.route('/update_league', methods=['GET','POST'])
 def update_league():
     if request.method == 'POST':
+        connection = psycopg2.connect(app.config['dsn'])
         id = request.form['id']
         name = request.form['name']
         nation = request.form['nation']
         classification = request.form['classification']
-        cursor = dataBaseSetup.connection.cursor()
+        cursor = connection.cursor()
         query="""UPDATE LEAGUES SET NAME='"""+name+"""', NATION='"""+nation+"""', CLASSIFICATION="""+classification+""" WHERE ID="""+id+""";"""
         cursor.execute(query)
-        dataBaseSetup.connection.commit()
+        connection.commit()
+        connection.close()
         return redirect('/leagues')
 
 
@@ -613,16 +698,13 @@ if __name__ == '__main__':
             port, debug = 5000, True
 
         VCAP_SERVICES = os.getenv('VCAP_SERVICES')
+
         if VCAP_SERVICES is not None:
             app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
         else:
             app.config['dsn'] = "host='localhost' dbname='itucsdb' user='postgres' password='12345'"
 
-
-
-        dataBaseSetup.makeConnection(app)
-
-        dataBaseSetup.initiateDataBase()
+        dataBaseSetup.initiateDataBase(app)
         app.run(host='0.0.0.0', port=port, debug=True)
 
     except:
