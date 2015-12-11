@@ -10,6 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='emin/css/demo.css') }}" />
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='emin/css/component.css') }}" />
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='emin/css/default.css') }}" />
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cssmenu/styles.css') }}" />
 
 		<script src="{{ url_for('static', filename='emin/js/jquery.min.js') }}" type="text/javascript"></script>
 		<script src="{{ url_for('static', filename='emin/js/jquery.ba-throttle-debounce.min.js') }}" type="text/javascript"></script>
@@ -17,6 +18,7 @@
 		<script src="{{ url_for('static', filename='emin/js/jquery.js') }}" type="text/javascript"></script>
 		<script src="{{ url_for('static', filename='emin/js/validate.min.js') }}" type="text/javascript"></script>
 		<script src="{{ url_for('static', filename='emin/js/init.js') }}" type="text/javascript"></script>
+ 		<script src="{{ url_for('static', filename='cssmenu/script.js') }}" type="text/javascript"></script>
         <script type="text/javascript">
 		  $(document).ready(
 		  function() {
@@ -31,14 +33,39 @@
     	</script>
 
     	<title>{%block title%} {%endblock%}</title>
-
+   <header>
+		<nav class="codrops-demos">
+			<ul>
+				<li class='active'><a href="{{ url_for('home') }}"><span>Home</span></a></li>
+				<li class='has-sub'><a href='#'><span>General</span></a>
+					<ul>
+						<li><a href="{{ url_for('players') }}"><span>Players</span></a></li>
+						<li><a href="{{ url_for('coaches') }}"><span>Coaches</span></a></li>
+						<li class='last'><a href="{{ url_for('pool_list') }}"><span>Pools</span></a></li>
+					</ul></li>
+				<li class='active'><a href="{{ url_for('statistics') }}"><span>Statistics</span></a>
+				<li class='has-sub'><a href='#'><span>Emin</span></a>
+					<ul>
+						<li><a href="{{ url_for('leagues')}}"><span>Leagues</span></a></li>
+						<li><a href="{{ url_for('countries')}}"><span>Countries</span></a></li>
+						<li><a href='#'><span>Messages</span></a></li>
+					</ul></li>
+				<li class='has-sub'><a href='#'><span>About</span></a>
+					<ul>
+						<li class='last'><a href='#'><span>Water Polo</span></a></li>
+					</ul></li>
+				<li class='has-sub'><a href='#'><span>Administration</span></a>
+					<ul>
+						<li><a href="{{ url_for('userManagement') }}"><span>User Management</span></a></li>
+					</ul></li>
+				<li class='last'><a href="{{ url_for('initiateDB') }}"><span>Initialize DB</span></a>
+			</li>
+			</ul>
+		</nav>
+	</header>
 	</head>
 	<body>
 		<div class="container">
-			<header>
-<!-- 				<h1>Pages of <em>Emin OCAK</em> <span>040100040</span></h1> -->
-				{%block navigator %} {%endblock%}
-			</header>
 			{%block content%}{%endblock%}
 		</div>
 	</body>

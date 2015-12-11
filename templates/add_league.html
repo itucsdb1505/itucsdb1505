@@ -1,20 +1,9 @@
-{% extends "eminLayout.html" %}
+{% extends "layout.html" %}
 
 {%block title%}Add League{%endblock%}
 
-{%block navigator %}
-                <nav class="codrops-demos">
-                	<a href="{{url_for('home')}}" title="Main Page">Main Page</a>
-					<a href="{{ url_for('countries') }}" title="Country">Country</a>
-					<a href="{{ url_for('leagues') }}" title="League">League</a>
-					<a href="#" title="Message">Message</a>
-				</nav>
-                <nav class="codrops-demos">
-					<a class="current-demo" href="{{ url_for('add_league') }}" title="Add League">Add League</a>
-				</nav>
-{%endblock%}
-
 {%block content%}
+
 	<div class="wrapper">
 		<form id="form" class="blocks" method="post" action="/add_league">
 			<p>
@@ -28,8 +17,7 @@
 						<option value="{{country.0}}">{{ country.1 }}</option>
 					{% endfor %}
 				</select>
-			</p>
-			<p>
+				<a href="{{ url_for('add_country') }}" class="btn2">Add New Country</a>
 				<label>Classification:</label>
 				<input type="text" class="text" name="classification" />
 			</p>

@@ -158,7 +158,7 @@ a:hover, a:focus {
  	background: #444;
  	background: rgba(0,0,0,.2);
  */
- 	margin: 2px 50px auto;
+ 	margin: 50px 50px 50px;
     border-radius: 10px;
     box-shadow: 0 1px 1px rgba(0,0,0,.4) inset, 0 1px 0 rgba(255,255,255,.2);
 }
@@ -203,7 +203,7 @@ a:hover, a:focus {
 /* Form submit button */
 .form-wrapper button {
 	overflow: visible;
-    position: relative;
+    position: hidden;
     float: right;
     border: 0;
     padding: 0;

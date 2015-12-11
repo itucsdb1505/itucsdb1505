@@ -1,20 +1,9 @@
-{% extends "eminLayout.html" %}
+{% extends "layout.html" %}
 
 {%block title%}Add Country{%endblock%}
 
-{%block navigator %}
-                <nav class="codrops-demos">
-                	<a href="{{url_for('home')}}" title="Main Page">Main Page</a>
-					<a href="{{ url_for('countries') }}" title="Country">Country</a>
-					<a href="{{ url_for('leagues') }}" title="League">League</a>
-					<a href="#" title="Message">Message</a>
-				</nav>
-                <nav class="codrops-demos">
-					<a class="current-demo" href="{{ url_for('add_country') }}" title="Add Country">Add Country</a>
-				</nav>
-{%endblock%}
-
 {%block content%}
+
 	<div class="wrapper">
 		<form id="form" class="blocks" method="post" action="/add_country">
 			<p>

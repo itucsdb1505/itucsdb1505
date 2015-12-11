@@ -16,9 +16,6 @@ $(function(){
 			title:{
 				required: true
 			},
-//			nation: {
-//				required: true
-//			},
 			classification: {
 				required: true,
 				digits:true
@@ -51,9 +48,6 @@ $(function(){
 			title: {
 				required: 'This field is required'
 			},
-//			nation: {
-//				required: 'This field is required'
-//			},
 			classification: {
 				required: 'This field is required',
 				digits:'Please enter only digits'
