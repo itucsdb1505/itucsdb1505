@@ -16,14 +16,22 @@
 
 {%block content%}
 	<div class="wrapper">
-		<form class="blocks" method="post" action="/update_league">
+		<form id="form" class="blocks" method="post" action="/update_league">
 			<p>
 				<label>Name:</label>
-				<input type="text" class="text" name="name"  value={{name}} required />
+				<input type="text" class="text" name="name"  value="{{name}}" />
 			</p>
 			<p>
 				<label>Nation:</label>
-				<input type="text" class="text" name="nation" value={{nation}} required />
+				<select class="text" name="nation">
+					{% for country in countryList %}
+						{% if country.0 == nation %}
+							<option value="{{country.0}}" selected>{{ country.1 }}</option>
+						{% else %}
+							<option value="{{country.0}}" >{{ country.1 }}</option>
+						{% endif %}
+					{% endfor %}
+				</select>
 			</p>
 			<p>
 				<label>Classification:</label>

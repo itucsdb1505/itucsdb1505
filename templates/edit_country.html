@@ -16,14 +16,14 @@
 
 {%block content%}
 	<div class="wrapper">
-		<form class="blocks" method="post" action="/update_country">
+		<form id="form" class="blocks" method="post" action="/update_country">
 			<p>
 				<label>Name:</label>
-				<input type="text" class="text" name="name"  value={{name}} required />
+				<input type="text" class="text" name="name"  value={{name}} />
 			</p>
 			<p>
 				<label>Population:</label>
-				<input type="text" class="text" name="population" value={{population}} required />
+				<input type="text" class="text" name="population" value={{population}} />
 			</p>
 			<p>
 				<label>Coordinates:</label>

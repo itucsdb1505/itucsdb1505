@@ -599,7 +599,7 @@ def leagues():
         now = datetime.datetime.now()
         connection = psycopg2.connect(app.config['dsn'])
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM LEAGUES ORDER BY NAME;")
+        cursor.execute("SELECT LEAGUES.ID, COUNTRIES.NAME, LEAGUES.CLASSIFICATION, LEAGUES.NAME FROM LEAGUES JOIN COUNTRIES ON LEAGUES.NATION = COUNTRIES.ID ORDER BY COUNTRIES.NAME;")
         leagueListAsTuple = cursor.fetchall()
         connection.close()
         leagueListAsList = []
@@ -611,7 +611,15 @@ def leagues():
 def add_league():
     if request.method == 'GET':
         now = datetime.datetime.now()
-        return render_template('add_league.html', current_time=now.ctime())
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM COUNTRIES ORDER BY NAME;")
+        countryListAsTuple = cursor.fetchall()
+        connection.close()
+        countryListAsList = []
+        for country in countryListAsTuple:
+            countryListAsList.append(list(country))
+        return render_template('add_league.html', current_time=now.ctime(), countryList=countryListAsList)
     else:
         name = request.form['name']
         nation = request.form['nation']
@@ -639,7 +647,7 @@ def search_league():
         connection = psycopg2.connect(app.config['dsn'])
         now = datetime.datetime.now()
         cursor = connection.cursor()
-        query="""SELECT * FROM LEAGUES WHERE LOWER(NAME) LIKE LOWER('%"""+ request.form['search'] +"""%') ORDER BY NAME;"""
+        query="""SELECT LEAGUES.ID, COUNTRIES.NAME, LEAGUES.CLASSIFICATION, LEAGUES.NAME FROM LEAGUES JOIN COUNTRIES ON LEAGUES.NATION = COUNTRIES.ID WHERE LOWER(LEAGUES.NAME) LIKE LOWER('%"""+ request.form['search'] +"""%') ORDER BY COUNTRIES.NAME;"""
         cursor.execute(query)
         leagueListAsTuple = cursor.fetchall()
         connection.close()
@@ -657,8 +665,14 @@ def edit_league(id):
         query = """SELECT NAME, NATION, CLASSIFICATION FROM LEAGUES WHERE ID=""" + id + """;"""
         cursor.execute(query)
         name, nation, classification = cursor.fetchone()
+        cursor.execute("SELECT * FROM COUNTRIES ORDER BY NAME;")
+        countryListAsTuple = cursor.fetchall()
         connection.close()
-        return render_template('edit_league.html', current_time=now.ctime(),id=id, name=name , nation=nation , classification=classification)
+        countryListAsList = []
+        for country in countryListAsTuple:
+            countryListAsList.append(list(country))
+        connection.close()
+        return render_template('edit_league.html', current_time=now.ctime(),id=id, name=name , nation=nation, classification=classification, countryList=countryListAsList)
 
 @app.route('/update_league', methods=['GET','POST'])
 def update_league():

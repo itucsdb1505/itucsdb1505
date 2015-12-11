@@ -32,7 +32,7 @@
 					<tbody>
 							 {% for league in leagueList %}
 								<tr>
-									<td class="user-name">{{ league.2 }}
+									<td class="user-name">{{ league.1 }}
 										<p>
 										<a href="{{url_for('edit_league',id=league.0) }}" title="Edit League">
 											<img src="{{url_for('static',filename='emin/gfx/Pencil-icon.png')}}" width="40" height="40" alt="update">
@@ -42,8 +42,8 @@
 										</a>
 										</p>
 									</td>
-									<td class="user-email">{{ league.3 }}</td>
-									<td class="user-phone">{{ league.1 }}</td>
+									<td class="user-email">{{ league.2 }}</td>
+									<td class="user-phone">{{ league.3 }}</td>
 								</tr>
 							{% endfor %}
 					</tbody>

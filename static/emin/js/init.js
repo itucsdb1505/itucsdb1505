@@ -4,19 +4,24 @@ $(function(){
 		rules: {
 			name: {
 				required: true,
-				minlength: 2
+				minlength: 2,
 			},
 			population:{
-				required: true
+				required: true,
+				number:true
+			},
+			coordinates:{
+				number:true
 			},
 			title:{
 				required: true
 			},
-			nation: {
-				required: true
-			},
+//			nation: {
+//				required: true
+//			},
 			classification: {
 				required: true,
+				digits:true
 			},
 			phone: {
 				required: true,
@@ -37,16 +42,21 @@ $(function(){
 				minlength: 'Minimum length: 2'
 			},
 			population:{
-				required: 'This field is required'
+				required: 'This field is required',
+				number: 'Please enter a valid number'
+			},
+			coordinates:{
+				number: 'Please enter a valid number'
 			},
 			title: {
 				required: 'This field is required'
 			},
-			nation: {
-				required: 'This field is required'
-			},
+//			nation: {
+//				required: 'This field is required'
+//			},
 			classification: {
-				required: 'This field is required'
+				required: 'This field is required',
+				digits:'Please enter only digits'
 			},
 			phone: {
 				required: 'This field is required',

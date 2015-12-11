@@ -19,15 +19,19 @@
 		<form id="form" class="blocks" method="post" action="/add_league">
 			<p>
 				<label>Name:</label>
-				<input type="text" class="text" name="name" required autofocus/>
+				<input type="text" class="text" name="name" autofocus/>
 			</p>
 			<p>
 				<label>Nation:</label>
-				<input type="text" class="text" name="nation" required />
+				<select class="text" name="nation">
+					{% for country in countryList %}
+						<option value="{{country.0}}">{{ country.1 }}</option>
+					{% endfor %}
+				</select>
 			</p>
 			<p>
 				<label>Classification:</label>
-				<input type="text" class="text" name="classification" required />
+				<input type="text" class="text" name="classification" />
 			</p>
 			<p>
 				<label>&nbsp;</label>
