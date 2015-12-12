@@ -13,19 +13,19 @@ $(function(){
 			coordinates:{
 				number:true
 			},
-			title:{
-				required: true
-			},
 			classification: {
 				required: true,
 				digits:true
+			},
+			title:{
+				required: true
 			},
 			phone: {
 				required: true,
 				number: true,
 				minlength: 11
 			},
-			email: {
+			mail: {
 				required: true,
 				email: true
 			},
@@ -45,19 +45,22 @@ $(function(){
 			coordinates:{
 				number: 'Please enter a valid number'
 			},
-			title: {
-				required: 'This field is required'
-			},
 			classification: {
 				required: 'This field is required',
 				digits:'Please enter only digits'
 			},
+			title: {
+				required: 'This field is required'
+			},
 			phone: {
 				required: 'This field is required',
 				number: 'Invalid phone number',
-				length: 'Length: 11'
+				minlength: 'Length: 11'
 			},
-			email: 'Invalid e-mail address',
+			mail: {
+				required: 'This field is required',
+				email: 'Invalid e-mail address'
+			},
 			message: {
 				required: 'This field is required'
 			}

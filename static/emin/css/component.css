@@ -58,7 +58,6 @@ tbody tr:hover {
 .sticky-wrap {
 	overflow-x: auto;
 	overflow-y: hidden;
-	position: relative;
 	margin: 3em 0;
 	width: 100%;
 }
