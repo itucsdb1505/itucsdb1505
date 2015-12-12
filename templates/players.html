@@ -5,6 +5,21 @@
 	<title>Players</title>
 	<link rel="stylesheet"
 	href="{{ url_for('static', filename='style.css') }}" />
+
+	<script language="JavaScript">
+		function setVisibility(id) {
+			if(document.getElementById('addButton').value=='Hide Layer'){
+				document.getElementById('addButton').value = 'Add New Player';
+				document.getElementById(id).style.display = 'none';
+				}else{
+				document.getElementById('addButton').value = 'Hide Layer';
+				document.getElementById(id).style.display = 'inline';
+			}
+		}
+
+
+	</script>
+
 </head>
 
 <body>
@@ -16,30 +31,31 @@
 
 
 	<form method="post" action="/searchPlayer" >
-		<table cellpadding="0px" cellspacing="0px">
+
 			<tr>
 				<td style="border-style:solid none solid solid;border-color:#4B7B9F;border-width:1px;">
-				<input type="text" name="search_player" style="width:100px; border:0px solid; height:17px; padding:0px 3px; position:relative;">
+				<input type="text" name="search_player" style="width:100px; border:0px solid; height:20px; border-width:1px; padding:0px 3px; position:relative;">
 				</td>
 				<td style="border-style:solid;border-color:#4B7B9F;border-width:1px;">
 				<input type="submit" value="" style="border-style: none; background: url('static/images/search.gif') no-repeat; width: 24px; height: 20px;">
 				</td>
 			</tr>
-		</table>
+
 	</form>
 
-	<p>
-		<b>Add Player</b>
-	</p>
+
+	<input type=button name=type id='addButton' value='Add New Player' onclick="setVisibility('add');";>
+
+	<div id="add" style="display:none;">
 
 	<form action="/addPlayer" method=post>
 		<dl>
-			<dt>Id:
-			<dd>
-				<input type=text name=id>
 			<dt>Name:
 			<dd>
 				<input type=text name=name>
+			<dt>Surname:
+			<dd>
+				<input type=text name=surname>
 			<dt>Age:
 			<dd>
 				<input type=text name=age>
@@ -52,13 +68,16 @@
 			<dt>Field:
 			<dd>
 				<input type=text name=field>
+			<dt>Goal:
+			<dd>
+				<input type=text name=goal>
 			<dd>
 
 				<br /> <input type=submit value=Add>
 		</dl>
 	</form>
 
-
+	</div>
 
 	<TABLE BORDER="5"    WIDTH="50%"   CELLPADDING="4" CELLSPACING="3">
 		   <TR>
@@ -66,22 +85,28 @@
 		      </TH>
 		   </TR>
 		   <TR>
-		      <TH>ID</TH>
+
 		      <TH>Name</TH>
+		      <TH>Surname</TH>
 		      <TH>Age</TH>
 		      <TH>Nation</TH>
 		      <TH>Team</TH>
 		      <TH>Field</TH>
+		      <TH>GOAL</TH>
+
 
 		   </TR>
 		   {% for player in playerList %}
 			<tr>
-				<td>{{ player.0 }}</td>
+
 				<td>{{ player.1 }}</td>
 				<td>{{ player.2 }}</td>
 				<td>{{ player.3 }}</td>
 				<td>{{ player.4 }}</td>
 				<td>{{ player.5 }}</td>
+				<td>{{ player.6 }}</td>
+				<td>{{ player.7 }}</td>
+
 
 				<td>
 					<form action="/deletePlayer" method=post>

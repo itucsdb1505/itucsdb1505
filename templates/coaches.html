@@ -16,16 +16,16 @@
 
 
 	<form method="post" action="/searchCoach" >
-		<table cellpadding="0px" cellspacing="0px">
-			<tr>
+
+		<tr>
 				<td style="border-style:solid none solid solid;border-color:#4B7B9F;border-width:1px;">
-				<input type="text" name="search_coach" style="width:100px; border:0px solid; height:17px; padding:0px 3px; position:relative;">
+				<input type="text" name="search_coach" style="width:100px; border:0px solid; height:20px; border-width:1px; padding:0px 3px; position:relative;">
 				</td>
 				<td style="border-style:solid;border-color:#4B7B9F;border-width:1px;">
 				<input type="submit" value="" style="border-style: none; background: url('static/images/search.gif') no-repeat; width: 24px; height: 20px;">
 				</td>
 			</tr>
-		</table>
+
 	</form>
 
 	<p>
@@ -34,12 +34,13 @@
 
 	<form action="/addCoach" method=post>
 		<dl>
-			<dt>Id:
-			<dd>
-				<input type=text name=id>
+
 			<dt>Name:
 			<dd>
 				<input type=text name=name>
+			<dt>Surname:
+			<dd>
+				<input type=text name=surname>
 			<dt>Nation:
 			<dd>
 				<input type=text name=nation>
@@ -59,18 +60,18 @@
 		      </TH>
 		   </TR>
 		   <TR>
-		      <TH>ID</TH>
 		      <TH>Name</TH>
+		      <TH>Surname</TH>
 		      <TH>Nation</TH>
 		      <TH>Team</TH>
 
 		   </TR>
 		   {% for coach in coachList %}
 			<tr>
-				<td>{{ coach.0 }}</td>
 				<td>{{ coach.1 }}</td>
 				<td>{{ coach.2 }}</td>
 				<td>{{ coach.3 }}</td>
+				<td>{{ coach.4 }}</td>
 
 				<td>
 					<form action="/deleteCoach" method=post>

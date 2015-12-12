@@ -12,10 +12,12 @@
 		   <TR>
 		      <TH>ID</TH>
 		      <TH>Name</TH>
+		      <TH>Surname</TH>
 		      <TH>Age</TH>
 		      <TH>Nation</TH>
 		      <TH>Team</TH>
 		      <TH>Field</TH>
+		      <TH>GOAL</TH>
 
 		   </TR>
 		   {% for player in playerList %}
@@ -26,6 +28,8 @@
 				<td>{{ player.3 }}</td>
 				<td>{{ player.4 }}</td>
 				<td>{{ player.5 }}</td>
+				<td>{{ player.6 }}</td>
+				<td>{{ player.7 }}</td>
 
 				<td>
 					<form action="/deletePlayer" method=post>

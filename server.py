@@ -343,7 +343,7 @@ def players():
     now = datetime.datetime.now()
     connection = psycopg2.connect(app.config['dsn'])
     cursor = connection.cursor()
-    query = """select id, name, age, nation, team, field from PLAYERS;"""
+    query = """select players.id, players.name, players.surname, players.age, countries.name, players.team, players.field, players.goal from PLAYERS join countries on players.nation = countries.id;"""
     cursor.execute(query)
     playerListAsTuple = cursor.fetchall()
     connection.close()
@@ -356,15 +356,16 @@ def players():
 
 @app.route('/addPlayer' , methods=['POST'])
 def addPlayer():
-    id = request.form['id']
     name = request.form['name']
+    surname = request.form['surname']
     age = request.form['age']
     nation = request.form['nation']
     team = request.form['team']
     field = request.form['field']
+    goal = request.form['goal']
     connection = psycopg2.connect(app.config['dsn'])
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO PLAYERS (id, name, age, nation, team, field) VALUES (%s, %s, %s, %s, %s, %s)", (id, name, age, nation, team, field))
+    cursor.execute("INSERT INTO PLAYERS (name,surname, age, nation, team, field, goal) VALUES (%s,%s, %s, %s, %s, %s, %s)", (name, surname, age, nation, team, field, goal))
     connection.commit()
     connection.close()
     return redirect('/players')
@@ -387,7 +388,7 @@ def updatePlayer():
         connection = psycopg2.connect(app.config['dsn'])
         cursor = connection.cursor()
         id = request.form['id']
-        query = """select id, name, age, nation, team, field from players where id='""" + id + """';"""
+        query = """select id, name, surname, age, nation, team, field, goal from players where id='""" + id + """';"""
         cursor.execute(query)
         update = list(cursor.fetchall()[0])
         connection.close()
@@ -397,13 +398,15 @@ def updatePlayer():
 def update_Player():
         id = request.form['id']
         name = request.form['name']
+        surname = request.form['surname']
         age = request.form['age']
         nation = request.form['nation']
         team = request.form['team']
         field =request.form['field']
+        goal = request.form['goal']
         connection = psycopg2.connect(app.config['dsn'])
         cursor = connection.cursor()
-        query = """UPDATE PLAYERS SET NAME='""" + name + """',AGE=""" + age + """,NATION='""" + nation + """',TEAM='""" + team + """', FIELD='""" + field + """' where ID=""" + id + """;"""
+        query = """UPDATE PLAYERS SET NAME='""" + name + """', SURNAME='""" + surname +"""', AGE=""" + age + """,NATION=""" + nation + """,TEAM='""" + team + """', FIELD='""" + field + """', GOAL=""" + goal + """ where ID=""" + id + """;"""
         cursor.execute(query)
         connection.commit()
         connection.close()
@@ -432,7 +435,7 @@ def coaches():
     now = datetime.datetime.now()
     connection = psycopg2.connect(app.config['dsn'])
     cursor = connection.cursor()
-    query = """select id, name, nation, team from COACHES;"""
+    query = """select coaches.id, coaches.name, coaches.surname, countries.name, coaches.team from COACHES join COUNTRIES on coaches.nation = countries.id;"""
     cursor.execute(query)
     coachListAsTuple = cursor.fetchall()
     connection.close()
@@ -444,13 +447,13 @@ def coaches():
 
 @app.route('/addCoach' , methods=['POST'])
 def addCoach():
-    id = request.form['id']
     name = request.form['name']
+    surname = request.form['surname']
     nation = request.form['nation']
     team = request.form['team']
     connection = psycopg2.connect(app.config['dsn'])
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO COACHES (id, name, nation, team) VALUES (%s, %s, %s, %s)", (id, name, nation, team))
+    cursor.execute("INSERT INTO COACHES (name,surname, nation, team) VALUES (%s, %s, %s, %s)", (name, surname, nation, team))
     connection.commit()
     connection.close()
     return redirect('/coaches')
@@ -473,7 +476,7 @@ def updateCoach():
         connection = psycopg2.connect(app.config['dsn'])
         cursor = connection.cursor()
         id = request.form['id']
-        query = """select id, name, nation, team from COACHES where id='""" + id + """';"""
+        query = """select id, name, surname, nation, team from COACHES where id='""" + id + """';"""
         cursor.execute(query)
         update = list(cursor.fetchall()[0])
         connection.close()
@@ -483,11 +486,12 @@ def updateCoach():
 def update_Coach():
         id = request.form['id']
         name = request.form['name']
+        surname = request.form['surname']
         nation = request.form['nation']
         team = request.form['team']
         connection = psycopg2.connect(app.config['dsn'])
         cursor = connection.cursor()
-        query = """UPDATE COACHES SET NAME='""" + name + """' ,NATION='""" + nation + """',TEAM='""" + team + """' where ID=""" + id + """;"""
+        query = """UPDATE COACHES SET NAME='""" + name + """' ,SURNAME='""" +surname+ """', NATION='""" + nation + """',TEAM='""" + team + """' where ID=""" + id + """;"""
         cursor.execute(query)
         connection.commit()
         connection.close()
