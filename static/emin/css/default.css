@@ -51,6 +51,21 @@ margin-bottom: 20px;
 width:115px;
 }
 
+.btn3 {
+display:block;
+height:31px;
+line-height:31px;
+padding:0 10px;
+background:url(../gfx/bgbtn.jpg) repeat-x;
+color:#565e62;
+font-weight:bold;
+font-size:11px;
+border:1px solid #e1e0df;
+outline:none;
+margin-left:0px;
+margin-top: 20px;
+}
+
 .text,
 .textarea {
 padding:5px 10px;

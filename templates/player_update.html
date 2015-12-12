@@ -9,46 +9,50 @@
 	{% extends "layout.html" %}
 	{% block content %}
 		<h2>Update Player</h2>
-		<form action="/update_Player" method=post>
-		<dl>
-			<dd>
-				<input type=hidden name=id value={{updatedlist.0}}>
-			</dd>
-			<dt>Name:</dt>
-			<dd>
-				<input type=text name=name value={{updatedlist.1}}>
-			<dd>
-			<dt>Surname:</dt>
-			<dd>
-				<input type=text name=surname value={{updatedlist.2}}>
-			<dd>
-			<dt>Age:</dt>
-			<dd>
-				<input type=text name=age value={{updatedlist.3}}>
-			<dd>
-			<dt>Nation:</dt>
-			<dd>
-				<input type=text name=nation value={{updatedlist.4}}>
-			</dd>
-			<dd>
-			<dt>Team:</dt>
-			<dd>
-				<input type=text name=team value={{updatedlist.5}}>
-			</dd>
-			<dd>
-			<dt>Field:</dt>
-			<dd>
-				<input type=text name=field value={{updatedlist.6}}>
-			</dd>
-			<dd>
-			<dt>Goal:</dt>
-			<dd>
-				<input type=text name=goal value={{updatedlist.7}}>
-			</dd>
-			<dd>
-				<br /> <input type=submit value=Update>
-			</dd>
-		</dl>
+		<form action="/update_Player" class="blocks" method=post>
+			<p>
+				<input type=hidden  name="id" value={{updatedlist.0}}>
+			</p>
+
+			<p>
+				<label>Name:</label>
+				<input type="text" class="text" name="name" value={{updatedlist.1}} autofocus/>
+			</p>
+			<p>
+				<label>Surname:</label>
+				<input type="text" class="text" name="surname" value={{updatedlist.2}} autofocus/>
+			</p>
+			<p>
+				<label>Age:</label>
+				<input type="text" class="text" name="age" value={{updatedlist.3}} autofocus/>
+			</p>
+			<p>
+				<label>Nation:</label>
+				<select class="text" name="nation">
+					{% for country in countryList %}
+						<option value="{{country.0}}">{{ country.1 }}</option>
+					{% endfor %}
+				</select>
+
+			</p>
+			<p>
+				<label>Team:</label>
+				<input type="text" class="text" name="team" value={{updatedlist.5}} autofocus/>
+			</p>
+			<p>
+				<label>Field:</label>
+				<input type="text" class="text" name="field" value={{updatedlist.6}} autofocus/>
+			</p>
+			<p>
+				<label>Goal:</label>
+				<input type="text" class="text" name="goal" value={{updatedlist.7}} autofocus/>
+			</p>
+
+			<p>
+				<label>&nbsp;</label>
+				<input type="submit" class="btn" value="Update" />
+			</p>
+
 	</form>
 
 

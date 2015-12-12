@@ -343,32 +343,37 @@ def players():
     now = datetime.datetime.now()
     connection = psycopg2.connect(app.config['dsn'])
     cursor = connection.cursor()
-    query = """select players.id, players.name, players.surname, players.age, countries.name, players.team, players.field, players.goal from PLAYERS join countries on players.nation = countries.id;"""
+    query = """select players.id, players.name, players.surname, players.age, countries.name, players.team, players.field, players.goal from PLAYERS left join countries on players.nation = countries.id;"""
     cursor.execute(query)
     playerListAsTuple = cursor.fetchall()
-    connection.close()
     playerListAsList = []
     for player in playerListAsTuple:
         playerListAsList.append(list(player))
-
-    return render_template('players.html', playerList=playerListAsList, current_time=now.ctime())
-
-
-@app.route('/addPlayer' , methods=['POST'])
-def addPlayer():
-    name = request.form['name']
-    surname = request.form['surname']
-    age = request.form['age']
-    nation = request.form['nation']
-    team = request.form['team']
-    field = request.form['field']
-    goal = request.form['goal']
-    connection = psycopg2.connect(app.config['dsn'])
-    cursor = connection.cursor()
-    cursor.execute("INSERT INTO PLAYERS (name,surname, age, nation, team, field, goal) VALUES (%s,%s, %s, %s, %s, %s, %s)", (name, surname, age, nation, team, field, goal))
-    connection.commit()
+    cursor.execute("SELECT * FROM COUNTRIES ORDER BY NAME;")
+    countryListAsTuple = cursor.fetchall()
     connection.close()
-    return redirect('/players')
+    countryListAsList = []
+    for country in countryListAsTuple:
+        countryListAsList.append(list(country))
+    return render_template('players.html', playerList=playerListAsList, current_time=now.ctime(), countryList=countryListAsList)
+
+
+@app.route('/addPlayer' , methods=['GET','POST'])
+def addPlayer():
+        name = request.form['name']
+        surname = request.form['surname']
+        age = request.form['age']
+        nation = request.form['nation']
+        team = request.form['team']
+        field = request.form['field']
+        goal = request.form['goal']
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        cursor.execute("INSERT INTO PLAYERS (name,surname, age, nation, team, field, goal) VALUES (%s,%s, %s, %s, %s, %s, %s)", (name, surname, age, nation, team, field, goal))
+        connection.commit()
+        connection.close()
+        return redirect('/players')
+
 
 @app.route('/deletePlayer' , methods=['POST'])
 def deletePlayer():
@@ -391,8 +396,14 @@ def updatePlayer():
         query = """select id, name, surname, age, nation, team, field, goal from players where id='""" + id + """';"""
         cursor.execute(query)
         update = list(cursor.fetchall()[0])
+        cursor.execute("SELECT * FROM COUNTRIES ORDER BY NAME;")
+        countryListAsTuple = cursor.fetchall()
         connection.close()
-        return render_template('player_update.html', current_time=now.ctime(), updatedlist=update)
+        countryListAsList = []
+        for country in countryListAsTuple:
+            countryListAsList.append(list(country))
+        connection.close()
+        return render_template('player_update.html', current_time=now.ctime(), updatedlist=update, countryList=countryListAsList)
 
 @app.route('/update_Player' , methods=['POST'])
 def update_Player():
@@ -435,15 +446,20 @@ def coaches():
     now = datetime.datetime.now()
     connection = psycopg2.connect(app.config['dsn'])
     cursor = connection.cursor()
-    query = """select coaches.id, coaches.name, coaches.surname, countries.name, coaches.team from COACHES join COUNTRIES on coaches.nation = countries.id;"""
+    query = """select coaches.id, coaches.name, coaches.surname, countries.name, coaches.team from COACHES left join COUNTRIES on coaches.nation = countries.id;"""
     cursor.execute(query)
     coachListAsTuple = cursor.fetchall()
-    connection.close()
     coachListAsList = []
     for coach in coachListAsTuple:
         coachListAsList.append(list(coach))
+    cursor.execute("SELECT * FROM COUNTRIES ORDER BY NAME;")
+    countryListAsTuple = cursor.fetchall()
+    connection.close()
+    countryListAsList = []
+    for country in countryListAsTuple:
+        countryListAsList.append(list(country))
 
-    return render_template('coaches.html', coachList=coachListAsList, current_time=now.ctime())
+    return render_template('coaches.html', coachList=coachListAsList, current_time=now.ctime(), countryList=countryListAsList)
 
 @app.route('/addCoach' , methods=['POST'])
 def addCoach():
@@ -479,9 +495,14 @@ def updateCoach():
         query = """select id, name, surname, nation, team from COACHES where id='""" + id + """';"""
         cursor.execute(query)
         update = list(cursor.fetchall()[0])
+        cursor.execute("SELECT * FROM COUNTRIES ORDER BY NAME;")
+        countryListAsTuple = cursor.fetchall()
         connection.close()
-        return render_template('coach_update.html', current_time=now.ctime(), updatedlist=update)
-
+        countryListAsList = []
+        for country in countryListAsTuple:
+            countryListAsList.append(list(country))
+        connection.close()
+        return render_template('coach_update.html', current_time=now.ctime(), updatedlist=update, countryList=countryListAsList)
 @app.route('/update_Coach' , methods=['POST'])
 def update_Coach():
         id = request.form['id']
