@@ -19,7 +19,6 @@
 		<script src="{{ url_for('static', filename='emin/js/validate.min.js') }}" type="text/javascript"></script>
 		<script src="{{ url_for('static', filename='emin/js/init.js') }}" type="text/javascript"></script>
 		<script src="{{ url_for('static', filename='cssmenu/script.js') }}" type="text/javascript"></script>
-		{% block script %} {% endblock %}
         <script type="text/javascript">
 		  $(document).ready(
 		  function() {
@@ -32,7 +31,6 @@
 		  }
 		  );
     	</script>
-
     	<title>{%block title%} {%endblock%}</title>
     <header>
 		<nav class="codrops-demos">
