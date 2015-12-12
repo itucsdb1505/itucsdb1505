@@ -32,24 +32,34 @@
 		<b>Add Coach</b>
 	</p>
 
-	<form action="/addCoach" method=post>
-		<dl>
+	<form id="form" class="blocks" method="post" action="/addCoach">
 
-			<dt>Name:
-			<dd>
-				<input type=text name=name>
-			<dt>Surname:
-			<dd>
-				<input type=text name=surname>
-			<dt>Nation:
-			<dd>
-				<input type=text name=nation>
-			<dt>Team:
-			<dd>
-				<input type=text name=team>
+			<p>
+				<label>Name:</label>
+				<input type="text" class="text" name="name" autofocus/>
+			</p>
+			<p>
+				<label>Surname:</label>
+				<input type="text" class="text" name="surname" autofocus/>
+			</p>
+			<p>
+				<label>Nation:</label>
+				<select class="text" name="nation">
+					{% for country in countryList %}
+						<option value="{{country.0}}">{{ country.1 }}</option>
+					{% endfor %}
+				</select>
 
-				<br /> <input type=submit value=Add>
-		</dl>
+			</p>
+			<p>
+				<label>Team:</label>
+				<input type="text" class="text" name="team" autofocus/>
+			</p>
+			<p>
+				<label>&nbsp;</label>
+				<input type="submit" class="btn" value="Add" />
+			</p>
+
 	</form>
 
 

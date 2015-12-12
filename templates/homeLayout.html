@@ -36,7 +36,7 @@
 					<ul>
 						<li><a href="{{ url_for('leagues')}}"><span>Leagues</span></a></li>
 						<li><a href="{{ url_for('countries')}}"><span>Countries</span></a></li>
-						<li><a href='#'><span>Messages</span></a></li>
+						<li><a href="{{ url_for('messages')}}"><span>Messages</span></a></li>
 					</ul></li>
 				<li class='has-sub'><a href='#'><span>About</span></a>
 					<ul>
@@ -52,6 +52,30 @@
 		</nav>
 	</header>
 </head>
-<body>
-</body>
+	<body>
+		<div id="content">
+						<article class="col-2">
+							<form id="contact-form" method="post" action="/add_message">
+								<fieldset>
+									<label>
+										<input type="text" value="Title" name="title" onBlur="if(this.value=='') this.value='Title'" onFocus="if(this.value =='Title' ) this.value=''" required/>
+									</label>
+									<label>
+									    <input type="tel" value="Phone" name="phone" onBlur="if(this.value=='') this.value='Phone'" onFocus="if(this.value =='Phone' ) this.value=''" required/>
+									</label>
+									<label>
+									    <input type="email" value="E-Posta" name="mail" onBlur="if(this.value=='') this.value='E-Posta'" onFocus="if(this.value =='E-Posta' ) this.value=''" required/>
+									</label>
+										<textarea name="message" onBlur="if(this.value=='') this.value='Message'" onFocus="if(this.value =='Message' ) this.value=''" required>Message</textarea>
+									<div class="buttons-wrapper">
+										<a class="button" onClick="document.getElementById('contact-form').reset()">Delete All</a>
+										<a class="button" onClick="document.getElementById('contact-form').submit()">Send</a>
+<!-- 										<input type="submit" class="button" value="Send" /> -->
+									</div>
+								</fieldset>
+							</form>
+						</article>
+		</div>
+		<script type="text/javascript"> Cufon.now(); </script>
+	</body>
 </html>
