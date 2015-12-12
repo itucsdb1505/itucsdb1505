@@ -537,7 +537,6 @@ def searchCoach():
 
 
 #*************************************************************************
-
 @app.route('/countries' , methods=['GET', 'POST'])
 def countries():
     now = datetime.datetime.now()
@@ -618,7 +617,7 @@ def update_country():
         connection.commit()
         connection.close()
         return redirect('/countries')
-
+#*************************************************************************
 @app.route('/leagues' , methods=['GET', 'POST'])
 def leagues():
         now = datetime.datetime.now()
@@ -713,7 +712,85 @@ def update_league():
         connection.commit()
         connection.close()
         return redirect('/leagues')
+#*************************************************************************
+@app.route('/messages' , methods=['GET', 'POST'])
+def messages():
+        now = datetime.datetime.now()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM MESSAGES ORDER BY ID DESC;")
+        messageListAsTuple = cursor.fetchall()
+        connection.close()
+        messageListAsList = []
+        for message in messageListAsTuple:
+            messageListAsList.append(list(message))
+        return render_template('messages.html', messageList=messageListAsList, current_time=now.ctime())
 
+@app.route('/add_message' , methods=['POST'])
+def add_message():
+        title = request.form['title']
+        phone = request.form['phone']
+        mail = request.form['mail']
+        message = request.form['message']
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        cursor.execute("INSERT INTO MESSAGES(TITLE, PHONE, MAIL, MESSAGE) VALUES(%s, %s, %s, %s)",(title, phone, mail, message))
+        connection.commit()
+        connection.close()
+        return redirect('/')
+
+@app.route('/edit_message/<id>', methods=['GET','POST'])
+def edit_message(id):
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        query = """SELECT TITLE, PHONE, MAIL, MESSAGE FROM MESSAGES WHERE ID=""" + id + """;"""
+        cursor.execute(query)
+        title, phone, mail, message = cursor.fetchone()
+        connection.close()
+        return render_template('edit_message.html', current_time=now.ctime(),id=id, title=title , phone=phone , mail=mail, message=message)
+
+@app.route('/update_message', methods=['GET','POST'])
+def update_message():
+    if request.method == 'POST':
+        id = request.form['id']
+        title = request.form['title']
+        phone = request.form['phone']
+        mail = request.form['mail']
+        message = request.form['message']
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        query="""UPDATE MESSAGES SET TITLE='"""+title+"""', PHONE="""+phone+""", MAIL='"""+mail+"""', MESSAGE='"""+message+"""' WHERE ID="""+id+""";"""
+        cursor.execute(query)
+        connection.commit()
+        connection.close()
+        return redirect('/messages')
+
+@app.route('/delete_message/<id>', methods=['GET'])
+def delete_message(id):
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    query = """DELETE FROM MESSAGES WHERE ID=""" + id + """;"""
+    cursor.execute(query)
+    connection.commit()
+    connection.close()
+    return redirect('/messages')
+
+@app.route('/search_message' , methods=['POST'])
+def search_message():
+    if request.method == 'POST':
+        connection = psycopg2.connect(app.config['dsn'])
+        now = datetime.datetime.now()
+        cursor = connection.cursor()
+        query="""SELECT * FROM MESSAGES WHERE LOWER(TITLE) LIKE LOWER('%"""+ request.form['search'] +"""%') ORDER BY ID DESC;"""
+        cursor.execute(query)
+        messageListAsTuple = cursor.fetchall()
+        connection.close()
+        messageListAsList = []
+        for message in messageListAsTuple:
+            messageListAsList.append(list(message))
+        return render_template('search_message.html', messageList=messageListAsList, count=len(messageListAsList), current_time=now.ctime())
 
 
 
