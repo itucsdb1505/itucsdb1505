@@ -398,7 +398,6 @@ def updatePlayer():
         update = list(cursor.fetchall()[0])
         cursor.execute("SELECT * FROM COUNTRIES ORDER BY NAME;")
         countryListAsTuple = cursor.fetchall()
-        connection.close()
         countryListAsList = []
         for country in countryListAsTuple:
             countryListAsList.append(list(country))
@@ -437,7 +436,6 @@ def searchPlayer():
         playerListAsList = []
         for player in playerListAsTuple:
             playerListAsList.append(list(player))
-
         return render_template('player_search.html', playerList=playerListAsList, current_time=now.ctime())
 
 #*************************************************************************
@@ -501,8 +499,8 @@ def updateCoach():
         countryListAsList = []
         for country in countryListAsTuple:
             countryListAsList.append(list(country))
-        connection.close()
         return render_template('coach_update.html', current_time=now.ctime(), updatedlist=update, countryList=countryListAsList)
+
 @app.route('/update_Coach' , methods=['POST'])
 def update_Coach():
         id = request.form['id']
@@ -532,7 +530,6 @@ def searchCoach():
         coachListAsList = []
         for coach in coachListAsTuple:
             coachListAsList.append(list(coach))
-
         return render_template('coach_search.html', coachList=coachListAsList, current_time=now.ctime())
 
 
