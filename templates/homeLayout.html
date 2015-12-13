@@ -29,6 +29,7 @@
 					<ul>
 						<li><a href="{{ url_for('players') }}"><span>Players</span></a></li>
 						<li><a href="{{ url_for('coaches') }}"><span>Coaches</span></a></li>
+						<li><a href="{{ url_for('referees') }}"><span>Referees</span></a></li>
 						<li class='last'><a href="{{ url_for('pool_list') }}"><span>Pools</span></a></li>
 					</ul></li>
 				<li class='active'><a href="{{ url_for('statistics') }}"><span>Statistics</span></a>
@@ -59,9 +60,6 @@
 								<fieldset>
 									<label>
 										<input type="text" value="Title" name="title" onBlur="if(this.value=='') this.value='Title'" onFocus="if(this.value =='Title' ) this.value=''" required/>
-									</label>
-									<label>
-									    <input type="tel" value="Phone" name="phone" onBlur="if(this.value=='') this.value='Phone'" onFocus="if(this.value =='Phone' ) this.value=''" required/>
 									</label>
 									<label>
 									    <input type="email" value="E-Posta" name="mail" onBlur="if(this.value=='') this.value='E-Posta'" onFocus="if(this.value =='E-Posta' ) this.value=''" required/>

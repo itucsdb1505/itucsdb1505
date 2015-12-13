@@ -60,3 +60,4 @@ target/
 .vagrant/
 /server.py
 /initialDB.sql~
+/initialDB.sql

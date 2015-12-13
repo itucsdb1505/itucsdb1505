@@ -575,6 +575,101 @@ def searchCoach():
 
 
 #*************************************************************************
+@app.route('/referees')
+def referees():
+    now = datetime.datetime.now()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    query = """select referees.id, referees.name, referees.surname, leagues.name, referees.city from REFEREES left join leagues on referees.league = leagues.id;"""
+    cursor.execute(query)
+    refereeListAsTuple = cursor.fetchall()
+    refereeListAsList = []
+    for referee in refereeListAsTuple:
+        refereeListAsList.append(list(referee))
+    cursor.execute("SELECT * FROM LEAGUES ORDER BY NAME;")
+    leagueListAsTuple = cursor.fetchall()
+    connection.close()
+    leagueListAsList = []
+    for league in leagueListAsTuple:
+        leagueListAsList.append(list(league))
+    return render_template('referees.html', refereeList=refereeListAsList, current_time=now.ctime(), leagueList=leagueListAsList)
+
+
+@app.route('/addReferee' , methods=['GET','POST'])
+def addReferee():
+        name = request.form['name']
+        surname = request.form['surname']
+        league = request.form['league']
+        city = request.form['city']
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        cursor.execute("INSERT INTO REFEREES (name,surname, league, city) VALUES (%s,%s, %s, %s)", (name, surname, league, city))
+        connection.commit()
+        connection.close()
+        return redirect('/referees')
+
+
+@app.route('/deleteReferee' , methods=['POST'])
+def deleteReferee():
+    id = request.form['id']
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    query = """DELETE FROM REFEREES WHERE id=""" + id + """;"""
+    cursor.execute(query)
+    connection.commit()
+    connection.close()
+    return redirect('/referees')
+
+@app.route('/updateReferee' , methods=['POST'])
+def updateReferee():
+    if request.method == 'POST':
+        now = datetime.datetime.now()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        id = request.form['id']
+        query = """select id, name, surname, league, city from REFEREES where id='""" + id + """';"""
+        cursor.execute(query)
+        update = list(cursor.fetchall()[0])
+        cursor.execute("SELECT * FROM LEAGUES ORDER BY NAME;")
+        leagueListAsTuple = cursor.fetchall()
+        connection.close()
+        leagueListAsList = []
+        for league in leagueListAsTuple:
+            leagueListAsList.append(list(league))
+        return render_template('referee_update.html', current_time=now.ctime(), updatedlist=update, leagueList=leagueListAsList)
+
+@app.route('/update_Referee' , methods=['POST'])
+def update_Referee():
+        id = request.form['id']
+        name = request.form['name']
+        surname = request.form['surname']
+        league= request.form['league']
+        city = request.form['city']
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        query = """UPDATE REFEREES SET NAME='""" + name + """' ,SURNAME='""" +surname+ """', LEAGUE='""" + league + """',CITY='""" + city + """' where ID=""" + id + """;"""
+        cursor.execute(query)
+        connection.commit()
+        connection.close()
+        return redirect('/referees')
+
+@app.route('/searchReferee' , methods=['POST'])
+def searchReferee():
+    if request.method == 'POST':
+        search = request.form['search_referee']
+        now = datetime.datetime.now()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        query="""SELECT * FROM REFEREES WHERE (NAME LIKE '%""" + search + """%');"""
+        cursor.execute(query)
+        refereeListAsTuple = cursor.fetchall()
+        connection.close()
+        refereeListAsList = []
+        for referee in refereeListAsTuple:
+            refereeListAsList.append(list(referee))
+        return render_template('referee_search.html', refereeList=refereeListAsList, current_time=now.ctime())
+#*************************************************************************
+
 @app.route('/countries' , methods=['GET', 'POST'])
 def countries():
     now = datetime.datetime.now()
@@ -767,12 +862,11 @@ def messages():
 @app.route('/add_message' , methods=['POST'])
 def add_message():
         title = request.form['title']
-        phone = request.form['phone']
         mail = request.form['mail']
         message = request.form['message']
         connection = psycopg2.connect(app.config['dsn'])
         cursor = connection.cursor()
-        cursor.execute("INSERT INTO MESSAGES(TITLE, PHONE, MAIL, MESSAGE) VALUES(%s, %s, %s, %s)",(title, phone, mail, message))
+        cursor.execute("INSERT INTO MESSAGES(TITLE, MAIL, MESSAGE) VALUES(%s, %s, %s)",(title, mail, message))
         connection.commit()
         connection.close()
         return redirect('/')
@@ -783,23 +877,22 @@ def edit_message(id):
         now = datetime.datetime.now()
         connection = psycopg2.connect(app.config['dsn'])
         cursor = connection.cursor()
-        query = """SELECT TITLE, PHONE, MAIL, MESSAGE FROM MESSAGES WHERE ID=""" + id + """;"""
+        query = """SELECT TITLE, MAIL, MESSAGE FROM MESSAGES WHERE ID=""" + id + """;"""
         cursor.execute(query)
         title, phone, mail, message = cursor.fetchone()
         connection.close()
-        return render_template('edit_message.html', current_time=now.ctime(),id=id, title=title , phone=phone , mail=mail, message=message)
+        return render_template('edit_message.html', current_time=now.ctime(),id=id, title=title , mail=mail, message=message)
 
 @app.route('/update_message', methods=['GET','POST'])
 def update_message():
     if request.method == 'POST':
         id = request.form['id']
         title = request.form['title']
-        phone = request.form['phone']
         mail = request.form['mail']
         message = request.form['message']
         connection = psycopg2.connect(app.config['dsn'])
         cursor = connection.cursor()
-        query="""UPDATE MESSAGES SET TITLE='"""+title+"""', PHONE="""+phone+""", MAIL='"""+mail+"""', MESSAGE='"""+message+"""' WHERE ID="""+id+""";"""
+        query="""UPDATE MESSAGES SET TITLE='"""+title+"""', MAIL='"""+mail+"""', MESSAGE='"""+message+"""' WHERE ID="""+id+""";"""
         cursor.execute(query)
         connection.commit()
         connection.close()
