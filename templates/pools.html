@@ -21,20 +21,19 @@
 						<th style="width:80px">Delete</th>
 						<th style="width:80px">Update</th>
 						<th>Name</th>
-						<th>City</th>
+						<th>Country</th>
 						<th>Capacity</th>
 						<th>Built</th>
 
 					</tr>
 					{% for pool in list %}
 					<tr>
-						<td><input type="radio" name="deletePoolbyname" value="{{ pool.0 }}" /></td>
-						<td><input type="radio" name="updatepool" value="{{ pool.0 }}"/></td>
+						<td><input type="radio" name="deletePoolbyid" value="{{ pool.4 }}" /></td>
+						<td><input type="radio" name="updatePoolbyid" value="{{ pool.4 }}"/></td>
 						<td>{{ pool.0 }}</td>
 						<td>{{ pool.1 }}</td>
 						<td>{{ pool.2 }}</td>
 						<td>{{ pool.3 }}</td>
-
 					</tr>
 					{% endfor %}
 				</table>

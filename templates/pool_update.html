@@ -18,10 +18,14 @@
 				</td>
 				</tr>
 				<tr>
-						<th>City:</th>
-				<td>
-					<input type="text" name="city" value={{element.1}} />
-				</td>
+						<th>Country:</th>
+							<td>
+								<select class="text" name="countryid">
+									{% for country in countryList %}
+										<option value="{{country.0}}">{{ country.1 }}</option>
+									{% endfor %}
+								</select>
+							</td>
 				</tr>
 				<tr>
 					<th>Capacity:</th>
@@ -37,8 +41,7 @@
 				</tr>
 				<tr>
 				<td>
-					<input type="hidden" name="oldname" value={{element.0}} />
-					<input type="hidden" name="oldcity" value={{element.1}} />
+					<input type="hidden" name="poolid" value={{element.4}} />
 				</td>
 				</tr>
 			</table>

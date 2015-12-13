@@ -109,36 +109,42 @@ def initiateDB():
 
 @app.route('/Pools', methods=['GET', 'POST'])
 def pool_list():
-        if 'deletePoolbyname' in request.form:
+        if 'deletePoolbyid' in request.form:
             try:
                 connection = psycopg2.connect(app.config['dsn'])
                 cursor=connection.cursor()
-                name = request.form['deletePoolbyname']
-                query = """delete from pool where name='""" + name + """';"""
+                poolid = request.form['deletePoolbyid']
+                query = """delete from pool where id=""" + poolid + """;"""
                 cursor.execute(query)
                 connection.commit()
                 connection.close()
                 return redirect('/Pools')
             except :
                 return redirect('/Pools')
-        elif 'updatepool' in request.form:
+        elif 'updatePoolbyid' in request.form:
             try:
                 connection = psycopg2.connect(app.config['dsn'])
                 cursor=connection.cursor()
-                name = request.form['updatepool']
-                query = """select * from pool where name='""" + name + """';"""
+                poolid = request.form['updatePoolbyid']
+                query = """select pool.name, countries.name, pool.capacity, pool.built, pool.id from pool join countries on pool.country_id=countries.id where pool.id=""" + poolid + """;"""
                 cursor.execute(query)
                 poolupdated = list(cursor.fetchall()[0])
+                query = """ SELECT ID,NAME FROM COUNTRIES ORDER BY NAME;"""
+                cursor.execute(query)
+                countryfetch = cursor.fetchall()
                 connection.close()
+                countryListForm = []
+                for country in countryfetch:
+                    countryListForm.append(list(country))
                 now = datetime.datetime.now()
-                return render_template('pool_update.html', current_time=now.ctime(), element=poolupdated)
+                return render_template('pool_update.html', current_time=now.ctime(), element=poolupdated,countryList=countryListForm)
             except :
                 return redirect('/Pools')
         else:
             try:
                 connection = psycopg2.connect(app.config['dsn'])
                 cursor=connection.cursor()
-                query = """select * from pool;"""
+                query = """select pool.name, countries.name, pool.capacity, pool.built, pool.id from pool join countries on pool.country_id=countries.id;"""
                 cursor.execute(query)
                 poolfetch = cursor.fetchall()
                 connection.close()
@@ -153,17 +159,29 @@ def pool_list():
 @app.route('/AddPool', methods=['GET', 'POST'])
 def pool_edit():
         if request.method == 'GET':
-            now = datetime.datetime.now()
-            return render_template('pool_edit.html', current_time=now.ctime())
+            try:
+                connection = psycopg2.connect(app.config['dsn'])
+                cursor=connection.cursor()
+                query = """ SELECT ID,NAME FROM COUNTRIES ORDER BY NAME;"""
+                cursor.execute(query)
+                countryfetch = cursor.fetchall()
+                connection.close()
+                countryListForm = []
+                for country in countryfetch:
+                    countryListForm.append(list(country))
+                now = datetime.datetime.now()
+                return render_template('pool_edit.html', current_time=now.ctime(),countryList=countryListForm)
+            except :
+                return redirect('/Pools')
         else:
             try:
                 connection = psycopg2.connect(app.config['dsn'])
                 cursor=connection.cursor()
                 name = request.form['name']
-                city = request.form['city']
+                countryid = request.form['countryid']
                 capacity = request.form['capacity']
                 built = request.form['built']
-                query = """insert into pool values('""" + name + """','""" + city + """',""" + capacity + """,""" + built + """);"""
+                query = """insert into pool values('""" + name + """',""" + countryid + """,""" + capacity + """,""" + built + """);"""
                 cursor.execute(query)
                 connection.commit()
                 connection.close()
@@ -182,7 +200,7 @@ def pool_search():
         name = request.form['searchbyname']
         if len(name)==0:
             return render_template('pools.html', current_time=now.ctime(), list=PoolListForm)
-        query = """select * from pool where (name like '%""" + name + """%');"""
+        query = """select pool.name, countries.name, pool.capacity, pool.built, pool.id from pool join countries on pool.country_id=countries.id where (pool.name like '%""" + name + """%');"""
         cursor.execute(query)
         poolfetch = cursor.fetchall()
         connection.close()
@@ -193,28 +211,27 @@ def pool_search():
         return redirect('/Pools')
 
 
-@app.route('/UpdatePool', methods=['GET', 'POST'])
+@app.route('/UpdatePool', methods=['GET','POST'])
 def pool_update():
-        if request.method == 'GET':
-            now = datetime.datetime.now()
-            return render_template('pool_update.html', current_time=now.ctime())
-        else:
-            try:
-                connection = psycopg2.connect(app.config['dsn'])
-                cursor=connection.cursor()
-                name = request.form['name']
-                city = request.form['city']
-                capacity = request.form['capacity']
-                built = request.form['built']
-                oldname=request.form['oldname']
-                oldcity=request.form['oldcity']
-                query = """update pool set name='""" + name + """',city='""" + city + """',capacity=""" + capacity + """,built=""" + built + """ where name='""" + oldname + """' and city='""" + oldcity + """';"""
-                cursor.execute(query)
-                connection.commit()
-                connection.close()
-                return redirect('/Pools')
-            except:
-                return redirect('/Pools')
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        return render_template('pool_update.html', current_time=now.ctime())
+    else:
+        try:
+            connection = psycopg2.connect(app.config['dsn'])
+            cursor=connection.cursor()
+            name = request.form['name']
+            countryid = request.form['countryid']
+            capacity = request.form['capacity']
+            built = request.form['built']
+            poolid=request.form['poolid']
+            query = """update pool set name='""" + name + """',country_id=""" + countryid + """,capacity=""" + capacity + """,built=""" + built + """ where id=""" + poolid + """;"""
+            cursor.execute(query)
+            connection.commit()
+            connection.close()
+            return redirect('/Pools')
+        except:
+            return redirect('/Pools')
 
 @app.route('/SearchStat' , methods=['POST'])
 def stat_search():
@@ -224,7 +241,7 @@ def stat_search():
         name = request.form['searchbyname']
         if len(name)==0:
             return redirect('/Statistic')
-        query = """select * from stats where (name like '%""" + name + """%');"""
+        query = """select players.name, players.surname, players.team, stats.goal, stats.assist, stats.save, stats.id from stats join players on players.id=stats.player_id where (players.name like '%""" + name + """%');"""
         cursor.execute(query)
         statfetch = cursor.fetchall()
         connection.close()
@@ -247,16 +264,11 @@ def stat_update():
             try:
                 connection = psycopg2.connect(app.config['dsn'])
                 cursor=connection.cursor()
-                name = request.form['name']
-                surname = request.form['surname']
-                team = request.form['team']
-                league = request.form['league']
                 goal = request.form['goal']
                 assist = request.form['assist']
                 save = request.form['save']
-                oldname=request.form['oldname']
-                oldsurname=request.form['oldsurname']
-                query = """update stats set name='""" + name + """',surname='""" + surname + """',team='""" + team + """',league='""" + league + """',goal=""" + goal + """,assist=""" + assist + """,save=""" + save + """ where name='""" + oldname + """' and surname='""" + surname + """';"""
+                statid=request.form['updatebyid']
+                query = """update stats set goal=""" + goal + """,assist=""" + assist + """,save=""" + save + """ where id=""" + statid + """;"""
                 cursor.execute(query)
                 connection.commit()
                 connection.close()
@@ -266,24 +278,24 @@ def stat_update():
 
 @app.route('/Statistic',methods=['GET', 'POST'])
 def statistics():
-        if 'deletestatbyname' in request.form:
+        if 'deletestatbyid' in request.form:
             try:
                 connection = psycopg2.connect(app.config['dsn'])
                 cursor=connection.cursor()
-                name = request.form['deletestatbyname']
-                query = """delete from stats where name='""" + name + """';"""
+                statid = request.form['deletestatbyid']
+                query = """delete from stats where id=""" + statid + """;"""
                 cursor.execute(query)
                 connection.commit()
                 connection.close()
                 return redirect('/Statistic')
             except :
                 return redirect('/Statistic')
-        elif 'updatestat' in request.form:
+        elif 'updatestatbyid' in request.form:
             try:
                 connection = psycopg2.connect(app.config['dsn'])
                 cursor=connection.cursor()
-                name = request.form['updatestat']
-                query = """select * from stats where name='""" + name + """';"""
+                statid = request.form['updatestatbyid']
+                query = """select players.name, players.surname, players.team, stats.goal, stats.assist, stats.save, stats.id from stats join players on players.id=stats.player_id where stats.id="""+statid+""";"""
                 cursor.execute(query)
                 statupdated = list(cursor.fetchall()[0])
                 connection.close()
@@ -297,39 +309,68 @@ def statistics():
                 cursor=connection.cursor()
                 league=request.form['league']
                 stattype=request.form['stattype']
-                query = """select * from stats where league='"""+league+"""' order by """+stattype+""" desc;"""
+                query = """select players.name, players.surname, players.team, stats.goal, stats.assist, stats.save, stats.id from stats join players on players.id=stats.player_id where stats.league_id="""+league+""" order by """+stattype+""" desc;"""
                 cursor.execute(query)
                 statsfetch = cursor.fetchall()
                 connection.close()
                 StatsListForm = []
                 for stats in statsfetch:
                     StatsListForm.append(list(stats))
+                leagueListForm = []
                 now = datetime.datetime.now()
-                return render_template('statistics.html', current_time=now.ctime(), list=StatsListForm)
+                return render_template('statistics.html', current_time=now.ctime(), list=StatsListForm,leagueList=leagueListForm)
             except :
                 return redirect('/Statistic')
-        else:
-            now = datetime.datetime.now()
-            StatsListForm = []
-            return render_template('statistics.html', current_time=now.ctime(),list=StatsListForm)
-
-@app.route('/AddStat', methods=['GET', 'POST'])
-def stat_add():
-        if request.method == 'GET':
-            now = datetime.datetime.now()
-            return render_template('stat_add.html', current_time=now.ctime())
         else:
             try:
                 connection = psycopg2.connect(app.config['dsn'])
                 cursor=connection.cursor()
-                name = request.form['name']
-                surname = request.form['surname']
-                team = request.form['team']
-                league = request.form['league']
+                query = """ SELECT ID,NAME FROM LEAGUES ORDER BY NAME;"""
+                cursor.execute(query)
+                leaguesfetch = cursor.fetchall()
+                connection.close()
+                StatsListForm = []
+                leagueListForm = []
+                for league in leaguesfetch:
+                    leagueListForm.append(list(league))
+                now = datetime.datetime.now()
+                return render_template('statistics.html', current_time=now.ctime(), list=StatsListForm,leagueList=leagueListForm)
+            except :
+                return redirect('/Statistic')
+
+@app.route('/AddStat', methods=['GET', 'POST'])
+def stat_add():
+        if request.method == 'GET':
+            try:
+                connection = psycopg2.connect(app.config['dsn'])
+                cursor=connection.cursor()
+                query = """ SELECT ID,NAME,SURNAME,TEAM FROM PLAYERS ORDER BY NAME;"""
+                cursor.execute(query)
+                playersfetch = cursor.fetchall()
+                playerListForm = []
+                for player in playersfetch:
+                    playerListForm.append(list(player))
+                query = """ SELECT ID,NAME FROM LEAGUES ORDER BY NAME;"""
+                cursor.execute(query)
+                leaguesfetch = cursor.fetchall()
+                connection.close()
+                leagueListForm = []
+                for league in leaguesfetch:
+                    leagueListForm.append(list(league))
+                now = datetime.datetime.now()
+                return render_template('stat_add.html', current_time=now.ctime(),playerList=playerListForm,leagueList=leagueListForm)
+            except:
+                return redirect('/Statistic')
+        else:
+            try:
+                connection = psycopg2.connect(app.config['dsn'])
+                cursor=connection.cursor()
+                playerid=request.form['playerid']
+                leagueid=request.form['leagueid']
                 goal = request.form['goal']
                 assist = request.form['assist']
                 save = request.form['save']
-                query = """insert into stats values('""" + name + """','""" + surname + """','""" + team + """','""" + league + """',""" + goal + """,""" + assist + """,""" + save +""");"""
+                query = """insert into stats values(""" + playerid + """,""" + leagueid + """,""" + goal + """,""" + assist + """,""" + save +""");"""
                 cursor.execute(query)
                 connection.commit()
                 connection.close()

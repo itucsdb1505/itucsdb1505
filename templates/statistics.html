@@ -36,10 +36,10 @@
 				<th>League</th>
 				<th>Statistics according to</th>
 			</tr>
-			<td><select name="league">
-			  <option value="Super">Super League</option>
-			  <option value="Second">2nd League</option>
-			  <option value="Amateur">Amateur league</option>
+			<td><select class="text" name="league">
+					{% for league in leagueList %}
+						<option value="{{league.0}}">{{ league.1 }}</option>
+					{% endfor %}
 			</select></td>
 			<td><select name="stattype" >
 			  <option value="goal">Goal</option>
@@ -58,22 +58,20 @@
 				<th>Name</th>
 				<th>Surname</th>
 				<th>Team</th>
-				<th>League</th>
 				<th>Goal</th>
 				<th>Assist</th>
 				<th>Save</th>
 			</tr>
 				{% for stats in list %}
 			<tr>
-				<td><input type="radio" name="deletestatbyname" value="{{ stats.0 }}" /></td>
-				<td><input type="radio" name="updatestat" value="{{ stats.0 }}"/></td>
+				<td><input type="radio" name="deletestatbyid" value="{{ stats.6 }}" /></td>
+				<td><input type="radio" name="updatestatbyid" value="{{ stats.6 }}"/></td>
 				<td>{{ stats.0 }}</td>
 				<td>{{ stats.1 }}</td>
 				<td>{{ stats.2 }}</td>
 				<td>{{ stats.3 }}</td>
 				<td>{{ stats.4 }}</td>
 				<td>{{ stats.5 }}</td>
-				<td>{{ stats.6 }}</td>
 			</tr>
 				{% endfor %}
 		</table>

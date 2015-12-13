@@ -18,10 +18,14 @@
 				</td>
 				</tr>
 				<tr>
-						<th>City:</th>
-				<td>
-					<input type="text" name="city" />
-				</td>
+						<th>Country:</th>
+							<td>
+								<select class="text" name="countryid">
+									{% for country in countryList %}
+										<option value="{{country.0}}">{{ country.1 }}</option>
+									{% endfor %}
+								</select>
+							</td>
 				</tr>
 				<tr>
 					<th>Capacity:</th>
@@ -38,9 +42,6 @@
 			</table>
 			<input value="Add" type="submit" />
 		</form>
-
-
-
 	{% endblock %}
 	</body>
 </html>

@@ -12,28 +12,23 @@
 		<form action="{{ url_for('stat_add') }}" method="post">
 			<table>
 				<tr>
-						<th>Player name:</th>
-				<td>
-					<input type="text" name="name"  />
-				</td>
+					<th>Player</th>
+						<td><select class="text" name="playerid">
+						{% for player in playerList %}
+							<option value="{{player.0}}">{{ player.1 }} {{ player.2 }} {{ player.3 }}</option>
+						{% endfor %}
+						</select>
+						</td>
 				</tr>
 				<tr>
-						<th>Player surname:</th>
-				<td>
-					<input type="text" name="surname" />
-				</td>
-				</tr>
-				<tr>
-					<th>Player's Team:</th>
-				<td>
-					<input type="text" name="team" />
-				</td>
-				</tr>
-				<tr>
-					<th>Team League</th>
-				<td>
-					<input type="text" name="league" />
-				</td>
+					<th>League</th>
+							<td>
+								<select class="text" name="leagueid">
+									{% for league in leagueList %}
+										<option value="{{league.0}}">{{ league.1 }}</option>
+									{% endfor %}
+								</select>
+							</td>
 				</tr>
 				<tr>
 					<th>Goals</th>
