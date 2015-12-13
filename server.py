@@ -821,12 +821,11 @@ def messages():
 @app.route('/add_message' , methods=['POST'])
 def add_message():
         title = request.form['title']
-        phone = request.form['phone']
         mail = request.form['mail']
         message = request.form['message']
         connection = psycopg2.connect(app.config['dsn'])
         cursor = connection.cursor()
-        cursor.execute("INSERT INTO MESSAGES(TITLE, PHONE, MAIL, MESSAGE) VALUES(%s, %s, %s, %s)",(title, phone, mail, message))
+        cursor.execute("INSERT INTO MESSAGES(TITLE, MAIL, MESSAGE) VALUES(%s, %s, %s)",(title, mail, message))
         connection.commit()
         connection.close()
         return redirect('/')
@@ -837,23 +836,22 @@ def edit_message(id):
         now = datetime.datetime.now()
         connection = psycopg2.connect(app.config['dsn'])
         cursor = connection.cursor()
-        query = """SELECT TITLE, PHONE, MAIL, MESSAGE FROM MESSAGES WHERE ID=""" + id + """;"""
+        query = """SELECT TITLE, MAIL, MESSAGE FROM MESSAGES WHERE ID=""" + id + """;"""
         cursor.execute(query)
         title, phone, mail, message = cursor.fetchone()
         connection.close()
-        return render_template('edit_message.html', current_time=now.ctime(),id=id, title=title , phone=phone , mail=mail, message=message)
+        return render_template('edit_message.html', current_time=now.ctime(),id=id, title=title , mail=mail, message=message)
 
 @app.route('/update_message', methods=['GET','POST'])
 def update_message():
     if request.method == 'POST':
         id = request.form['id']
         title = request.form['title']
-        phone = request.form['phone']
         mail = request.form['mail']
         message = request.form['message']
         connection = psycopg2.connect(app.config['dsn'])
         cursor = connection.cursor()
-        query="""UPDATE MESSAGES SET TITLE='"""+title+"""', PHONE="""+phone+""", MAIL='"""+mail+"""', MESSAGE='"""+message+"""' WHERE ID="""+id+""";"""
+        query="""UPDATE MESSAGES SET TITLE='"""+title+"""', MAIL='"""+mail+"""', MESSAGE='"""+message+"""' WHERE ID="""+id+""";"""
         cursor.execute(query)
         connection.commit()
         connection.close()
