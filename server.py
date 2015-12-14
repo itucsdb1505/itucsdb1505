@@ -5,15 +5,81 @@ import json
 import re
 import sys
 
-from flask import Flask
-from flask import render_template
-from flask import request, redirect
+from flask import Flask, request, redirect, render_template, url_for
+from flask.ext.login import login_required, LoginManager, UserMixin, login_user, logout_user
 from DataBaseSetup import *
 
 
 app = Flask(__name__)
+
+login_manager = LoginManager()
+
 dataBaseSetup = DataBaseSetup()
 
+
+class User(UserMixin):
+
+    def __init__(self, id):
+        self.id = id
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        cursor.execute("""SELECT USERS.NAME, USERS.AGE, USERS.EMAIL, USERS.PASSWORD, USERS.AUTH, USERS.COUNTRY_ID FROM USERS WHERE ID = """ + str(id) + """;""")
+        self.name, self.age, self.email, self.password, self.auth, self.country_id=  cursor.fetchone()
+        connection.close()
+
+    def is_active(self):
+        # Here you should write whatever the code is
+        # that checks the database if your user is active
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def is_authenticated(self):
+        return True
+
+    def get_id(self):
+        return self.id
+
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    return redirect('/login?next=' + request.path)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(int(user_id))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    login_message = ""
+    now = datetime.datetime.now()
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        cursor.execute("""select id, password from USERS WHERE email = '""" + email + """';""")
+        id,db_password = cursor.fetchone()
+        connection.close()
+
+
+        user = load_user(id)
+        login_user(user)
+
+        if db_password == password:
+            return render_template('home.html', current_time=now.ctime())
+        login_message = "Wrong Credentials ! Please try again..."
+    return render_template('login.html', current_time=now.ctime(), login_message = login_message )
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("home"))
 
 @app.route('/')
 def home():
@@ -22,6 +88,7 @@ def home():
     return render_template('home.html', current_time=now.ctime())
 
 @app.route('/userManagement')
+@login_required
 def userManagement():
     now = datetime.datetime.now()
     connection = psycopg2.connect(app.config['dsn'])
@@ -34,7 +101,6 @@ def userManagement():
         userListAsList.append(list(user))
 
     return render_template('userManagement.html', userList=userListAsList, user4Update=None, current_time=now.ctime())
-
 
 @app.route('/addUser' , methods=['POST'])
 def addUser():
@@ -928,6 +994,7 @@ def get_elephantsql_dsn(vcap_services):
              dbname='{}'""".format(user, password, host, port, dbname)
     return dsn
 
+
 if __name__ == '__main__':
     try:
         VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
@@ -945,6 +1012,10 @@ if __name__ == '__main__':
             app.config['dsn'] = "host='localhost' dbname='itucsdb' user='postgres' password='12345'"
 
         dataBaseSetup.initiateDataBase(app)
+
+        app.secret_key = 'super secret key'
+
+        login_manager.init_app(app)
         app.run(host='0.0.0.0', port=port, debug=True)
 
     except:
