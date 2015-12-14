@@ -335,6 +335,50 @@ def statistics():
             except :
                 return redirect('/Statistic')
 
+@app.route('/Fixture',methods=['GET', 'POST'])
+def fixture():
+    if 'weekresultsnum' in request.form:
+        try:
+            connection = psycopg2.connect(app.config['dsn'])
+            cursor=connection.cursor()
+            leagueid=request.form['leagueid']
+            weekresultsnum=request.form['weekresultsnum']
+            query = """select * from fixture where weeknum=""" + weekresultsnum + """ and league_id=""" + leagueid + """;"""
+            cursor.execute(query)
+            fixturefetch = cursor.fetchall()
+            connection.close()
+            fixtureListForm = []
+            for results in fixturefetch:
+                fixtureListForm.append(list(results))
+            leagueListForm = []
+            weeknumListForm = []
+            now = datetime.datetime.now()
+            return render_template('fixture.html', current_time=now.ctime(), weekList=weeknumListForm,leagueList=leagueListForm,fixtureList=fixtureListForm)
+        except :
+            return redirect('/Fixture')
+    else:
+        try:
+            connection = psycopg2.connect(app.config['dsn'])
+            cursor=connection.cursor()
+            query = """ SELECT ID,NAME FROM LEAGUES ORDER BY NAME;"""
+            cursor.execute(query)
+            leaguesfetch = cursor.fetchall()
+            leagueListForm = []
+            for league in leaguesfetch:
+                leagueListForm.append(list(league))
+            query = """ SELECT weeknum FROM fixture group by weeknum ORDER BY weeknum;"""
+            cursor.execute(query)
+            weeknumfetch = cursor.fetchall()
+            connection.close()
+            weeknumListForm = []
+            for num in weeknumfetch:
+                weeknumListForm.append(list(num))
+            fixtureListForm = []
+            now = datetime.datetime.now()
+            return render_template('fixture.html', current_time=now.ctime(), weekList=weeknumListForm,leagueList=leagueListForm,fixtureList=fixtureListForm)
+        except :
+            return redirect('/Fixture')
+
 @app.route('/AddStat', methods=['GET', 'POST'])
 def stat_add():
         if request.method == 'GET':
