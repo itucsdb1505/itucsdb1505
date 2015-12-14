@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+<a href="{{url_for('competition')}}" title="Competition">Go Back</a>
+
+<TABLE BORDER="5"    WIDTH="50%"   CELLPADDING="4" CELLSPACING="3">
+		   <TR>
+		      <TH COLSPAN="2"><BR><H3>COMPETITION LIST</H3>
+		      </TH>
+		   </TR>
+		   <TR>
+		      <TH>ID</TH>
+		      <TH>Name</TH>
+		      <TH>Type</TH>
+		   </TR>
+
+		   {% for competition in competitionList %}
+			<tr>
+				<td>{{ competition.0 }}</td>
+				<td>{{ competition.1 }}</td>
+				<td>{{ competition.2 }}</td>
+
+				<td>
+					<form action="/deleteCompetition" method=post>
+						<input type=text name=id value={{competition.0}} hidden="true">
+						<input type=submit value=Delete>
+					</form>
+				</td>
+
+				<td>
+					<form action="/update_Competition" method=post>
+						<input type=text name=id value={{competition.0}} hidden="true">
+						<input type=submit value=Update>
+					</form>
+				</td>
+
+			</tr>
+		{% endfor %}
+	</TABLE>
+
+
+{% endblock %}

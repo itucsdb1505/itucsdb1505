@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Pools</title>
+		<link rel="stylesheet" href="/static/style.css" />
+	</head>
+	<body>
+	{% extends "layout.html" %}
+	{% block content %}
+		<div style="text-align:right; margin-bottom:20px">
+			<form action="/SearchPool" method="post">
+				<input type=text name=searchbyname >
+						    <input type=submit value="Search by name" >
+			</form>
+		</div>
+		<h2> Pool list</h2>
+			<form action="{{ url_for('pool_list') }}" method="post">
+				<table border=2>
+					<tr>
+						<th style="width:80px">Delete</th>
+						<th style="width:80px">Update</th>
+						<th>Name</th>
+						<th>Country</th>
+						<th>Capacity</th>
+						<th>Built</th>
+
+					</tr>
+					{% for pool in list %}
+					<tr>
+						<td><input type="radio" name="deletePoolbyid" value="{{ pool.4 }}" /></td>
+						<td><input type="radio" name="updatePoolbyid" value="{{ pool.4 }}"/></td>
+						<td>{{ pool.0 }}</td>
+						<td>{{ pool.1 }}</td>
+						<td>{{ pool.2 }}</td>
+						<td>{{ pool.3 }}</td>
+					</tr>
+					{% endfor %}
+				</table>
+				{%if list%}
+					<input type="submit" value="Delete" name="delete" style="width:85px" />
+					<input type="submit" value="Update" name="Update" style="width:80px"/>
+				{% endif %}
+			</form>
+			<ul>
+				<ul><a href="{{ url_for('pool_edit') }}">Add New Pool</a></ul>
+			</ul>
+
+
+	{% endblock %}
+	</body>
+</html>

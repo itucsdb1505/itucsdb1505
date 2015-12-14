@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block content %}
+<a href="{{url_for('teams')}}" title="Teams">Go Back</a>
+
+<TABLE BORDER="5"    WIDTH="50%"   CELLPADDING="4" CELLSPACING="3">
+		   <TR>
+		      <TH COLSPAN="2"><BR><H3>TEAM LIST</H3>
+		      </TH>
+		   </TR>
+		   <TR>
+		      <TH>ID</TH>
+		      <TH>Name</TH>
+		      <TH>Foundation Year</TH>
+		      <TH>Colours</TH>
+		      <TH>League</TH>
+		      <TH>Country</TH>
+		   </TR>
+		   {% for team in teamList %}
+			<tr>
+				<td>{{ team.0 }}</td>
+				<td>{{ team.1 }}</td>
+				<td>{{ team.2 }}</td>
+				<td>{{ team.3 }}</td>
+				<td>{{ team.4 }}</td>
+				<td>{{ team.5 }}</td>
+
+
+				<td>
+					<form action="/deleteTeam" method=post>
+						<input type=text name=id value={{team.0}} hidden="true">
+						<input type=submit value=Delete>
+					</form>
+				</td>
+
+				<td>
+					<form action="/update_Team" method=post>
+						<input type=text name=id value={{team.0}} hidden="true">
+						<input type=submit value=Update>
+					</form>
+				</td>
+
+			</tr>
+		{% endfor %}
+	</TABLE>
+
+
+{% endblock %}

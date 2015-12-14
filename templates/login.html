@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>User Management</title>
+<link rel="stylesheet"
+	href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+	{% extends "layout.html" %}{% block content %}
+	<p>
+		<b>Login</b>
+	</p>
+{% if login_message %}
+	{{ login_message }}
+{% endif %}
+
+
+	<form action="/login" method=post>
+		<dl>
+			<dt>Email:
+			<dd>
+				<input type=text name=email>
+			<dt>Password:
+			<dd>
+				<input type=password name=password>
+			<dd>
+				<br /> <input type=submit value=Login>
+		</dl>
+	</form>
+
+	{% endblock %}
+
+</body>
+</html>

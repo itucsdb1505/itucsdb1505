@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Matches</title>
+	<link rel="stylesheet"
+	href="{{ url_for('static', filename='style.css') }}" />
+
+</head>
+
+<body>
+	{% extends "layout.html" %}{% block content %}
+
+	<p>
+		<b>Search Matches</b>
+	</p>
+
+
+	<form method="post" action="/searchMatches" >
+
+			<tr>
+				<td style="border-style:solid none solid solid;border-color:#4B7B9F;border-width:1px;">
+				<input type="text" class='text'  name="search_matches" style="width:100px; border:0px solid; height:20px; border-width:1px; padding:0px 3px;">
+				</td>
+				<td style="border-style:solid;border-color:#4B7B9F;border-width:1px;">
+				<input type="submit" value="" style="border-style: none; background: url('static/images/search.gif') no-repeat; width: 24px; height: 20px;">
+				</td>
+			</tr>
+
+	</form>
+
+	<p>
+		<b>Add Matches</b>
+	</p>
+
+
+		<form id="form" class="blocks" method="post" action="/addMatches">
+			<p>
+				<label>Home:</label>
+				<input type="text" class="text" name="home" autofocus/>
+			</p>
+			<p>
+				<label>Away:</label>
+				<input type="text" class="text" name="away" autofocus/>
+			</p>
+			<p>
+				<label>Referee:</label>
+				<input type="text" class="text" name="referee" autofocus/>
+			</p>
+			<p>
+				<label>League:</label>
+				<select class="text" name="league">
+					{% for league in leagueList %}
+						<option value="{{league.0}}">{{ league.1 }}</option>
+					{% endfor %}
+				</select>
+
+			</p>
+
+			<p>
+				<label>&nbsp;</label>
+				<input type="submit" class="btn" value="Add" />
+			</p>
+		</form>
+
+	<TABLE BORDER="5"    WIDTH="50%"   CELLPADDING="4" CELLSPACING="3">
+		   <TR>
+		      <TH COLSPAN="2"><BR><H3>MATCHES LIST</H3>
+		      </TH>
+		   </TR>
+		   <TR>
+
+		      <TH>Home</TH>
+		      <TH>Away</TH>
+		      <TH>Referee</TH>
+		      <TH>League</TH>
+
+		   </TR>
+		   {% for matches in matchesList %}
+			<tr>
+				<td>{{ matches.1 }}</td>
+				<td>{{ matches.2 }}</td>
+				<td>{{ matches.3 }}</td>
+				<td>{{ matches.4 }}</td>
+
+				<td>
+					<form action="/deleteMatches" method=post>
+						<input type=text name=id value={{matches.0}} hidden="true">
+						<input type=submit value=Delete>
+					</form>
+				</td>
+
+				<td>
+					<form action="/update_Matches" method=post>
+						<input type=text name=id value={{matches.0}} hidden="true">
+						<input type=submit value=Update>
+					</form>
+				</td>
+
+			</tr>
+		{% endfor %}
+	</TABLE>
+
+
+
+	</p>
+	{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Statistics</title>
+		<link rel="stylesheet" href="/static/style.css"  />
+		<style>
+			#stattable {
+				width:20%;
+			}
+			table td{
+				min-width:100px;
+				text-align:center;
+			}
+			.bottombutton{
+				width:100px;
+				padding:3px;
+				margin:3px;
+			}
+
+		</style>
+	</head>
+	<body>
+	{% extends "layout.html" %}
+	{% block content %}
+	<div style="text-align:right; margin-bottom:20px">
+		<form action="{{ url_for('stat_search') }}" method="post">
+			<input type=text name=searchbyname >
+					    <input type=submit value="Search by name" >
+		</form>
+	</div>
+{%if not list%}
+	<form action="{{ url_for('statistics') }}" method="post">
+		<table id="stattable" border=2>
+			<tr>
+				<th>League</th>
+				<th>Statistics according to</th>
+			</tr>
+			<td><select class="text" name="league">
+					{% for league in leagueList %}
+						<option value="{{league.0}}">{{ league.1 }}</option>
+					{% endfor %}
+			</select></td>
+			<td><select name="stattype" >
+			  <option value="goal">Goal</option>
+			  <option value="assist">Assist</option>
+			  <option value="save">Save</option>
+			</select></td>
+			<td><input value="show" type="submit" /></td>
+		</table>
+	</form>
+{%else%}
+	<form action="{{ url_for('statistics') }}" method="post">
+		<table border=2>
+			<tr>
+				<th style="width:80px">Delete</th>
+				<th style="width:80px">Update</th>
+				<th>Name</th>
+				<th>Surname</th>
+				<th>Team</th>
+				<th>Goal</th>
+				<th>Assist</th>
+				<th>Save</th>
+			</tr>
+				{% for stats in list %}
+			<tr>
+				<td><input type="radio" name="deletestatbyid" value="{{ stats.6 }}" /></td>
+				<td><input type="radio" name="updatestatbyid" value="{{ stats.6 }}"/></td>
+				<td>{{ stats.0 }}</td>
+				<td>{{ stats.1 }}</td>
+				<td>{{ stats.2 }}</td>
+				<td>{{ stats.3 }}</td>
+				<td>{{ stats.4 }}</td>
+				<td>{{ stats.5 }}</td>
+			</tr>
+				{% endfor %}
+		</table>
+			<input type="submit" value="Delete" class="bottombutton" />
+			<input type="submit" value="Update" class="bottombutton" />
+	</form>
+{% endif %}
+<ul>
+	<ul><a href="{{ url_for('stat_add') }}">Add New Stat</a></ul>
+</ul>
+	{% endblock %}
+	</body>
+</html>

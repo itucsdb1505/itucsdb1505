@@ -1,0 +1,46 @@
+{% extends "eminLayout.html" %}
+
+{%block title%}Search Leagues{%endblock%}
+
+{%block content%}
+					<form class="form-wrapper cf" action="/search_league" method="post">
+					    <input type=text name=search placeholder="Search League" style="text-align: center;" autofocus>
+					    <button type=submit>Search</button>
+					</form>
+
+					<div class="codrops-demos">
+						<a href="{{ url_for('add_league') }}" title="Add League">Add League</a>
+					</div>
+
+				<div class="component">
+					<p>Meanings of "<em><b>{{ request.form.search}}</b></em>" in Leagues : {{count}} result(s)</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Nation</th>
+							<th>Classification</th>
+							<th>Name</th>
+						</tr>
+					</thead>
+					<tbody>
+							 {% for league in leagueList %}
+								<tr>
+									<td class="user-name">{{ league.1 }}
+										<p>
+										<a href="{{url_for('edit_league',id=league.0) }}" title="Edit League">
+											<img src="{{url_for('static',filename='emin/gfx/Pencil-icon.png')}}" width="40" height="40" alt="update">
+										</a>
+										<a href="{{url_for('delete_league',id=league.0) }}" title="Delete League">
+											<img src="{{url_for('static',filename='emin/gfx/delete.png')}}" width="40" height="40" alt="delete">
+										</a>
+										</p>
+									</td>
+									<td class="user-email">{{ league.2 }}</td>
+									<td class="user-phone">{{ league.3 }}</td>
+								</tr>
+							{% endfor %}
+					</tbody>
+				</table>
+			</div>
+{%endblock%}
+

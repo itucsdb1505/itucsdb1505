@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Fixtures</title>
+		<link rel="stylesheet" href="/static/style.css"  />
+		<style>
+			#fixturetable {
+				width:20%;
+			}
+			table td{
+				min-width:100px;
+				text-align:center;
+			}
+			table th{
+				min-width:100px;
+				text-align:center;
+			}
+			.bottombutton{
+				width:100px;
+				padding:3px;
+				margin:3px;
+			}
+
+		</style>
+	</head>
+	<body>
+	{% extends "layout.html" %}
+	{% block content %}
+{%if not fixtureList%}
+	<form action="{{ url_for('fixture') }}" method="post">
+		<table id="fixturetable" border=2>
+			<tr>
+				<th>League</th>
+				<th>Week (th)</th>
+			</tr>
+			<td><select class="text" name="leagueid">
+					{% for league in leagueList %}
+						<option value="{{league.0}}">{{ league.1 }}</option>
+					{% endfor %}
+			</select></td>
+			<td><select name="weekresultsnum" >
+					{% for week in weekList %}
+						<option value="{{week.0}}">{{ week.0 }}</option>
+					{% endfor %}
+			</select></td>
+			<td><input value="show results" type="submit" /></td>
+		</table>
+	</form>
+{%else%}
+	<form action="{{ url_for('fixture') }}" method="post">
+		<table border=2>
+			<tr>
+				<th style="width:80px">Delete</th>
+				<th style="width:80px">Update</th>
+				<th>Week</th>
+				<th>Home Team</th>
+				<th>Score </th>
+				<th>vs</th>
+				<th>Score </th>
+				<th>Away Team</th>
+			</tr>
+				{% for results in fixtureList %}
+			<tr>
+				<td><input type="radio" name="deletestatbyid" value="{{ results.0}}" /></td>
+				<td><input type="radio" name="updatestatbyid" value="{{ results.0 }}"/></td>
+				<td>{{ results.0 }}</td>
+				<td>{{ results.1 }}</td>
+				<td>{{ results.2 }}</td>
+				<td>vs</td>
+				<td>{{ results.4 }}</td>
+				<td>{{ results.3 }}</td>
+			</tr>
+				{% endfor %}
+		</table>
+			<input type="submit" value="Delete" class="bottombutton" />
+			<input type="submit" value="Update" class="bottombutton" />
+	</form>
+{% endif %}
+<ul>
+	<ul><a href="{{ url_for('stat_add') }}">Add New Fixture Data</a></ul>
+</ul>
+	{% endblock %}
+	</body>
+</html>

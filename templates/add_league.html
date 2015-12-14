@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{%block title%}Add League{%endblock%}
+
+{%block content%}
+
+	<div class="wrapper">
+		<form id="form" class="blocks" method="post" action="/add_league">
+			<p>
+				<label>Name:</label>
+				<input type="text" class="text" name="name" autofocus/>
+			</p>
+			<p>
+				<label>Nation:</label>
+				<select class="text" name="nation">
+					{% for country in countryList %}
+						<option value="{{country.0}}">{{ country.1 }}</option>
+					{% endfor %}
+				</select>
+				<a href="{{ url_for('add_country') }}" class="btn2">Add New Country</a>
+				<label>Classification:</label>
+				<input type="text" class="text" name="classification" />
+			</p>
+			<p>
+				<label>&nbsp;</label>
+				<input type="submit" class="btn" value="Submit" />
+			</p>
+		</form>
+	</div>
+{%endblock%}
