@@ -33,6 +33,8 @@
     	</script>
     	<title>{%block title%} {%endblock%}</title>
     <header>
+    {% if current_user.is_authenticated %} Hi {{ current_user.name }}! <a href="{{ url_for('logout')}}"><span>Logout</span>{%
+		endif %}
 		<nav class="codrops-demos">
 			<ul>
 				<li class='active'><a href="{{ url_for('home') }}"><span>Home</span></a></li>
