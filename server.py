@@ -15,9 +15,6 @@ app = Flask(__name__)
 dataBaseSetup = DataBaseSetup()
 
 
-
-
-
 @app.route('/')
 def home():
     now = datetime.datetime.now()
@@ -479,7 +476,6 @@ def searchPlayer():
             playerListAsList.append(list(player))
         return render_template('player_search.html', playerList=playerListAsList, current_time=now.ctime())
 
-#*************************************************************************
 @app.route('/coaches')
 def coaches():
     now = datetime.datetime.now()
@@ -573,8 +569,6 @@ def searchCoach():
             coachListAsList.append(list(coach))
         return render_template('coach_search.html', coachList=coachListAsList, current_time=now.ctime())
 
-
-#*************************************************************************
 @app.route('/referees')
 def referees():
     now = datetime.datetime.now()
@@ -668,7 +662,6 @@ def searchReferee():
         for referee in refereeListAsTuple:
             refereeListAsList.append(list(referee))
         return render_template('referee_search.html', refereeList=refereeListAsList, current_time=now.ctime())
-#*************************************************************************
 
 @app.route('/countries' , methods=['GET', 'POST'])
 def countries():
@@ -750,7 +743,7 @@ def update_country():
         connection.commit()
         connection.close()
         return redirect('/countries')
-#*************************************************************************
+
 @app.route('/leagues' , methods=['GET', 'POST'])
 def leagues():
         now = datetime.datetime.now()
@@ -845,7 +838,7 @@ def update_league():
         connection.commit()
         connection.close()
         return redirect('/leagues')
-#*************************************************************************
+
 @app.route('/messages' , methods=['GET', 'POST'])
 def messages():
         now = datetime.datetime.now()
