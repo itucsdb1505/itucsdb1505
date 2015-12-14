@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		{% block title %}<title>Matches Update</title>{% endblock %}
+
+	</head>
+	<body>
+	{% extends "layout.html" %}
+	{% block content %}
+		<h2>Update Matches</h2>
+		<form action="/edit_Matches" class="blocks" method=post>
+			<p>
+				<input type=hidden  name="id" value={{updatedlist.0}}>
+			</p>
+
+			<p>
+				<label>Home:</label>
+				<input type="text" class="text" name="home" value={{updatedlist.1}} autofocus/>
+			</p>
+			<p>
+				<label>Away:</label>
+				<input type="text" class="text" name="away" value={{updatedlist.2}} autofocus/>
+			</p>
+			<p>
+				<label>Referee:</label>
+				<input type="text" class="text" name="referee" value={{updatedlist.3}} autofocus/>
+			</p>
+			<p>
+				<label>League:</label>
+				<select class="text" name="league">
+					{% for league in leagueList %}
+						<option value="{{league.0}}">{{ league.1 }}</option>
+					{% endfor %}
+				</select>
+			</p>
+
+			<p>
+				<label>&nbsp;</label>
+				<input type="submit" class="btn" value="Update" />
+			</p>
+
+	</form>
+
+
+
+	{% endblock %}
+	</body>
+</html>

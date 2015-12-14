@@ -983,6 +983,298 @@ def search_message():
         return render_template('search_message.html', messageList=messageListAsList, count=len(messageListAsList), current_time=now.ctime())
 
 
+#*************************************************************************
+
+
+@app.route('/teams')
+def teams():
+    now = datetime.datetime.now()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    cursor.execute("select teams.id, teams.name, teams.foundation_year, teams.colours, leagues.name,countries.name from TEAMS left join LEAGUES on teams.league = leagues.id left join COUNTRIES on leagues.nation = countries.id;")
+    teamListAsTuple = cursor.fetchall()
+    teamListAsList = []
+    for team in teamListAsTuple:
+        teamListAsList.append(list(team))
+
+    cursor.execute("SELECT * FROM COUNTRIES ORDER BY NAME;")
+    countryListAsTuple = cursor.fetchall()
+    countryListAsList = []
+    for country in countryListAsTuple:
+        countryListAsList.append(list(country))
+
+    cursor.execute("SELECT * FROM LEAGUES ORDER BY NAME;")
+    leagueListAsTuple = cursor.fetchall()
+    leagueListAsList = []
+    for league in leagueListAsTuple:
+        leagueListAsList.append(list(league))
+        connection.close()
+    return render_template('teams.html', teamList=teamListAsList, current_time=now.ctime(), countryList=countryListAsList, leagueList=leagueListAsList)
+
+@app.route('/addTeam' , methods=['GET','POST'])
+def addTeam():
+        name = request.form['name']
+        foundation_year = request.form['foundation_year']
+        colours = request.form['colours']
+        league = request.form['league']
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        query="""SELECT COUNTRIES.ID FROM COUNTRIES JOIN LEAGUES ON COUNTRIES.ID=LEAGUES.NATION WHERE LEAGUES.ID="""+league+""";"""
+        cursor.execute(query)
+        country = cursor.fetchone()
+        cursor.execute("INSERT INTO TEAMS(NAME, FOUNDATION_YEAR, COLOURS, LEAGUE, COUNTRY) VALUES (%s, %s, %s, %s, %s)", (name, foundation_year, colours, league, country))
+        connection.commit()
+        connection.close()
+        return redirect('/teams')
+
+
+@app.route('/deleteTeam' , methods=['POST'])
+def deleteTeam():
+    id = request.form['id']
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    query = """DELETE FROM TEAMS WHERE id=""" + id + """;"""
+    cursor.execute(query)
+    connection.commit()
+    connection.close()
+    return redirect('/teams')
+
+@app.route('/edit_Team' , methods=['POST'])
+def edit_Team():
+    if request.method == 'POST':
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        id = request.form['id']
+        name=request.form['name']
+        foundation_year=request.form['foundation_year']
+        colours=request.form['colours']
+        league=request.form['league']
+        country=request.form['country']
+        query = """update teams set NAME='"""+name+"""', FOUNDATION_YEAR="""+foundation_year+""", COLOURS='"""+colours+"""', LEAGUE="""+league+""", COUNTRY="""+country+"""  where id=""" + id + """;"""
+        cursor.execute(query)
+        connection.commit()
+        connection.close()
+        return redirect('/teams')
+
+@app.route('/update_Team' , methods=['POST'])
+def update_Team():
+   if request.method == 'POST':
+        now = datetime.datetime.now()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        id = request.form['id']
+        query = """select * from teams where id='""" + id + """';"""
+        cursor.execute(query)
+        update = list(cursor.fetchall()[0])
+        cursor.execute("SELECT * FROM COUNTRIES ORDER BY NAME;")
+        countryListAsTuple = cursor.fetchall()
+        countryListAsList = []
+        for country in countryListAsTuple:
+            countryListAsList.append(list(country))
+
+        cursor.execute("SELECT * FROM LEAGUES ORDER BY NAME;")
+        leagueListAsTuple = cursor.fetchall()
+        leagueListAsList = []
+        for league in leagueListAsTuple:
+            leagueListAsList.append(list(league))
+
+        connection.close()
+        return render_template('team_update.html', current_time=now.ctime(), updatedlist=update, countryList=countryListAsList, leagueList=leagueListAsList)
+
+@app.route('/searchTeam' , methods=['POST'])
+def searchTeam():
+    if request.method == 'POST':
+        search = request.form['search_team']
+        now = datetime.datetime.now()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        query="""SELECT * FROM TEAMS WHERE (NAME LIKE '%""" + search + """%');"""
+        cursor.execute(query)
+        teamListAsTuple = cursor.fetchall()
+        teamListAsList = []
+        for team in teamListAsTuple:
+            teamListAsList.append(list(team))
+
+            connection.close()
+        return render_template('team_search.html', teamList=teamListAsList, current_time=now.ctime())
+
+@app.route('/matches')
+def matches():
+        now = datetime.datetime.now()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        cursor.execute("select matches.id, matches.home, matches.away, matches.referee, leagues.name from MATCHES left join LEAGUES on matches.league = leagues.id;")
+        matchesListAsTuple = cursor.fetchall()
+        matchesListAsList = []
+        for matches in matchesListAsTuple:
+            matchesListAsList.append(list(matches))
+
+        cursor.execute("SELECT * FROM LEAGUES ORDER BY NAME;")
+        leagueListAsTuple = cursor.fetchall()
+        leagueListAsList = []
+        for league in leagueListAsTuple:
+            leagueListAsList.append(list(league))
+            connection.close()
+        return render_template('matches.html', matchesList=matchesListAsList, current_time=now.ctime(), leagueList=leagueListAsList)
+
+
+@app.route('/addMatches' , methods=['POST'])
+def addMatches():
+    home = request.form['home']
+    away = request.form['away']
+    referee = request.form['referee']
+    league = request.form['league']
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO MATCHES (home, away, referee, league) VALUES (%s, %s, %s, %s)", (home, away, referee, league))
+    connection.commit()
+    connection.close()
+    return redirect('/matches')
+
+@app.route('/deleteMatches' , methods=['POST'])
+def deleteMatches():
+        id = request.form['id']
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        query = """DELETE FROM MATCHES WHERE id=""" + id + """;"""
+        cursor.execute(query)
+        connection.commit()
+        connection.close()
+        return redirect('/matches')
+
+@app.route('/edit_Matches' , methods=['POST'])
+def edit_Matches():
+        if request.method == 'POST':
+            connection = psycopg2.connect(app.config['dsn'])
+            cursor = connection.cursor()
+            id = request.form['id']
+            home=request.form['home']
+            away=request.form['away']
+            referee=request.form['referee']
+            league=request.form['league']
+            query = """update matches set HOME='"""+home+"""', AWAY='"""+away+"""', REFEREE='"""+referee+"""', LEAGUE="""+league+"""  where id=""" + id + """;"""
+            cursor.execute(query)
+            connection.commit()
+            connection.close()
+            return redirect('/matches')
+
+@app.route('/update_Matches' , methods=['POST'])
+def update_Matches():
+        now = datetime.datetime.now()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        id = request.form['id']
+        query = """select * from matches where id='""" + id + """';"""
+        cursor.execute(query)
+        update = list(cursor.fetchall()[0])
+        cursor.execute("SELECT * FROM LEAGUES ORDER BY NAME;")
+        leagueListAsTuple = cursor.fetchall()
+        leagueListAsList = []
+        for league in leagueListAsTuple:
+            leagueListAsList.append(list(league))
+
+        connection.close()
+        return render_template('matches_update.html', current_time=now.ctime(), updatedlist=update, leagueList=leagueListAsList)
+
+
+@app.route('/searchMatches' , methods=['POST'])
+def searchMatches():
+        if request.method == 'POST':
+            search = request.form['search_matches']
+            now = datetime.datetime.now()
+            connection = psycopg2.connect(app.config['dsn'])
+            cursor = connection.cursor()
+            query="""SELECT * FROM MATCHES WHERE (HOME LIKE '%""" + search + """%');"""
+            cursor.execute(query)
+            matchesListAsTuple = cursor.fetchall()
+            connection.close()
+            matchesListAsList = []
+            for matches in matchesListAsTuple:
+                matchesListAsList.append(list(matches))
+
+            return render_template('matches_search.html', matchesList=matchesListAsList, current_time=now.ctime())
+
+@app.route('/competition')
+def competition():
+        now = datetime.datetime.now()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM COMPETITION;")
+        competitionListAsTuple = cursor.fetchall()
+        competitionListAsList = []
+        for competition in competitionListAsTuple:
+            competitionListAsList.append(list(competition))
+
+        return render_template('competition.html', competitionList=competitionListAsList, current_time=now.ctime())
+
+@app.route('/addCompetition' , methods=['GET','POST'])
+def addCompetition():
+        name = request.form['name']
+        type = request.form['type']
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        cursor.execute("INSERT INTO COMPETITION(NAME, TYPE) VALUES (%s, %s)", (name, type))
+        connection.commit()
+        connection.close()
+        return redirect('/competition')
+
+
+@app.route('/deleteCompetition' , methods=['POST'])
+def deleteCompetition():
+        id = request.form['id']
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        query = """DELETE FROM COMPETITION WHERE id=""" + id + """;"""
+        cursor.execute(query)
+        connection.commit()
+        connection.close()
+        return redirect('/competition')
+
+@app.route('/edit_Competition' , methods=['POST'])
+def edit_Competition():
+    if request.method == 'POST':
+        now = datetime.datetime.now()
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        id = request.form['id']
+        name = request.form['name']
+        type = request.form['type']
+        query = """update competition set NAME='"""+name+"""',  TYPE='"""+type+"""'  where id=""" + id + """;"""
+        cursor.execute(query)
+        connection.commit()
+        connection.close()
+        return redirect('/competition')
+
+@app.route('/update_Competition' , methods=['POST'])
+def update_Competition():
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        id = request.form['id']
+        query = """select * from competition where id='""" + id + """';"""
+        cursor.execute(query)
+        update = list(cursor.fetchall()[0])
+
+        connection.close()
+        return render_template('competition_update.html', updatedlist=update)
+
+
+@app.route('/searchCompetition' , methods=['POST'])
+def searchCompetition():
+        if request.method == 'POST':
+            search = request.form['search_competition']
+            now = datetime.datetime.now()
+            connection = psycopg2.connect(app.config['dsn'])
+            cursor = connection.cursor()
+            query="""SELECT * FROM COMPETITION WHERE (NAME LIKE '%""" + search + """%');"""
+            cursor.execute(query)
+            competitionListAsTuple = cursor.fetchall()
+            connection.close()
+            competitionListAsList = []
+            for competition in competitionListAsTuple:
+                competitionListAsList.append(list(competition))
+            return render_template('competition_search.html', competitionList=competitionListAsList, current_time=now.ctime())
+
+
 
 def get_elephantsql_dsn(vcap_services):
     """Returns the data source name for ElephantSQL."""
