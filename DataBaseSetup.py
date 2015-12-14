@@ -5,9 +5,6 @@ import os
 class DataBaseSetup:
 
 
-    def __init__(self):
-        pass
-
     def initiateDataBase(self, app):
         try:
             connection = psycopg2.connect(app.config['dsn'])
