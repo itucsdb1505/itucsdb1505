@@ -1,7 +1,7 @@
 Welcome to itucsdb1505's documentation!
 =======================================
 
-:Team: Team Name
+:Team: itucsdb1505 - Water Polo
 
 :Members:
 
@@ -11,7 +11,7 @@ Welcome to itucsdb1505's documentation!
    * Member 4
    * Member 5
 
-**project description goes here (a few paragraphs)**
+
 Water Polo
 
 Our project is a fixture management tool for Water Polo.
