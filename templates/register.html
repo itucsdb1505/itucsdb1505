@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Register</title>
+<link rel="stylesheet"
+	href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+	{% extends "layout.html" %}{% block content %}
+
+	<p>
+		<b>Register</b>
+	</p>
+	<form action="/register" method=post>
+		<dl>
+			<dt>Name:
+			<dd>
+				<input type=text name=name>
+			</dd>
+			<dt>Age:
+			<dd>
+				<input type=text name=age>
+			</dd>
+			<dt>E-mail:
+			<dd>
+				<input type=text name=email>
+			</dd>
+			<dt>Country:
+			<dd>
+				<select name=country> {% for country in countries %}
+					<option value="{{country.0}}" name=countryid>{{country.1}}</option>
+					{% endfor %}
+				</select>
+			</dd>
+			<dt>Password:
+			<dd>
+				<input type=password name=passwordFirst>
+			</dd>
+			<dt>Password again:
+			<dd>
+				<input type=password name=passwordSecond>
+			</dd>
+			<br />
+			<input type=submit value=Register>
+		</dl>
+	</form>
+	{%if errors is not none %}
+	<p>
+	<ul>
+		{% for error in errors %}
+		<li>{{error}}</li> {% endfor %}
+	</ul>
+	</p>
+	{% endif %} {% endblock %}
+</body>
+</html>

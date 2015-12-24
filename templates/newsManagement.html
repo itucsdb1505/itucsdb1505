@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>News Management</title>
+<link rel="stylesheet"
+	href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+	{% extends "layout.html" %}{% block content %}
+{% if current_user.auth is sameas 'u' %}
+ You are not allowed in this page !
+{% else %}
+	{% if news4Update is not
+	none %}
+	<p>
+		<b>User Update</b>
+	</p>
+	<form action="/newsUpdate" method=post>
+		<dl>
+
+			<dd>
+				<input type=text name=id hidden="true" value={{news4Update.0}}>
+			</dd>
+			<dt>Title:</dt>
+			<dd>
+				<input type=text name=title value="{{news4Update.1}}">
+			</dd>
+			<dt>Content:</dt>
+			<dd>
+				<textarea name=content>{{news4Update.2}}</textarea>
+			</dd>
+			<dt>Author:</dt>
+			<dd>
+				{% if current_user.auth is sameas 'a' %}
+				 <select name=author>
+				 {% for user in users %}
+				  {% if news4Update.4 == user.1 %}
+					<option value="{{user.0}}" name=author selected="selected">{{user.1}}</option>
+					{% else %}
+					<option value="{{user.0}}" name=author>{{user.1}}</option> {% endif %}{%
+					endfor %}
+				</select>
+				{% else %}
+					{{current_user.name}}
+				  	<input type=text name=author hidden=true value={{current_user.id}}>
+
+				{% endif %}
+			</dd>
+
+
+			<dd>
+				<br /> <input type=submit value=Update>
+			</dd>
+		</dl>
+	</form>
+
+	{% else %}
+	<p>
+		<b>User Add</b>
+	</p>
+	<form action="/addNews" method=post>
+		<dl>
+			<dt>Title:
+			<dd>
+				<input type=text name=title>
+			</dd>
+			<dt>Content:
+			<dd>
+				<textarea name=content></textarea>
+			</dd>
+			<dt>Author:
+			<dd>
+			{% if current_user.auth is sameas 'a' %}
+				<select name=author> {% for user in users %}
+					<option value="{{user.0}}" name=countryid>{{user.1}}</option> {%
+					endfor %}
+				</select>
+				{% else %}
+					{{current_user.name}}
+				  	<input type=text name=author hidden=true value={{current_user.id}}>
+
+				{% endif %}
+			</dd>
+
+			<br />
+			<input type=submit value=Add>
+		</dl>
+	</form>
+	{% endif %}
+	<p>
+	<dt>
+		Search:
+		<form action="/newsManagement" method=post>
+			<dd>
+				<input type=text name=search>
+			</dd>
+			<br /> <input type=submit value=Search>
+		</form>
+	</dt>
+	</p>
+	<p>
+		<b>News List</b>
+	</p>
+	<p>
+	<table border=1>
+		<tr>
+			<th>Title</th>
+			<th>Content</th>
+			<th>Author</th>
+			<th>Update</th>
+			<th>Delete</th>
+		</tr>
+		{% if current_user.auth is sameas 'a' %}
+		{% for new in newsList %}
+		<tr>
+			<td>{{ new.0 }}</td>
+			<td>{{ new.1 }}</td>
+			<td>{{ new.2 }}</td>
+			<td>
+				<form action="/updateNews" method=post>
+					<input type=text name=id value={{new.3}} hidden="true"> <input
+						type=submit value=Update>
+				</form>
+			</td>
+			<td>
+				<form action="/deleteNews" method=post>
+					<input type=text name=id value={{new.3}} hidden="true"> <input
+						type=submit value=Delete>
+				</form>
+			</td>
+		</tr>
+		{% endfor %}
+		{% else %}
+		{% for new in newsList %}
+		{% if current_user.name == new.2 %}
+		<tr>
+			<td>{{ new.0 }}</td>
+			<td>{{ new.1 }}</td>
+			<td>{{ new.2 }}</td>
+			<td>
+				<form action="/updateNews" method=post>
+					<input type=text name=id value={{new.3}} hidden="true"> <input
+						type=submit value=Update>
+				</form>
+			</td>
+			<td>
+				<form action="/deleteNews" method=post>
+					<input type=text name=id value={{new.3}} hidden="true"> <input
+						type=submit value=Delete>
+				</form>
+			</td>
+		</tr>
+		{% endif %}
+		{% endfor %}
+		{% endif %}
+	</table>
+	</p>
+	{% endif %}
+	{% endblock %}
+
+</body>
+</html>

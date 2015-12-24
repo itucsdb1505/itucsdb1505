@@ -23,6 +23,7 @@ class DataBaseSetup:
 
             connection.close()
         except:
-            print("Database could not initialized.")
+            print("Database could not initialized. Err : ")
+            print(sys.exc_info()[0])
 
 

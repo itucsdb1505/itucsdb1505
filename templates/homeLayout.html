@@ -1,78 +1,112 @@
 <!DOCTYPE html>
 <html>
 <head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="keywords" content="Waterpolo" />
-		<meta name="author" content="Emin Ocak, eminnocak@gmail.com" />
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="keywords" content="Waterpolo" />
+<meta name="author" content="Emin Ocak, eminnocak@gmail.com" />
 
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='emin/css/normalize.css') }}" />
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cssmenu/styles_h.css') }}" />
+<link rel="stylesheet" type="text/css"
+	href="{{ url_for('static', filename='emin/css/normalize.css') }}" />
+<link rel="stylesheet" type="text/css"
+	href="{{ url_for('static', filename='cssmenu/styles_h.css') }}" />
 
-		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-        <script type="text/javascript" src="http://calismalar.aycan.net/degisenArkaPlan/kutuphane/js/ab-degisenArkaPlan.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $('body').abDegisenArkaPlan({
-                    resimlerArasiGecis  : 20000,
-                    resimEfekleri       : 1000,
-                    resimler       :"static/images/wp2.jpg,static/images/wp4.jpg,static/images/wp1.jpg,static/images/wp3.jpg"
-                });
-            });
-        </script>
-    	<title>{%block title%} {%endblock%}</title>
-     <header>
-		<nav class="codrops-demos">
-			<ul>
-				<li class='active'><a href="{{ url_for('home') }}"><span>Home</span></a></li>
-				<li class='has-sub'><a href='#'><span>General</span></a>
-					<ul>
-						<li><a href="{{ url_for('players') }}"><span>Players</span></a></li>
-						<li><a href="{{ url_for('coaches') }}"><span>Coaches</span></a></li>
-						<li><a href="{{ url_for('referees') }}"><span>Referees</span></a></li>
-						<li class='last'><a href="{{ url_for('pool_list') }}"><span>Pools</span></a></li>
-						<li><a href="{{ url_for('leagues')}}"><span>Leagues</span></a></li>
-						<li><a href="{{ url_for('countries')}}"><span>Countries</span></a></li>
-						<li><a href="{{ url_for('messages')}}"><span>Messages</span></a></li>
-						<li><a href="{{ url_for('teams')}}"><span>Teams</span></a></li>
-						<li><a href="{{ url_for('matches')}}"><span>Matches</span></a></li>
-						<li><a href="{{ url_for('competition')}}"><span>Competition</span></a></li>
-					</ul></li>
-				<li class='has-sub'><a href='#'><span>About</span></a>
-					<ul>
-						<li class='last'><a href='#'><span>Water Polo</span></a></li>
-					</ul></li>
-				<li class='has-sub'><a href='#'><span>Administration</span></a>
-					<ul>
-						<li><a href="{{ url_for('userManagement') }}"><span>User Management</span></a></li>
-					</ul></li>
-				<li class='last'><a href="{{ url_for('initiateDB') }}"><span>Initialize DB</span></a>
-			</li>
-			</ul>
-		</nav>
-	</header>
+<script type="text/javascript"
+	src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript"
+	src="http://calismalar.aycan.net/degisenArkaPlan/kutuphane/js/ab-degisenArkaPlan.js"></script>
+<script type="text/javascript">
+	$(document)
+			.ready(
+					function() {
+						$('body')
+								.abDegisenArkaPlan(
+										{
+											resimlerArasiGecis : 20000,
+											resimEfekleri : 1000,
+											resimler : "static/images/wp2.jpg,static/images/wp4.jpg,static/images/wp1.jpg,static/images/wp3.jpg"
+										});
+					});
+</script>
+<title>{%block title%} {%endblock%}</title>
 </head>
-	<body>
-		<div id="content">
-						<article class="col-2">
-							<form id="contact-form" method="post" action="/add_message">
-								<fieldset>
-									<label>
-										<input type="text" value="Title" name="title" onBlur="if(this.value=='') this.value='Title'" onFocus="if(this.value =='Title' ) this.value=''" required/>
-									</label>
-									<label>
-									    <input type="email" value="E-Posta" name="mail" onBlur="if(this.value=='') this.value='E-Posta'" onFocus="if(this.value =='E-Posta' ) this.value=''" required/>
-									</label>
-										<textarea name="message" onBlur="if(this.value=='') this.value='Message'" onFocus="if(this.value =='Message' ) this.value=''" required>Message</textarea>
-									<div class="buttons-wrapper">
-										<a class="button" onClick="document.getElementById('contact-form').reset()">Delete All</a>
-										<a class="button" onClick="document.getElementById('contact-form').submit()">Send</a>
-<!-- 										<input type="submit" class="button" value="Send" /> -->
-									</div>
-								</fieldset>
-							</form>
-						</article>
-		</div>
-		<script type="text/javascript"> Cufon.now(); </script>
-	</body>
+<header>
+	{% if current_user.is_authenticated %}
+	<ul>
+		<li>Hi {{ current_user.name }}! <a href="{{ url_for('logout')}}">Logout
+		</a>
+		</li>
+	</ul>
+	</p>
+	{% endif %}
+	<nav class="codrops-demos">
+		<ul>
+			<li class='active'><a href="{{ url_for('home') }}"><span>Home</span></a></li>
+			<li class='has-sub'><a href='#'><span>General</span></a>
+				<ul>
+					<li><a href="{{ url_for('players') }}"><span>Players</span></a></li>
+					<li><a href="{{ url_for('coaches') }}"><span>Coaches</span></a></li>
+					<li><a href="{{ url_for('referees') }}"><span>Referees</span></a></li>
+					<li class='last'><a href="{{ url_for('pool_list') }}"><span>Pools</span></a></li>
+				</ul></li>
+			<li class='active'><a href="{{ url_for('statistics') }}"><span>Statistics</span></a></li>
+			<li class='has-sub'><a href='#'><span>Emin</span></a>
+				<ul>
+					<li><a href="{{ url_for('leagues')}}"><span>Leagues</span></a></li>
+					<li><a href="{{ url_for('countries')}}"><span>Countries</span></a></li>
+					<li><a href="{{ url_for('messages')}}"><span>Messages</span></a></li>
+				</ul></li>
+			<li class='has-sub'><a href='#'><span>About</span></a>
+				<ul>
+					<li class='last'><a href='#'><span>Water Polo</span></a></li>
+				</ul></li>
+
+
+			<li class='active'><a href="{{ url_for('news') }}"><span>News</span></a></li>
+				{% if current_user.is_authenticated %}{%if current_user.auth != 'u' %}
+			<li class='has-sub'><a href='#'><span>Administration</span></a>
+				<ul>
+					<li><a href="{{ url_for('userManagement') }}"><span>User
+								Management</span></a></li>
+					<li><a href="{{ url_for('newsManagement') }}"><span>News
+								Management</span></a></li>
+				</ul></li>{% endif %}{% endif %} {% if current_user.is_authenticated is sameas false %}
+			<li class='active'><a href="{{ url_for('login') }}"><span>Login</span></a>
+			<li class='active'><a href="{{ url_for('registerPage') }}"><span>Register</span></a>
+				{% endif %}
+			<li class='last'><a href="{{ url_for('initiateDB') }}"><span>Initialize
+						DB</span></a></li>
+		</ul>
+	</nav>
+</header>
+<body>
+	<div id="content">
+		<article class="col-2">
+			<form id="contact-form" method="post" action="/add_message">
+				<fieldset>
+					<label> <input type="text" value="Title" name="title"
+						onBlur="if(this.value=='') this.value='Title'"
+						onFocus="if(this.value =='Title' ) this.value=''" required />
+					</label> <label> <input type="email" value="E-Posta" name="mail"
+						onBlur="if(this.value=='') this.value='E-Posta'"
+						onFocus="if(this.value =='E-Posta' ) this.value=''" required />
+					</label>
+					<textarea name="message"
+						onBlur="if(this.value=='') this.value='Message'"
+						onFocus="if(this.value =='Message' ) this.value=''" required>Message</textarea>
+					<div class="buttons-wrapper">
+						<a class="button"
+							onClick="document.getElementById('contact-form').reset()">Delete
+							All</a> <a class="button"
+							onClick="document.getElementById('contact-form').submit()">Send</a>
+						<!-- 										<input type="submit" class="button" value="Send" /> -->
+					</div>
+				</fieldset>
+			</form>
+		</article>
+	</div>
+	<script type="text/javascript">
+		Cufon.now();
+	</script>
+</body>
 </html>

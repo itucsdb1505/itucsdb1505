@@ -4,15 +4,21 @@ import os
 import json
 import re
 import sys
+import hashlib
+
 
 from flask import Flask, request, redirect, render_template, url_for
-from flask.ext.login import login_required, LoginManager, UserMixin, login_user, logout_user
+from flask.ext.login import login_required, LoginManager, UserMixin, login_user, logout_user, AnonymousUserMixin
 from DataBaseSetup import *
 
 
 app = Flask(__name__)
 
+class AnonymousUser(AnonymousUserMixin):
+    pass
+
 login_manager = LoginManager()
+login_manager.anonymous_user = AnonymousUser
 
 dataBaseSetup = DataBaseSetup()
 
@@ -24,7 +30,7 @@ class User(UserMixin):
         connection = psycopg2.connect(app.config['dsn'])
         cursor = connection.cursor()
         cursor.execute("""SELECT USERS.NAME, USERS.AGE, USERS.EMAIL, USERS.PASSWORD, USERS.AUTH, USERS.COUNTRY_ID FROM USERS WHERE ID = """ + str(id) + """;""")
-        self.name, self.age, self.email, self.password, self.auth, self.country_id=  cursor.fetchone()
+        self.name, self.age, self.email, self.password, self.auth, self.country_id =  cursor.fetchone()
         connection.close()
 
     def is_active(self):
@@ -40,6 +46,9 @@ class User(UserMixin):
 
     def get_id(self):
         return self.id
+
+    def get_auth(self):
+        return self.auth
 
 @login_manager.unauthorized_handler
 def unauthorized_callback():
@@ -57,7 +66,10 @@ def login():
     now = datetime.datetime.now()
     if request.method == 'POST':
         email = request.form['email']
-        password = request.form['password']
+
+        m = hashlib.md5()
+        m.update(request.form['password'].encode('utf-8'))
+        password = m.hexdigest()
 
         connection = psycopg2.connect(app.config['dsn'])
         cursor = connection.cursor()
@@ -66,15 +78,15 @@ def login():
         connection.close()
 
 
-        user = load_user(id)
-        login_user(user)
 
         if db_password == password:
-            return render_template('home.html', current_time=now.ctime())
+            user = load_user(id)
+            login_user(user)
+            return redirect(url_for("home"))
         login_message = "Wrong Credentials ! Please try again..."
     return render_template('login.html', current_time=now.ctime(), login_message = login_message )
 
-
+import hashlib
 @app.route("/logout")
 @login_required
 def logout():
@@ -87,35 +99,67 @@ def home():
 
     return render_template('home.html', current_time=now.ctime())
 
-@app.route('/userManagement')
+
+
+@app.route('/userManagement', methods=['GET', 'POST'])
 @login_required
 def userManagement():
+
     now = datetime.datetime.now()
     connection = psycopg2.connect(app.config['dsn'])
     cursor = connection.cursor()
-    cursor.execute("""select users.name, users.age, users.email, users.auth, countries.name from USERS join countries on users.country_id = countries.id;""")
+    query = ""
+    search = ""
+    if request.method != 'GET':
+        search = request.form['search']
+    if search != "":
+        query = """select users.name, users.age, users.email, users.password, users.auth, countries.name from USERS join countries on users.country_id = countries.id where users.name like '""" + search + """%';"""
+    else:
+        query = """select users.name, users.age, users.email, users.password, users.auth, countries.name from USERS join countries on users.country_id = countries.id;"""
+    cursor.execute(query)
     userListAsTuple = cursor.fetchall()
-    connection.close()
     userListAsList = []
     for user in userListAsTuple:
         userListAsList.append(list(user))
 
-    return render_template('userManagement.html', userList=userListAsList, user4Update=None, current_time=now.ctime())
+    query = """SELECT * FROM COUNTRIES;"""
+    cursor.execute(query)
+    countriesAsTuple = cursor.fetchall()
+    connection.close()
+    countriesAsList = []
+    for country in countriesAsTuple:
+        countriesAsList.append(list(country))
+
+    return render_template('userManagement.html', userList=userListAsList, user4Update=None, current_time=now.ctime(), countries = countriesAsList)
 
 @app.route('/addUser' , methods=['POST'])
 def addUser():
+    errors = []
     name = request.form['name']
+    if name is "":
+        errors.append(["Name is empty."])
     age = request.form['age']
+    if age is "":
+        errors.append(["Age is empty."])
     email = request.form['email']
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        errors.append(["Email is not valid."])
     auth = request.form['auth']
+    if auth != 'u' or auth != 'm' or auth != 'a':
+        errors.append(["Auth should be one of u,m or a "])
+    m = hashlib.md5()
+    m.update(request.form['password'].encode('utf-8'))
+    password = m.hexdigest()
+
+    countryid = request.form['country']
+
     connection = psycopg2.connect(app.config['dsn'])
     cursor = connection.cursor()
-    query = """INSERT INTO USERS(NAME, AGE, EMAIL, AUTH) values('""" + name + """',""" + age + """,'""" + email + """','""" + auth + """')"""
+    query = """INSERT INTO USERS(NAME, AGE, EMAIL, PASSWORD, AUTH, COUNTRY_ID) values('""" + name + """','""" + age + """','""" + email + """','""" + password + """','""" + auth + """','""" + countryid + """');"""
     cursor.execute(query)
     connection.commit()
     connection.close()
     return redirect('/userManagement')
-
 
 @app.route('/userUpdate', methods=['POST'])
 def userUpdate():
@@ -123,9 +167,17 @@ def userUpdate():
     age = request.form['age']
     email = request.form['email']
     auth = request.form['auth']
+    countryid = request.form['country']
     connection = psycopg2.connect(app.config['dsn'])
     cursor = connection.cursor()
-    query = """UPDATE users SET name='""" + name + """',age=""" + age + """,email='""" + email + """',auth='""" + auth + """' WHERE email='""" + email + """';"""
+    password = request.form['password']
+    if password == "":
+        query = """UPDATE users SET name='""" + name + """',age='""" + age + """',email='""" + email + """',auth='""" + auth + """', country_id='""" + countryid + """' WHERE email='""" + email + """';"""
+    else:
+        m = hashlib.md5()
+        m.update(password.encode('utf-8'))
+        password = m.hexdigest()
+        query = """UPDATE users SET name='""" + name + """',age='""" + age + """',email='""" + email + """',password='""" + password + """',auth='""" + auth + """', country_id='""" + countryid + """' WHERE email='""" + email + """';"""
     cursor.execute(query)
     connection.commit()
     connection.close()
@@ -140,13 +192,16 @@ def updateUser():
     query = """select users.name, users.age, users.email, users.auth, countries.name from USERS join countries on users.country_id = countries.id where email='""" + email + """';"""
     cursor.execute(query)
     user4Update = list(cursor.fetchall()[0])
-    cursor.execute("""select users.name, users.age, users.email, users.auth, countries.name from USERS join countries on users.country_id = countries.id;""")
+    cursor.execute("""select users.name, users.age, users.email, users.password, users.auth, countries.name from USERS join countries on users.country_id = countries.id;""")
     userListAsTuple = cursor.fetchall()
+    query = """SELECT * FROM COUNTRIES;"""
+    cursor.execute(query)
+    countriesAsTuple = cursor.fetchall()
     connection.close()
     userListAsList = []
     for user in userListAsTuple:
         userListAsList.append(list(user))
-    return render_template('userManagement.html', userList=userListAsList, user4Update=user4Update, current_time=now.ctime())
+    return render_template('userManagement.html', userList=userListAsList, user4Update=user4Update, current_time=now.ctime(), countries = countriesAsTuple)
 
 @app.route('/deleteUser' , methods=['POST'])
 def deleteUser():
@@ -158,6 +213,193 @@ def deleteUser():
     connection.commit()
     connection.close()
     return redirect('/userManagement')
+
+
+@app.route('/register' , methods=['POST'])
+def register():
+    errors = []
+    name = request.form['name']
+    if name is "":
+        errors.append(["Name is empty."])
+    age = request.form['age']
+    if age is "":
+        errors.append(["Age is empty."])
+    try:
+        datetime.datetime.strptime(age, '%Y-%m-%d')
+    except ValueError:
+        errors.append(["Age is wrong it should be like yyyy-mm-dd ."])
+    email = request.form['email']
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        errors.append(["Email is not valid."])
+    countryid = request.form['country']
+    passwordFirst = request.form['passwordFirst']
+    if passwordFirst is "":
+        errors.append(["Password is empty."])
+    passwordSecond = request.form['passwordSecond']
+    if passwordSecond is "":
+        errors.append(["Check password is empty."])
+    if passwordFirst != passwordSecond:
+        errors.append(["Passwords are not same."])
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    query = """SELECT EMAIL FROM USERS WHERE EMAIL = '""" + email + """';"""
+    cursor.execute(query)
+    checkMail = None
+    checkMail = cursor.fetchone()
+    if checkMail != None:
+        errors.append(["User exists. Please try another email."])
+
+
+    if not errors:
+
+        m = hashlib.md5()
+        m.update(passwordFirst.encode('utf-8'))
+        password = m.hexdigest()
+        query = """INSERT INTO USERS(NAME, AGE, EMAIL, PASSWORD, AUTH, COUNTRY_ID) values('""" + name + """','""" + age + """','""" + email + """','""" + password + """','u','""" + countryid + """');"""
+        cursor.execute(query)
+        connection.commit()
+        connection.close()
+        return redirect('/login')
+    else:
+        return registerPage(errors)
+
+@app.route('/registerPage')
+def registerPage(errors=None):
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    query = """SELECT * FROM COUNTRIES;"""
+    cursor.execute(query)
+    countriesAsTuple = cursor.fetchall()
+    connection.close()
+    countriesAsList = []
+    for country in countriesAsTuple:
+        countriesAsList.append(list(country))
+    return render_template('register.html', countries = countriesAsList, errors=errors)
+
+
+@app.route('/newsManagement', methods=['GET', 'POST'])
+@login_required
+def newsManagement():
+
+    now = datetime.datetime.now()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    query = ""
+    search = ""
+    if request.method != 'GET':
+        search = request.form['search']
+    if search != "":
+        query = """select news.title, news.content, users.name, news.id from news join users on news.user_id = users.id where news.title like '%""" + search + """%';"""
+    else:
+        query = """select news.title, news.content, users.name, news.id from news join users on news.user_id = users.id;"""
+    cursor.execute(query)
+    newsListAsTuple = cursor.fetchall()
+    newsListAsList = []
+    for news in newsListAsTuple:
+        newsListAsList.append(list(news))
+    query = """SELECT * FROM USERS;"""
+    cursor.execute(query)
+    usersAsTuple = cursor.fetchall()
+    connection.close()
+    usersAsList = []
+    for user in usersAsTuple:
+        usersAsList.append(list(user))
+
+    return render_template('newsManagement.html', newsList=newsListAsList, news4Update=None, current_time=now.ctime(), users=usersAsList)
+
+@app.route('/addNews' , methods=['POST'])
+def addNews():
+    errors = []
+    name = request.form['title']
+    if name is "":
+        errors.append(["Title is empty."])
+    age = request.form['content']
+    if age is "":
+        errors.append(["Content is empty."])
+
+    email = request.form['email']
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        errors.append(["Email is not valid."])
+    auth = request.form['auth']
+
+    m = hashlib.md5()
+    m.update(request.form['password'].encode('utf-8'))
+    password = m.hexdigest()
+
+    countryid = request.form['country']
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    query = """INSERT INTO USERS(NAME, AGE, EMAIL, PASSWORD, AUTH, COUNTRY_ID) values('""" + name + """','""" + age + """','""" + email + """','""" + password + """','""" + auth + """','""" + countryid + """');"""
+    cursor.execute(query)
+    connection.commit()
+    connection.close()
+    return redirect('/newsManagement')
+
+@app.route('/newsUpdate', methods=['POST'])
+def newsUpdate():
+    id = request.form['id']
+    title = request.form['title']
+    content = request.form['content']
+    user = request.form['author']
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    query = """SELECT id from users where name='""" + user + """';"""
+    cursor.execute(query)
+    user_id = list(cursor.fetchone())
+    query = """UPDATE news SET title='""" + title + """', content='""" + content + """', user_id=""" + str(user_id[0]) + """ WHERE id='""" + id + """';"""
+    cursor.execute(query)
+    connection.commit()
+    connection.close()
+    return redirect('/newsManagement')
+
+@app.route('/updateNews', methods=['POST'])
+def updateNews():
+    now = datetime.datetime.now()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    id = request.form['id']
+    query = """select news.id, news.title, news.content, users.name, news.id from news join users on news.user_id = users.id where news.id ='""" + id + """';"""
+    cursor.execute(query)
+    news4Update = list(cursor.fetchall()[0])
+    cursor.execute("""select news.title, news.content, users.name, news.id from news join users on news.user_id = users.id;""")
+    newsListAsTuple = cursor.fetchall()
+    query = """SELECT * FROM USERS;"""
+    cursor.execute(query)
+    usersAsTuple = cursor.fetchall()
+    connection.close()
+    newsListAsList = []
+    for news in newsListAsTuple:
+        newsListAsList.append(list(news))
+    return render_template('newsManagement.html', newsList=newsListAsList, news4Update=news4Update, current_time=now.ctime(), users = usersAsTuple)
+
+@app.route('/deleteNews' , methods=['POST'])
+def deleteNews():
+    id = request.form['id']
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    query = """DELETE FROM NEWS WHERE id='""" + id + """';"""
+    cursor.execute(query)
+    connection.commit()
+    connection.close()
+    return redirect('/newsManagement')
+
+
+@app.route('/news')
+def news():
+    now = datetime.datetime.now()
+    connection = psycopg2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    query = """select news.title, news.content, users.name, news.id from news join users on news.user_id = users.id;"""
+    cursor.execute(query)
+    newsListAsTuple = cursor.fetchall()
+    newsListAsList = []
+    for news in newsListAsTuple:
+        newsListAsList.append(list(news))
+    query = """SELECT * FROM USERS;"""
+    cursor.execute(query)
+    usersAsTuple = cursor.fetchall()
+    connection.close()
+    return render_template('news.html', current_time=now.ctime(), newsList=newsListAsList)
 
 @app.route('/initiateDB')
 def initiateDB():

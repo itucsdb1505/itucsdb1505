@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>News</title>
+<link rel="stylesheet"
+	href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+	{% extends "layout.html" %}{% block content %}
+
+	<table border=1>
+		<tr>
+			<th>Title</th>
+			<th>Content</th>
+			<th>Author</th>
+		</tr>
+
+		{% for new in newsList %}
+		<tr>
+			<td>{{ new.0 }}</td>
+			<td>{{ new.1 }}</td>
+			<td>{{ new.2 }}</td>
+
+		</tr>
+		{% endfor %}
+	</table>
+	{% endblock %}
+
+</body>
+				</html>

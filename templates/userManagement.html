@@ -7,7 +7,19 @@
 	href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-	{% extends "layout.html" %}{% block content %} {% if user4Update is not
+	{% extends "layout.html" %}{% block content %}
+	{% if current_user.auth is sameas 'u' %}
+ You are not allowed in this page !
+{% else %}
+	{%if errors is not none %}
+	<p>
+	<ul>
+		{% for error in errors %}
+		<li>{{error}}</li> {% endfor %}
+	</ul>
+	</p>
+	{% endif %}
+	{% if user4Update is not
 	none %}
 	<p>
 		<b>User Update</b>
@@ -26,6 +38,10 @@
 			<dd>
 				<input type=text name=email value={{user4Update.2}}>
 			</dd>
+			<dt>Password:
+			<dd>
+				<input type=password name=password>
+			</dd>
 			<dt>Auth:</dt>
 			<dd>
 				<input type=text name=auth value={{user4Update.3}}>
@@ -33,7 +49,14 @@
 
 			<dt>Country:</dt>
 			<dd>
-				<input type=text name=country value={{user4Update.4}}>
+
+				<select name=country> {% for country in
+					countries %} {% if user4Update.4 == country.1 %}
+					<option value="{{country.0}}" name=countryid selected="selected">{{country.1}}</option>
+					{% else %}
+					<option value="{{country.0}}" name=countryid>{{country.1}}</option>{% endif %}
+					{% endfor %}
+				</select>
 			</dd>
 
 			<dd>
@@ -50,37 +73,56 @@
 			<dt>Name:
 			<dd>
 				<input type=text name=name>
+			</dd>
 			<dt>Age:
 			<dd>
 				<input type=text name=age>
-			<dd>
+			</dd>
 			<dt>E-mail:
 			<dd>
 				<input type=text name=email>
+			</dd>
+			<dt>Password:
 			<dd>
+				<input type=password name=password>
+			</dd>
 			<dt>Auth:
 			<dd>
 				<input type=text name=auth>
+			</dd>
+			<dt>Country:</dt>
 			<dd>
-			<dt>Country:
-			<dd>
-				<input type=text name=country_id>
-			<dd>
-				<br /> <input type=submit value=Add>
-
+				<select name=country> {% for country in countries %}
+					<option value="{{country.0}}" name="countryid">{{country.1}}</option>
+					{% endfor %}
+				</select>
+			</dd>
+			<br />
+			<input type=submit value=Add>
 		</dl>
 	</form>
 	{% endif %}
 	<p>
+	<dt>
+		Search:
+		<form action="/userManagement" method=post>
+			<dd>
+				<input type=text name=search>
+			</dd>
+			<br /> <input type=submit value=Search>
+		</form>
+	</dt>
+	</p>
+	<p>
 		<b>User List</b>
 	</p>
 	<p>
-
 	<table border=1>
 		<tr>
 			<th>Name</th>
 			<th>Age</th>
 			<th>E-Mail</th>
+			<th>Password</th>
 			<th>Auth</th>
 			<th>Country</th>
 			<th>Update</th>
@@ -93,6 +135,7 @@
 			<td>{{ user.2 }}</td>
 			<td>{{ user.3 }}</td>
 			<td>{{ user.4 }}</td>
+			<td>{{ user.5 }}</td>
 			<td>
 				<form action="/updateUser" method=post>
 					<input type=text name=email value={{user.2}} hidden="true">
@@ -109,6 +152,7 @@
 		{% endfor %}
 	</table>
 	</p>
+	{% endif %}
 	{% endblock %}
 
 </body>

@@ -45,12 +45,13 @@
 						<li><a href="{{ url_for('coaches') }}"><span>Coaches</span></a></li>
 						<li><a href="{{ url_for('referees') }}"><span>Referees</span></a></li>
 						<li class='last'><a href="{{ url_for('pool_list') }}"><span>Pools</span></a></li>
+					</ul></li>
+				<li class='active'><a href="{{ url_for('statistics') }}"><span>Statistics</span></a>
+				<li class='has-sub'><a href='#'><span>Emin</span></a>
+					<ul>
 						<li><a href="{{ url_for('leagues')}}"><span>Leagues</span></a></li>
 						<li><a href="{{ url_for('countries')}}"><span>Countries</span></a></li>
 						<li><a href="{{ url_for('messages')}}"><span>Messages</span></a></li>
-						<li><a href="{{ url_for('teams')}}"><span>Teams</span></a></li>
-						<li><a href="{{ url_for('matches')}}"><span>Matches</span></a></li>
-						<li><a href="{{ url_for('competition')}}"><span>Competition</span></a></li>
 					</ul></li>
 				<li class='has-sub'><a href='#'><span>About</span></a>
 					<ul>
