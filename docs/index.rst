@@ -1,17 +1,17 @@
 Welcome to itucsdb1505's documentation!
 =======================================
 
-:Team: Team Name
+:Team: itucsdb1505 - Water Polo
 
 :Members:
 
-   * Member 1
+   * Emre EROĞLU
    * Member 2
    * Member 3
    * Member 4
    * Member 5
 
-**project description goes here (a few paragraphs)**
+
 Water Polo
 
 Our project is a fixture management tool for Water Polo.
