@@ -1,5 +1,5 @@
-Welcome to itucsdb's documentation!
-===================================
+Welcome to itucsdb1505's documentation!
+=======================================
 
 :Team: Team Name
 
@@ -12,6 +12,14 @@ Welcome to itucsdb's documentation!
    * Member 5
 
 **project description goes here (a few paragraphs)**
+Water Polo
+
+Our project is a fixture management tool for Water Polo.
+
+In this project we tried to make traceable World Wide Water Polo matches, tournements, clubs, teams, players and other relevant information.
+
+Since this is a student project, it has seperated explanations for sub parts of web site.
+
 
 Contents:
 
