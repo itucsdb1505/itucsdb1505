@@ -5,7 +5,7 @@ Welcome to itucsdb1505's documentation!
 
 :Members:
 
-   * Member 1
+   * Emre EROĞLU
    * Member 2
    * Member 3
    * Member 4
