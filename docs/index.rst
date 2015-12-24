@@ -21,6 +21,7 @@ In this project we tried to make traceable World Wide Water Polo matches, tourne
 Since this is a student project, it has seperated explanations for sub parts of web site.
 
 
+
 Contents:
 
 .. toctree::
