@@ -1180,7 +1180,7 @@ def edit_message(id):
         cursor = connection.cursor()
         query = """SELECT TITLE, MAIL, MESSAGE FROM MESSAGES WHERE ID=""" + id + """;"""
         cursor.execute(query)
-        title, phone, mail, message = cursor.fetchone()
+        title, mail, message = cursor.fetchone()
         connection.close()
         return render_template('edit_message.html', current_time=now.ctime(),id=id, title=title , mail=mail, message=message)
 
