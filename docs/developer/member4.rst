@@ -2,8 +2,8 @@ Parts Implemented by İhsan HALICI
 =================================
 
 
-1.Code and Database Definitions
-*******************************
+Code and Database Definitions
+*****************************
 
 1.1 Database Definitions
 ------------------------
@@ -89,8 +89,8 @@ def searchCompetition():
 
 
 
-2.TABLE EXPLANATIONS
-********************
+TABLE EXPLANATIONS
+******************
 
 2.1 TEAMS TABLE EXPLANATIONS
 ----------------------------
