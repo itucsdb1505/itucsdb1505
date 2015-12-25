@@ -70,7 +70,7 @@ Delete Operation
 
 By clicking **Delete** button for coach *Matt Biondi*, he will be removed from coach table as following;
    .. figure:: coachDelete2.png
-      :scale: 5100 %
+      :scale: 100 %
       :alt: map to buried treasure
 
 
