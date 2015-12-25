@@ -6,7 +6,7 @@ Welcome to itucsdb1505's documentation!
 :Members:
 
    * Emre EROĞLU
-   * Member 2
+   * Nurullah TOPALOĞLU
    * Emin OCAK
    * Member 4
    * Member 5
