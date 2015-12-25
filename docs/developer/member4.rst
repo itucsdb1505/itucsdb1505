@@ -20,69 +20,71 @@ Parts Implemented by İhsan HALICI
 1.2 PYTHON CODE EXPLANATIONS
 ----------------------------
 
+.. code
+
 def teams():
-**this is the definition of the teams table**
-**and it goes the teams.html here**
+  **this is the definition of the teams table**
+  **and it goes the teams.html here**
 
 def addTeam():
-**we insert a new team to the database here**
+  **we insert a new team to the database here**
 
 def deleteTeam():
-**we delete the row from the database here**
+  **we delete the row from the database here**
 
 def edit_Team():
-**we update the values here**
+  **we update the values here**
 
 def update_Team():
-**this code block is used for the update operations, it goes to the team_update.html file**
+  **this code block is used for the update operations, it goes to the team_update.html file**
 
 def searchTeam():
- **with this code block we can search strings**
- **and it goes the team_search.html here**
+  **with this code block we can search strings**
+  **and it goes the team_search.html here**
 
 
 
 def matches():
-**this is the definition of the matches table**
-**and it goes the matches.html here**
+  **this is the definition of the matches table**
+  **and it goes the matches.html here**
 
 def addMatches():
-**we insert a new match to the database here**
+  **we insert a new match to the database here**
 
 def deleteMatches():
-**we delete the row from the database here**
+  **we delete the row from the database here**
 
 def edit_Matches():
-**we update the values here**
+  **we update the values here**
 
 def update_Matches():
-**this code block is used for the update operations, it goes to the matches_update.html file**
+  **this code block is used for the update operations, it goes to the matches_update.html file**
 
 def searchMatches():
-**with this code block we can search strings**
-**and it goes the matches_search.html here**
+  **with this code block we can search strings**
+  **and it goes the matches_search.html here**
 
 
 
 def competition():
-**this is the definition of the competition table**
-**and it goes the competition.html here**
+  **this is the definition of the competition table**
+  **and it goes the competition.html here**
 
 def addCompetition():
-**we insert a new competition to the database here**
+  **we insert a new competition to the database here**
 
 def deleteCompetition():
-**we delete the row from the database here**
+  **we delete the row from the database here**
 
 def edit_Competition():
-**we update the values here**
+  **we update the values here**
 
 def update_Competition():
-**this code block is used for the update operations, it goes to the competition_update.html file**
+  **this code block is used for the update operations, it goes to the competition_update.html file**
 
 def searchCompetition():
-**with this code block we can search strings**
-**and it goes the competition_search.html here**
+  **with this code block we can search strings**
+  **and it goes the competition_search.html here**
 
 
 
