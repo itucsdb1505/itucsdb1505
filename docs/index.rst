@@ -13,6 +13,7 @@ Welcome to itucsdb1505's documentation!
 
 
 Water Polo
+----------
 
 Our project is a fixture management tool for Water Polo.
 
