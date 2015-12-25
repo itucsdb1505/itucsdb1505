@@ -2,9 +2,6 @@ Parts Implemented by İhsan HALICI
 =================================
 
 
-DEVELOPER EXPLANATIONS OF THE TEAMS, MATCHES AND COMPETITION TABLES
-###################################################################
-
 1.Code and Database Definitions
 *******************************
 
