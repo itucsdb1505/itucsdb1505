@@ -49,7 +49,8 @@ SQL Statement that initializes the Players Table:
       FIELD TEXT,
       GOAL INT);
 
-      ALTER TABLE PLAYERS ADD CONSTRAINT FK_PLAYERS_COUNTRIES FOREIGN KEY (NATION) REFERENCES COUNTRIES (ID) ON DELETE SET NULL ON UPDATE CASCADE;
+      ALTER TABLE PLAYERS ADD CONSTRAINT FK_PLAYERS_COUNTRIES FOREIGN KEY (NATION)
+      REFERENCES COUNTRIES (ID) ON DELETE SET NULL ON UPDATE CASCADE;
 
 Since *Players(Nation)* is referenced from *Countries(id)* and it is *ON DELETE SET NULL ON UPDATE CASCADE*, whenever a country is deleted, it will be *NULL*
 
@@ -87,7 +88,8 @@ SQL Statement that initializes the Coaches Table:
       NATION INT,
       TEAM TEXT);
 
-      ALTER TABLE COACHES ADD CONSTRAINT FK_COACHES_COUNTRIES FOREIGN KEY (NATION) REFERENCES COUNTRIES (ID) ON DELETE SET NULL ON UPDATE CASCADE;
+      ALTER TABLE COACHES ADD CONSTRAINT FK_COACHES_COUNTRIES FOREIGN KEY (NATION)
+      REFERENCES COUNTRIES (ID) ON DELETE SET NULL ON UPDATE CASCADE;
 
 Since *Coaches(Nation)* is referenced from *Countries(Id)* and it is *ON DELETE SET NULL ON UPDATE CASCADE*, whenever a country is deleted, it will be *NULL*
 
@@ -125,7 +127,8 @@ SQL Statement that initializes the Referees Table:
       LEAGUE INT,
       CITY TEXT);
 
-      ALTER TABLE REFEREES ADD CONSTRAINT FK_REFEREES_LEAGUES FOREIGN KEY (LEAGUE) REFERENCES LEAGUES   (ID) ON DELETE SET NULL ON UPDATE CASCADE;
+      ALTER TABLE REFEREES ADD CONSTRAINT FK_REFEREES_LEAGUES FOREIGN KEY (LEAGUE)
+      REFERENCES LEAGUES   (ID) ON DELETE SET NULL ON UPDATE CASCADE;
 
 Since *Referees(League)* is referenced from *Leagues(Id)* and it is *ON DELETE SET NULL ON UPDATE CASCADE*, whenever a league is deleted, it will be *NULL*
 
@@ -142,7 +145,9 @@ Since *Referees(League)* is referenced from *Leagues(Id)* and it is *ON DELETE S
           now = datetime.datetime.now()
           connection = psycopg2.connect(app.config['dsn'])
           cursor = connection.cursor()
-          query = """select players.id, players.name, players.surname, players.age, countries.name, players.team, players.field, players.goal from PLAYERS left join countries on players.nation = countries.id;"""
+          query = """select players.id, players.name, players.surname, players.age,"""
+                   + """countries.name, players.team, players.field, players.goal from"""
+                   + """PLAYERS left join countries on players.nation = countries.id;"""
           cursor.execute(query)
           playerListAsTuple = cursor.fetchall()
           playerListAsList = []
@@ -154,7 +159,8 @@ Since *Referees(League)* is referenced from *Leagues(Id)* and it is *ON DELETE S
           countryListAsList = []
           for country in countryListAsTuple:
               countryListAsList.append(list(country))
-          return render_template('players.html', playerList=playerListAsList, current_time=now.ctime(), countryList=countryListAsList)
+          return render_template('players.html', playerList=playerListAsList,
+           current_time=now.ctime(), countryList=countryListAsList)
 
 Above code is the definiton of the players table. First, all columns of players table is selected and added to 'playersListAsTuple'. Since 'Nation' is foreign key referenced to Countries table, it is also selected and added to 'countryListAsTuple'. Then created tuples are passed to 'players.html' file and all players are listed.
 
@@ -172,7 +178,9 @@ Above code is the definiton of the players table. First, all columns of players 
          goal = request.form['goal']
          connection = psycopg2.connect(app.config['dsn'])
          cursor = connection.cursor()
-         cursor.execute("INSERT INTO PLAYERS (name,surname, age, nation, team, field, goal) VALUES (%s,%s, %s, %s, %s, %s, %s)", (name, surname, age, nation, team, field, goal))
+         cursor.execute("INSERT INTO PLAYERS (name,surname, age, nation, team, field,"
+                        + "goal) VALUES (%s,%s, %s, %s, %s, %s, %s)",
+                         (name, surname, age, nation, team, field, goal))
          connection.commit()
          connection.close()
          return redirect('/players')
@@ -203,7 +211,8 @@ Deletes a player from players table by finding it with its unique id.
            connection = psycopg2.connect(app.config['dsn'])
            cursor = connection.cursor()
            id = request.form['id']
-           query = """select id, name, surname, age, nation, team, field, goal from players where id='""" + id + """';"""
+           query = """select id, name, surname, age, nation, team, field, goal from players"""
+                      + """where id='""" + id + """';"""
            cursor.execute(query)
            update = list(cursor.fetchall()[0])
            cursor.execute("SELECT * FROM COUNTRIES ORDER BY NAME;")
@@ -212,7 +221,8 @@ Deletes a player from players table by finding it with its unique id.
            for country in countryListAsTuple:
                countryListAsList.append(list(country))
            connection.close()
-           return render_template('player_update.html', current_time=now.ctime(), updatedlist=update, countryList=countryListAsList)
+           return render_template('player_update.html', current_time=now.ctime(),
+                           updatedlist=update, countryList=countryListAsList)
 Above code first gets the information of desired player to be updated according its unique id and sends it to 'player_update.html' file.
 
    .. code-block:: python
@@ -229,7 +239,10 @@ Above code first gets the information of desired player to be updated according 
            goal = request.form['goal']
            connection = psycopg2.connect(app.config['dsn'])
            cursor = connection.cursor()
-           query = """UPDATE PLAYERS SET NAME='""" + name + """', SURNAME='""" + surname +"""', AGE=""" + age + """,NATION=""" + nation + """,TEAM='""" + team + """', FIELD='""" + field + """', GOAL=""" + goal + """ where ID=""" + id + """;"""
+           query = """UPDATE PLAYERS SET NAME='""" + name + """', SURNAME='"""
+                   + surname +"""', AGE=""" + age + """,NATION=""" + nation
+                   + """,TEAM='""" + team + """', FIELD='""" + field
+                   + """', GOAL=""" + goal + """ where ID=""" + id + """;"""
            cursor.execute(query)
            connection.commit()
            connection.close()
@@ -246,14 +259,16 @@ Selected player information is updated and new data is send to the Database.
               now = datetime.datetime.now()
               connection = psycopg2.connect(app.config['dsn'])
               cursor = connection.cursor()
-              query="""SELECT * FROM PLAYERS WHERE (NAME LIKE '%""" + search + """%');"""
+              query="""SELECT * FROM PLAYERS WHERE (NAME LIKE '%""" + search +
+                         """%');"""
               cursor.execute(query)
               playerListAsTuple = cursor.fetchall()
               connection.close()
               playerListAsList = []
               for player in playerListAsTuple:
                   playerListAsList.append(list(player))
-              return render_template('player_search.html', playerList=playerListAsList, current_time=now.ctime())
+              return render_template('player_search.html',
+                      playerList=playerListAsList, current_time=now.ctime())
 Searches a player object in DB by its name using %LIKE% and returns the matches in a list.
 
 2.2 Coaches Table Operations
@@ -266,7 +281,8 @@ Searches a player object in DB by its name using %LIKE% and returns the matches 
           now = datetime.datetime.now()
           connection = psycopg2.connect(app.config['dsn'])
           cursor = connection.cursor()
-          query = """select coaches.id, coaches.name, coaches.surname, countries.name, coaches.team from COACHES left join COUNTRIES on coaches.nation = countries.id;"""
+          query = """select coaches.id, coaches.name, coaches.surname, countries.name,"""
+          + """coaches.team from COACHES left join COUNTRIES on coaches.nation = countries.id;"""
           cursor.execute(query)
           coachListAsTuple = cursor.fetchall()
           coachListAsList = []
@@ -279,7 +295,8 @@ Searches a player object in DB by its name using %LIKE% and returns the matches 
           for country in countryListAsTuple:
               countryListAsList.append(list(country))
 
-          return render_template('coaches.html', coachList=coachListAsList, current_time=now.ctime(), countryList=countryListAsList)
+          return render_template('coaches.html', coachList=coachListAsList,
+           current_time=now.ctime(), countryList=countryListAsList)
 Above code holds the list of all coaches in DB and display them as a list on *coaches.html* file. First all data of coaches are selected and kept in coachListAsList, then countries are selected and kept in countryListAslist. They are all pass to the hmtl file.
 
 * Add
@@ -293,7 +310,8 @@ Above code holds the list of all coaches in DB and display them as a list on *co
           team = request.form['team']
           connection = psycopg2.connect(app.config['dsn'])
           cursor = connection.cursor()
-          cursor.execute("INSERT INTO COACHES (name,surname, nation, team) VALUES (%s, %s, %s, %s)", (name, surname, nation, team))
+          cursor.execute("INSERT INTO COACHES (name,surname, nation, team)"
+                     + "VALUES (%s, %s, %s, %s)", (name, surname, nation, team))
           connection.commit()
           connection.close()
           return redirect('/coaches')
@@ -324,7 +342,8 @@ Deletes a coach from Db using its uniqu id.
               connection = psycopg2.connect(app.config['dsn'])
               cursor = connection.cursor()
               id = request.form['id']
-              query = """select id, name, surname, nation, team from COACHES where id='""" + id + """';"""
+              query = """select id, name, surname, nation, team from"""
+                       + """COACHES where id='""" + id + """';"""
               cursor.execute(query)
               update = list(cursor.fetchall()[0])
               cursor.execute("SELECT * FROM COUNTRIES ORDER BY NAME;")
@@ -333,7 +352,8 @@ Deletes a coach from Db using its uniqu id.
               countryListAsList = []
               for country in countryListAsTuple:
                   countryListAsList.append(list(country))
-              return render_template('coach_update.html', current_time=now.ctime(), updatedlist=update, countryList=countryListAsList)
+              return render_template('coach_update.html', current_time=now.ctime(),
+                               updatedlist=update, countryList=countryListAsList)
 Above code first gets the information of desired coach to be updated according its unique id and sends it to 'coach_update.html' file.
 
    .. code-block:: python
@@ -347,7 +367,9 @@ Above code first gets the information of desired coach to be updated according i
               team = request.form['team']
               connection = psycopg2.connect(app.config['dsn'])
               cursor = connection.cursor()
-              query = """UPDATE COACHES SET NAME='""" + name + """' ,SURNAME='""" +surname+ """', NATION='""" + nation + """',TEAM='""" + team + """' where ID=""" + id + """;"""
+              query = """UPDATE COACHES SET NAME='""" + name + """' ,SURNAME='"""
+                      + surname + """', NATION='""" + nation + """',TEAM='"""
+                      + team + """' where ID=""" + id + """;"""
               cursor.execute(query)
               connection.commit()
               connection.close()
@@ -371,7 +393,8 @@ Selected coach information is updated and new data is send to the Database.
               coachListAsList = []
               for coach in coachListAsTuple:
                   coachListAsList.append(list(coach))
-              return render_template('coach_search.html', coachList=coachListAsList, current_time=now.ctime())
+              return render_template('coach_search.html', coachList=coachListAsList,
+                                      current_time=now.ctime())
 Searches a coach object in DB by its name using %LIKE% and returns the matches in a list.
 
 2.3 Referees Table Operations
@@ -384,7 +407,8 @@ Searches a coach object in DB by its name using %LIKE% and returns the matches i
           now = datetime.datetime.now()
           connection = psycopg2.connect(app.config['dsn'])
           cursor = connection.cursor()
-          query = """select referees.id, referees.name, referees.surname, leagues.name, referees.city from REFEREES left join leagues on referees.league = leagues.id;"""
+          query = """select referees.id, referees.name, referees.surname, leagues.name,"""
+          + """referees.city from REFEREES left join leagues on referees.league = leagues.id;"""
           cursor.execute(query)
           refereeListAsTuple = cursor.fetchall()
           refereeListAsList = []
@@ -396,7 +420,8 @@ Searches a coach object in DB by its name using %LIKE% and returns the matches i
           leagueListAsList = []
           for league in leagueListAsTuple:
               leagueListAsList.append(list(league))
-          return render_template('referees.html', refereeList=refereeListAsList, current_time=now.ctime(), leagueList=leagueListAsList)
+          return render_template('referees.html', refereeList=refereeListAsList,
+                         current_time=now.ctime(), leagueList=leagueListAsList)
 Lists all referees in the Database. Since *Referees(league)* is foreign key, all leagues are kept in leagueListAsList and sends to *referees.html* file.
 
 * Add
@@ -410,7 +435,8 @@ Lists all referees in the Database. Since *Referees(league)* is foreign key, all
               city = request.form['city']
               connection = psycopg2.connect(app.config['dsn'])
               cursor = connection.cursor()
-              cursor.execute("INSERT INTO REFEREES (name,surname, league, city) VALUES (%s,%s, %s, %s)", (name, surname, league, city))
+              cursor.execute("INSERT INTO REFEREES (name,surname, league, city)"
+                        + "VALUES (%s,%s, %s, %s)", (name, surname, league, city))
               connection.commit()
               connection.close()
               return redirect('/referees')
@@ -441,7 +467,8 @@ Deletes a referee from Db using its uniqu id.
               connection = psycopg2.connect(app.config['dsn'])
               cursor = connection.cursor()
               id = request.form['id']
-              query = """select id, name, surname, league, city from REFEREES where id='""" + id + """';"""
+              query = """select id, name, surname, league, city from REFEREES"""
+                      + """where id='""" + id + """';"""
               cursor.execute(query)
               update = list(cursor.fetchall()[0])
               cursor.execute("SELECT * FROM LEAGUES ORDER BY NAME;")
@@ -450,7 +477,8 @@ Deletes a referee from Db using its uniqu id.
               leagueListAsList = []
               for league in leagueListAsTuple:
                   leagueListAsList.append(list(league))
-              return render_template('referee_update.html', current_time=now.ctime(), updatedlist=update, leagueList=leagueListAsList)
+              return render_template('referee_update.html', current_time=now.ctime(),
+                                     updatedlist=update, leagueList=leagueListAsList)
 First gets the information of desired referee to be updated according its unique id and sends it to 'referee_update.html' file.
 
     .. code-block:: python
@@ -464,7 +492,9 @@ First gets the information of desired referee to be updated according its unique
               city = request.form['city']
               connection = psycopg2.connect(app.config['dsn'])
               cursor = connection.cursor()
-              query = """UPDATE REFEREES SET NAME='""" + name + """' ,SURNAME='""" +surname+ """', LEAGUE='""" + league + """',CITY='""" + city + """' where ID=""" + id + """;"""
+              query = """UPDATE REFEREES SET NAME='""" + name + """' ,SURNAME='"""
+                      + surname+ """', LEAGUE='""" + league + """',CITY='""" + city
+                      + """' where ID=""" + id + """;"""
               cursor.execute(query)
               connection.commit()
               connection.close()
@@ -488,7 +518,8 @@ Selected referee information is updated and new data is send to the Database.
               refereeListAsList = []
               for referee in refereeListAsTuple:
                   refereeListAsList.append(list(referee))
-              return render_template('referee_search.html', refereeList=refereeListAsList, current_time=now.ctime())
+              return render_template('referee_search.html', refereeList=refereeListAsList,
+                                     current_time=now.ctime())
 Searches a referee object in DB by its name using %LIKE% and returns the matches in a list.
 
 
