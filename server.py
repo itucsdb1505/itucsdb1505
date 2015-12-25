@@ -516,27 +516,23 @@ def pool_search():
         return redirect('/Pools')
 
 
-@app.route('/UpdatePool', methods=['GET','POST'])
+@app.route('/UpdatePool', methods=['POST'])
 def pool_update():
-    if request.method == 'GET':
-        now = datetime.datetime.now()
-        return render_template('pool_update.html', current_time=now.ctime())
-    else:
-        try:
-            connection = psycopg2.connect(app.config['dsn'])
-            cursor=connection.cursor()
-            name = request.form['name']
-            countryid = request.form['countryid']
-            capacity = request.form['capacity']
-            built = request.form['built']
-            poolid=request.form['poolid']
-            query = """update pool set name='""" + name + """',country_id=""" + countryid + """,capacity=""" + capacity + """,built=""" + built + """ where id=""" + poolid + """;"""
-            cursor.execute(query)
-            connection.commit()
-            connection.close()
-            return redirect('/Pools')
-        except:
-            return redirect('/Pools')
+    try:
+        connection = psycopg2.connect(app.config['dsn'])
+        cursor=connection.cursor()
+        name = request.form['name']
+        countryid = request.form['countryid']
+        capacity = request.form['capacity']
+        built = request.form['built']
+        poolid=request.form['poolid']
+        query = """update pool set name='""" + name + """',country_id=""" + countryid + """,capacity=""" + capacity + """,built=""" + built + """ where id=""" + poolid + """;"""
+        cursor.execute(query)
+        connection.commit()
+        connection.close()
+        return redirect('/Pools')
+    except:
+        return redirect('/Pools')
 
 @app.route('/SearchStat' , methods=['POST'])
 def stat_search():
