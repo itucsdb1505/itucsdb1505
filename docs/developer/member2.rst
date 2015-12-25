@@ -1,11 +1,11 @@
 Parts Implemented by Nurullah Topaloğlu
 =======================================
-1 TABLES
-~~~~~~~~
+TABLES
+~~~~~~
 This part explains how Players, Coaches and Referees tables are structured and what operations can run on them.
 
-1.1 Players Table
------------------
+Players Table
+-------------
 * Attributes of the Players Table.
 +---------+--------+-------------+-------------+----------------+
 | Name    | Type   | Primary Key | Foreign Key | Auto Increment |
@@ -54,8 +54,8 @@ SQL Statement that initializes the Players Table:
 
 Since *Players(Nation)* is referenced from *Countries(id)* and it is *ON DELETE SET NULL ON UPDATE CASCADE*, whenever a country is deleted, it will be *NULL*
 
-1.2 Coaches Table
------------------
+Coaches Table
+-------------
 * Attributes of the Coaches Table.
 +---------+--------+-------------+-------------+----------------+
 | Name    | Type   | Primary Key | Foreign Key | Auto Increment |
@@ -93,8 +93,8 @@ SQL Statement that initializes the Coaches Table:
 
 Since *Coaches(Nation)* is referenced from *Countries(Id)* and it is *ON DELETE SET NULL ON UPDATE CASCADE*, whenever a country is deleted, it will be *NULL*
 
-1.3 Referees Table
-------------------
+Referees Table
+--------------
 * Attributes of the Referees Table.
 +---------+--------+-------------+-------------+----------------+
 | Name    | Type   | Primary Key | Foreign Key | Auto Increment |
@@ -132,11 +132,11 @@ SQL Statement that initializes the Referees Table:
 
 Since *Referees(League)* is referenced from *Leagues(Id)* and it is *ON DELETE SET NULL ON UPDATE CASCADE*, whenever a league is deleted, it will be *NULL*
 
-2 TABLE OPERATIONS (Add/Delete/Update/Search)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TABLE OPERATIONS (Add/Delete/Update/Search)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2.1 Players Table Operations
-----------------------------
+Players Table Operations
+------------------------
 
    .. code-block:: python
 
@@ -271,8 +271,8 @@ Selected player information is updated and new data is send to the Database.
                       playerList=playerListAsList, current_time=now.ctime())
 Searches a player object in DB by its name using %LIKE% and returns the matches in a list.
 
-2.2 Coaches Table Operations
-----------------------------
+Coaches Table Operations
+------------------------
 
    .. code-block:: python
 
@@ -397,8 +397,8 @@ Selected coach information is updated and new data is send to the Database.
                                       current_time=now.ctime())
 Searches a coach object in DB by its name using %LIKE% and returns the matches in a list.
 
-2.3 Referees Table Operations
------------------------------
+Referees Table Operations
+-------------------------
 
    .. code-block:: python
 

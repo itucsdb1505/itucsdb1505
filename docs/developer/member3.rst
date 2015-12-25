@@ -1,11 +1,11 @@
 Parts Implemented by Emin OCAK
 ==============================
-1 TABLES
-~~~~~~~~
+TABLES
+~~~~~~
 * This part explains how Leagues, Countries and Messages tables are structured and what operations can run on them.
 
-1.1 Leagues Table
------------------
+Leagues Table
+-------------
 
    .. csv-table:: Leagues Table
       :header: "Name", "Type", "Not Null", "Foreign Key", "Primary Key"
@@ -29,8 +29,8 @@ Parts Implemented by Emin OCAK
 
 * *NATION* references the *COUNTRIES* table and it is executed by **ON DELETE CASCADE ON UPDATE CASCADE**.
 
-1.2 Countries Table
--------------------
+Countries Table
+---------------
 
    .. csv-table:: Countries Table
       :header: "Name", "Type", "Not Null", "Foreign Key", "Primary Key"
@@ -53,8 +53,8 @@ Parts Implemented by Emin OCAK
 
 * It does not require any foreign key since it stores independent data.
 
-1.3 Messages Table
-------------------
+Messages Table
+--------------
 
    .. csv-table:: Messages Table
       :header: "Name", "Type", "Not Null", "Foreign Key", "Primary Key"
@@ -77,11 +77,11 @@ Parts Implemented by Emin OCAK
 
 * It does not require any foreign key since it stores independent data.
 
-2 TABLE OPERATIONS
-~~~~~~~~~~~~~~~~~~
+TABLE OPERATIONS
+~~~~~~~~~~~~~~~~
 
-2.1 Leagues Table
------------------
+Leagues Table
+-------------
 
 **List of leagues in leagues table**
    .. code-block:: python
@@ -203,8 +203,8 @@ Parts Implemented by Emin OCAK
 
 * With the data will be updated according to the id's, it is gone to "*edit_league.html*" page. Again, a second query is executed for the drop-down list. After completion, data are taken by **post** method to *"update_league"*. Here, after the update is performed, it is gone to the *"leagues.html"* page.
 
-2.2 Countries Table
--------------------
+Countries Table
+---------------
 
 **List of countries in countries table**
    .. code-block:: python
@@ -312,8 +312,8 @@ Parts Implemented by Emin OCAK
 
 * With the data will be updated according to the id's, it is gone to "*edit_country.html*" page. Again, a second query is executed for the drop-down list. After completion, data are taken by **post** method to *"update_country"*. Here, after the update is performed, it is gone to the *"countries.html"* page.
 
-2.3 Messages Table
-------------------
+Messages Table
+--------------
 
 **List of messages in messages table**
    .. code-block:: python

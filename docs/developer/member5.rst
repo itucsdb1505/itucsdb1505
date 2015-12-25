@@ -1,9 +1,9 @@
-1.2.2.5  Parts Implemented by Caghan Caglar
-===========================================
-1.2.2.5.1  Tables
------------------
-1.2.2.5.1.1  Pool Table
------------------------
+Parts Implemented by Caghan Caglar
+==================================
+Tables
+~~~~~~
+Pool Table
+----------
 Pool Table consists of 5 attributes.
 
    .. figure:: pooltable.png
@@ -31,8 +31,8 @@ Pool Table consists of 5 attributes.
    ALTER TABLE POOL ADD CONSTRAINT FK_POOL_COUNTRIES FOREIGN KEY (COUNTRY_ID)
                REFERENCES COUNTRIES (ID) ON DELETE CASCADE ON UPDATE CASCADE;
 
-1.2.2.5.1.2  Stats Table
-------------------------
+Stats Table
+-----------
 Stats Table consists of 6 attributes.
 
    .. figure:: statstable.png
@@ -64,10 +64,10 @@ Stats Table consists of 6 attributes.
    ALTER TABLE STATS ADD CONSTRAINT FK_STATS_LEAGUES FOREIGN KEY (LEAGUE_ID)
                REFERENCES LEAGUES (ID) ON DELETE CASCADE ON UPDATE CASCADE;
 
-1.2.2.5.2   Table Operations
-============================
-1.2.2.5.2.1 Pool Page
----------------------
+Table Operations
+~~~~~~~~~~~~~~~~
+Pool Page
+---------
 There are 2 'Post' method possibilities for Pool page. Since this page initially lists the pools, update and delete options are available at the beginning. These options are coded in the pools.html file with values 'deletePoolbyid' and 'updatePoolbyid'. If one of these values are sended in the form necessary sql querry is done properly. If these values are not in form value then it is obvious that 'Get' method is used, so all datas of the pools in database is fetched and sended to the pools.html file for listing operation.
 This kind of implementation of 'Get' method prevents the failures for the case of Update and Delete button clicks without any radio option selected.
 
@@ -215,8 +215,8 @@ At Update Pool page, html design is in same form as Pool Adding page except this
        except:
            return redirect('/Pools')
 
-1.2.2.5.2.2 Statistic Page
---------------------------
+Statistic Page
+--------------
 Statistics page initialy takes league lists from league table for selection option in 'statistics.html' file. After the 2 selection is made by user, these values posted to the same page. Values at the html file are assigned to the variables for sql queries from the join of Stats and Players tables. Players that satisfies selection constraints listed according to the stat type (goal,assist or save) in decreasing order.
 Delete and update operations serves as almost same way as described in the Pool page.
 
