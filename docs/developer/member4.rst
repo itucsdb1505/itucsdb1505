@@ -5,8 +5,11 @@ Parts Implemented by İhsan HALICI
 DEVELOPER EXPLANATIONS OF THE TEAMS, MATCHES AND COMPETITION TABLES
 ###################################################################
 
-1.Database Definitions
-**********************
+1.Code and Database Definitions
+*******************************
+
+1.1 Database Definitions
+------------------------
    .. code-block:: python
 
       CREATE TABLE TEAMS(ID SERIAL PRIMARY KEY, NAME VARCHAR(50) NOT NULL, FOUNDATION_YEAR INT NOT NULL, COLOURS VARCHAR(50), LEAGUE INT NOT NULL, COUNTRY INT NOT NULL);
@@ -17,52 +20,8 @@ DEVELOPER EXPLANATIONS OF THE TEAMS, MATCHES AND COMPETITION TABLES
 **League and Country variables are defined as integer. Becaues they are referenced from the Leagues and Countries Tables.**
 **And ID of the Lagues and Countries table is referenced, so they are defined as integer.**
 
-2.TEAMS TABLE EXPLANATIONS
-**************************
-Teams Table includes the columns below
-
-ID (SERIAL PRIMARY KEY)
-NAME (VARCHAR(50))
-FOUNDATION_YEAR (INT)
-COLOURS (VARCHAR(50))
-LEAGUE (INT)
-COUNTRY (INT)
-
-   .. figure:: teams.png
-
-   Teams Table
-
-
-3.MATCHES TABLE EXPLANATIONS
-****************************
-Matches Table includes the columns below
-
-ID (SERIAL PRIMARY KEY)
-HOME (VARCHAR(50))
-AWAY (VARCHAR(50))
-REFEREE (VARCHAR(50))
-LEAGUE (INT)
-
-   .. figure:: matches.png
-
-   Matches Table
-
-
-4.COMPETITION TABLE EXPLANATIONS
-********************************
-Competition Table includes the columns below
-
-ID (SERIAL PRIMARY KEY)
-NAME (VARCHAR(100))
-TYPE (VARCHAR(50))
-
-   .. figure:: competition.png
-
-   Competition Table
-
-
-5.PYTHON CODE EXPLANATIONS
-**************************
+1.2 PYTHON CODE EXPLANATIONS
+----------------------------
 
 def teams():
 ** this is the definition of the teams table**
@@ -127,5 +86,54 @@ def update_Competition():
 def searchCompetition():
 ** with this code block we can search strings**
 ** and it goes the competition_search.html here**
+
+
+
+
+2.TABLE EXPLANATIONS
+********************
+
+2.1 TEAMS TABLE EXPLANATIONS
+----------------------------
+Teams Table includes the columns below
+
+ID (SERIAL PRIMARY KEY)
+NAME (VARCHAR(50))
+FOUNDATION_YEAR (INT)
+COLOURS (VARCHAR(50))
+LEAGUE (INT)
+COUNTRY (INT)
+
+   .. figure:: teams.png
+
+   Teams Table
+
+
+2.2 MATCHES TABLE EXPLANATIONS
+------------------------------
+Matches Table includes the columns below
+
+ID (SERIAL PRIMARY KEY)
+HOME (VARCHAR(50))
+AWAY (VARCHAR(50))
+REFEREE (VARCHAR(50))
+LEAGUE (INT)
+
+   .. figure:: matches.png
+
+   Matches Table
+
+
+2.3 COMPETITION TABLE EXPLANATIONS
+----------------------------------
+Competition Table includes the columns below
+
+ID (SERIAL PRIMARY KEY)
+NAME (VARCHAR(100))
+TYPE (VARCHAR(50))
+
+   .. figure:: competition.png
+
+   Competition Table
 
 
