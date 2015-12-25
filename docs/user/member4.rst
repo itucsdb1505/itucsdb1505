@@ -9,7 +9,6 @@ They can also add team, delete team and update a team. But we can come back to t
  .. figure:: teams.png
       :width: 100 %
       :align: center
-      :height: 250px
       :alt: teams list
 
       List teams table
@@ -23,7 +22,6 @@ But we can come back to the initial values with INITIALIZE DB.
    .. figure:: matches.png
       :width: 100 %
       :align: center
-      :height: 250px
       :alt: matches list
 
       List matches table
@@ -37,7 +35,6 @@ They can do all operations(add,delete,update,search). But we can come back to th
    .. figure:: competition.png
       :width: 100 %
       :align: center
-      :height: 250px
       :alt: competition list
 
       List competition table

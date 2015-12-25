@@ -7,7 +7,6 @@ List Leagues Table
    .. figure:: leagues.png
       :width: 100 %
       :align: center
-      :height: 250px
       :alt: leagues list
 
       List leagues table
@@ -28,7 +27,6 @@ Delete and Update League
    .. figure:: delete_edit_league.png
       :width: 100 %
       :align: center
-      :height: 150px
       :alt: delete or update league from leagues table
 
       Delete and Update League
@@ -49,7 +47,6 @@ Search League
    .. figure:: search_league.png
       :width: 100 %
       :align: center
-      :height: 150px
       :alt: search league
 
       Search League
@@ -62,7 +59,6 @@ List Countries Table
    .. figure:: countries.png
       :width: 100 %
       :align: center
-      :height: 250px
       :alt: countries list
 
       List countries table
@@ -92,7 +88,6 @@ Search Country
    .. figure:: search_country.png
       :width: 100 %
       :align: center
-      :height: 250px
       :alt: search country
 
       Search Country
@@ -104,7 +99,6 @@ List Messages Table
    .. figure:: messages.png
       :width: 100 %
       :align: center
-      :height: 300px
       :alt: messages list
 
       List messages table
@@ -125,7 +119,6 @@ Search Message
    .. figure:: search_message.png
       :width: 100 %
       :align: center
-      :height: 250px
       :alt: search message
 
       Search Message
