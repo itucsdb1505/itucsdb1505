@@ -1,14 +1,8 @@
 Developer Guide
 ===============
-E/R diagram
-~~~~~~~~~~~
-
-.. figure:: erdplus-diagram.png
-      :scale: 80 %
-      :alt: E/R diagram
 
 .. toctree::
-
+   e-r
    member1
    member2
    member3
