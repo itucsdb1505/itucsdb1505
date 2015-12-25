@@ -36,7 +36,8 @@ Players Table
 * *goal* holds number of goals that player has scored.
 
 SQL Statement that initializes the Players Table:
-   .. code-block:: python
+
+.. code-block:: python
 
       DROP TABLE IF EXISTS PLAYERS;
       CREATE TABLE PLAYERS(
@@ -78,7 +79,8 @@ Coaches Table
 
 
 SQL Statement that initializes the Coaches Table:
-   .. code-block:: python
+
+.. code-block:: python
 
       DROP TABLE IF EXISTS COACHES;
       CREATE TABLE COACHES(
@@ -117,7 +119,8 @@ Referees Table
 
 
 SQL Statement that initializes the Referees Table:
-   .. code-block:: python
+
+.. code-block:: python
 
       DROP TABLE IF EXISTS REFEREES;
       CREATE TABLE REFEREES(
@@ -138,7 +141,7 @@ TABLE OPERATIONS (Add/Delete/Update/Search)
 Players Table Operations
 ------------------------
 
-   .. code-block:: python
+.. code-block:: python
 
        @app.route('/players')
        def players():
@@ -165,7 +168,8 @@ Players Table Operations
 Above code is the definiton of the players table. First, all columns of players table is selected and added to 'playersListAsTuple'. Since 'Nation' is foreign key referenced to Countries table, it is also selected and added to 'countryListAsTuple'. Then created tuples are passed to 'players.html' file and all players are listed.
 
 * Add
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/addPlayer' , methods=['GET','POST'])
       def addPlayer():
@@ -187,7 +191,8 @@ Above code is the definiton of the players table. First, all columns of players 
 Above code adds a player object to the Database according to entered data.
 
 * Delete
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/deletePlayer' , methods=['POST'])
       def deletePlayer():
@@ -202,7 +207,8 @@ Above code adds a player object to the Database according to entered data.
 Deletes a player from players table by finding it with its unique id.
 
 * Update
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/updatePlayer' , methods=['POST'])
       def updatePlayer():
@@ -225,7 +231,7 @@ Deletes a player from players table by finding it with its unique id.
                            updatedlist=update, countryList=countryListAsList)
 Above code first gets the information of desired player to be updated according its unique id and sends it to 'player_update.html' file.
 
-   .. code-block:: python
+.. code-block:: python
 
       @app.route('/update_Player' , methods=['POST'])
       def update_Player():
@@ -250,7 +256,8 @@ Above code first gets the information of desired player to be updated according 
 Selected player information is updated and new data is send to the Database.
 
 * Search
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/searchPlayer' , methods=['POST'])
       def searchPlayer():
@@ -274,7 +281,7 @@ Searches a player object in DB by its name using %LIKE% and returns the matches 
 Coaches Table Operations
 ------------------------
 
-   .. code-block:: python
+.. code-block:: python
 
       @app.route('/coaches')
       def coaches():
@@ -300,7 +307,8 @@ Coaches Table Operations
 Above code holds the list of all coaches in DB and display them as a list on *coaches.html* file. First all data of coaches are selected and kept in coachListAsList, then countries are selected and kept in countryListAslist. They are all pass to the hmtl file.
 
 * Add
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/addCoach' , methods=['POST'])
       def addCoach():
@@ -318,7 +326,8 @@ Above code holds the list of all coaches in DB and display them as a list on *co
 Adds a new coach object to the DB.
 
 * Delete
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/deleteCoach' , methods=['POST'])
       def deleteCoach():
@@ -333,7 +342,8 @@ Adds a new coach object to the DB.
 Deletes a coach from Db using its uniqu id.
 
 * Update
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/updateCoach' , methods=['POST'])
       def updateCoach():
@@ -356,7 +366,7 @@ Deletes a coach from Db using its uniqu id.
                                updatedlist=update, countryList=countryListAsList)
 Above code first gets the information of desired coach to be updated according its unique id and sends it to 'coach_update.html' file.
 
-   .. code-block:: python
+.. code-block:: python
 
       @app.route('/update_Coach' , methods=['POST'])
       def update_Coach():
@@ -377,7 +387,8 @@ Above code first gets the information of desired coach to be updated according i
 Selected coach information is updated and new data is send to the Database.
 
 * Search
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/searchCoach' , methods=['POST'])
       def searchCoach():
@@ -400,7 +411,7 @@ Searches a coach object in DB by its name using %LIKE% and returns the matches i
 Referees Table Operations
 -------------------------
 
-   .. code-block:: python
+.. code-block:: python
 
       @app.route('/referees')
       def referees():
@@ -425,7 +436,8 @@ Referees Table Operations
 Lists all referees in the Database. Since *Referees(league)* is foreign key, all leagues are kept in leagueListAsList and sends to *referees.html* file.
 
 * Add
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/addReferee' , methods=['GET','POST'])
       def addReferee():
@@ -443,7 +455,8 @@ Lists all referees in the Database. Since *Referees(league)* is foreign key, all
 Adds a new referee object to the Db.
 
 * Delete
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/deleteReferee' , methods=['POST'])
       def deleteReferee():
@@ -458,7 +471,8 @@ Adds a new referee object to the Db.
 Deletes a referee from Db using its uniqu id.
 
 * Update
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/updateReferee' , methods=['POST'])
       def updateReferee():
@@ -481,7 +495,7 @@ Deletes a referee from Db using its uniqu id.
                                      updatedlist=update, leagueList=leagueListAsList)
 First gets the information of desired referee to be updated according its unique id and sends it to 'referee_update.html' file.
 
-    .. code-block:: python
+.. code-block:: python
 
       @app.route('/update_Referee' , methods=['POST'])
       def update_Referee():
@@ -502,7 +516,8 @@ First gets the information of desired referee to be updated according its unique
 Selected referee information is updated and new data is send to the Database.
 
 * Search
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/searchReferee' , methods=['POST'])
       def searchReferee():

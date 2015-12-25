@@ -8,7 +8,7 @@ Initialization operation is executing initialDB.sql file and committing it to da
 **This class helps initialization of the database.**
 **Parameters: initiateDatabase takes app as parameter. It gives us to connection information.**
 
-   .. code-block:: python
+.. code-block:: python
 
       import psycopg2
       import sys
@@ -78,7 +78,9 @@ User class is extended from Flasks UserMixin class.
 
 class User(UserMixin):
 
-..code    def __init__(self, id):
+.. code
+
+    def __init__(self, id):
       **Gets id of user and fills user instance wit own data.**
 
     def is_active(self):
@@ -92,51 +94,51 @@ class User(UserMixin):
     def get_auth(self):
       **returns authentication level which mentioned in database design section.**
 
-**unauthorized_callback function provides url fix for after login**
-@login_manager.unauthorized_handler
-def unauthorized_callback():
-    return redirect('/login?next=' + request.path)
+   **unauthorized_callback function provides url fix for after login**
+   @login_manager.unauthorized_handler
+   def unauthorized_callback():
+       return redirect('/login?next=' + request.path)
 
-**login manager uses @login_manager.user_loader annotation for start session**
-@login_manager.user_loader
-def load_user(user_id):
-    return User(int(user_id))
+   **login manager uses @login_manager.user_loader annotation for start session**
+   @login_manager.user_loader
+   def load_user(user_id):
+       return User(int(user_id))
 
 
-def login():
-   **Gets user credentials as POST data and redirects home page or login page in order to credentials trueness.**
+   def login():
+      **Gets user credentials as POST data and redirects home page or login page in order to credentials trueness.**
 
-def logout():
-   **Redirects home page.**
+   def logout():
+      **Redirects home page.**
 
-def home():
-   **Opens home page. -> home.html**
+   def home():
+      **Opens home page. -> home.html**
 
-def userManagement():
-   **Opens User Management Page. -> userManagement.html**
-   **This function is login required. You cannot use it without authorized user.**
-   **Lists user list on the botton of page.**
-   **This function can get GET and POST data, if it gets search variable as POST data it lists only search results.**
+   def userManagement():
+      **Opens User Management Page. -> userManagement.html**
+      **This function is login required. You cannot use it without authorized user.**
+      **Lists user list on the botton of page.**
+      **This function can get GET and POST data, if it gets search variable as POST data it lists only search results.**
 
-def addUser():
-   **This function inserts user to table it gets POST data as user information.**
-   **It is called from userManagement page.**
+   def addUser():
+      **This function inserts user to table it gets POST data as user information.**
+      **It is called from userManagement page.**
 
-def userUpdate():
-   **This function updates usert to table it gets POST data as user information.**
-   **It is called from userManagement page.**
+   def userUpdate():
+      **This function updates usert to table it gets POST data as user information.**
+      **It is called from userManagement page.**
 
-def deleteUser():
-   **This function deletes user from database.**
+   def deleteUser():
+      **This function deletes user from database.**
 
-def register():
-   **Inserts user to database.**
-   **It called from user register page.**
+   def register():
+      **Inserts user to database.**
+      **It called from user register page.**
 
-def registerPage(errors=None):
-   **Opens register.html **
-   **Makes back-end data validation for user registration.**
-   **Takes errors parameter for validation.**
+   def registerPage(errors=None):
+      **Opens register.html **
+      **Makes back-end data validation for user registration.**
+      **Takes errors parameter for validation.**
 
 
 News Management

@@ -7,7 +7,7 @@ TABLES
 Leagues Table
 -------------
 
-   .. csv-table:: Leagues Table
+.. csv-table:: Leagues Table
       :header: "Name", "Type", "Not Null", "Foreign Key", "Primary Key"
       :widths: 40, 40, 20, 30, 30
 
@@ -17,7 +17,8 @@ Leagues Table
       "CLASSIFICATION", "INT", 1, 0, 0
 
 **Sql statement that initialize the leagues table:**
-   .. code-block:: python
+
+.. code-block:: python
 
       DROP TABLE IF EXISTS LEAGUES;
       CREATE TABLE LEAGUES(
@@ -32,7 +33,7 @@ Leagues Table
 Countries Table
 ---------------
 
-   .. csv-table:: Countries Table
+.. csv-table:: Countries Table
       :header: "Name", "Type", "Not Null", "Foreign Key", "Primary Key"
       :widths: 40, 40, 20, 30, 30
 
@@ -42,7 +43,8 @@ Countries Table
       "COORDINATES", "FLOAT", 0, 0, 0
 
 **Sql statement that initialize the countries table:**
-   .. code-block:: python
+
+.. code-block:: python
 
       DROP TABLE IF EXISTS COUNTRIES;
       CREATE TABLE COUNTRIES(
@@ -56,7 +58,7 @@ Countries Table
 Messages Table
 --------------
 
-   .. csv-table:: Messages Table
+.. csv-table:: Messages Table
       :header: "Name", "Type", "Not Null", "Foreign Key", "Primary Key"
       :widths: 40, 40, 20, 30, 30
 
@@ -66,7 +68,8 @@ Messages Table
       "MESSAGE", "FLOAT", 0, 0, 0
 
 **Sql statement that initialize the messages table:**
-   .. code-block:: python
+
+.. code-block:: python
 
       DROP TABLE IF EXISTS MESSAGES;
       CREATE TABLE MESSAGES(
@@ -84,7 +87,8 @@ Leagues Table
 -------------
 
 **List of leagues in leagues table**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/leagues' , methods=['GET', 'POST'])
       def leagues():
@@ -102,7 +106,8 @@ Leagues Table
 * This method is used for getting all leagues. After running the query, variables are stored in the *"leagueListAsTuple"* via *"fetchall()"* function, respectively. Then it placed into *"leagueListAsList"* individual, and eventually sent to *"leagues.html"* as a parameter.
 
 **add_league()**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/add_league' , methods=['GET', 'POST'])
       def add_league():
@@ -131,7 +136,8 @@ Leagues Table
 * This method adds a new league to *"Leagues"* table according to user’s inputs by sending sql statement to database. When the **get** method is called, country query is executed to fill the drop-down list. After filling in the required data format, **post** method is called. According to the information in the page *"add_league.html"*, data is received and the insertion process is performed. After all, go to the *"leagues.html"* page.
 
 **delete_league(id)**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/delete_league/<id>', methods=['GET'])
       def delete_league(id):
@@ -146,7 +152,8 @@ Leagues Table
 * This method deletes a league from database which is chosen by user as sending sql statement to the database. According to the ID number of records are deleted and returns to the *"leagues.html"* page.
 
 **search_league()**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/search_league' , methods=['POST'])
       def search_league():
@@ -166,7 +173,8 @@ Leagues Table
 * It works like the *"leagues.html"* page. In addition, it is working with the **%like%** method for the search operation. Here, the characters are always converted to lowercase provided precision. It also again works as *"leagues.html"* page, if it is executed with the  blank search.
 
 **edit_league(id)**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/edit_league/<id>', methods=['GET','POST'])
       def edit_league(id):
@@ -207,7 +215,8 @@ Countries Table
 ---------------
 
 **List of countries in countries table**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/countries' , methods=['GET', 'POST'])
       def countries():
@@ -225,7 +234,8 @@ Countries Table
 * After running the query, variables are stored in the *"countryListAsTuple"* via *"fetchall()"* function, respectively. Then it placed into *"countryListAsList"* individual, and eventually sent to *"countries.html"* as a parameter.
 
 **add_country()**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/add_country' , methods=['GET', 'POST'])
       def add_country():
@@ -246,7 +256,8 @@ Countries Table
 * When the **get** method is called, returns *"add_country.html"*. After filling in the required data format, **post** method is called. According to the information in the page *"add_country.html"*, data is received and the insertion process is performed. After all, go to the *"countries.html"* page.
 
 **delete_country(id)**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/delete_country/<id>', methods=['GET'])
       def delete_country(id):
@@ -261,7 +272,8 @@ Countries Table
 * According to the ID number of records are deleted and returns to the *"countries.html"* page.
 
 **search_country()**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/search_country' , methods=['POST'])
       def search_country():
@@ -281,7 +293,8 @@ Countries Table
 * It works like the *"countries.html"* page. In addition, it is working with the **%like%** method for the search operation. Here, the characters are always converted to lowercase provided precision. It also again works as *"countries.html"* page, if it is executed with the  blank search.
 
 **edit_country(id)**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/edit_country/<id>', methods=['GET','POST'])
       def edit_country(id):
@@ -316,7 +329,8 @@ Messages Table
 --------------
 
 **List of messages in messages table**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/messages' , methods=['GET', 'POST'])
       def messages():
@@ -334,7 +348,8 @@ Messages Table
 * After running the query, variables are stored in the *"messageListAsTuple"* via *"fetchall()"* function, respectively. Then it placed into *"messageListAsList"* individual, and eventually sent to *"messages.html"* as a parameter.
 
 **add_message()**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/add_message' , methods=['POST'])
       def add_message():
@@ -351,7 +366,8 @@ Messages Table
 * Messages are added using a message board on the home page. After filling in the required data format, **post** method is called. After that, it is gone to the home page.
 
 **delete_message(id)**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/delete_message/<id>', methods=['GET'])
       def delete_message(id):
@@ -366,7 +382,8 @@ Messages Table
 * According to the ID number of records are deleted and returns to the *"messages.html"* page.
 
 **search_message()**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/search_message' , methods=['POST'])
       def search_message():
@@ -386,7 +403,8 @@ Messages Table
 * It works like the *"messages.html"* page. In addition, it is working with the **%like%** method for the search operation. Here, the characters are always converted to lowercase provided precision. It also again works as *"messages.html"* page, if it is executed with the blank search for title textbox.
 
 **edit_message(id)**
-   .. code-block:: python
+
+.. code-block:: python
 
       @app.route('/edit_message/<id>', methods=['GET','POST'])
       def edit_message(id):

@@ -5,7 +5,7 @@ _______
 List Leagues Table
 ******************
 
-   .. figure:: leagues.png
+.. figure:: leagues.png
       :scale: 100 %
       :align: center
       :alt: leagues list
@@ -16,7 +16,8 @@ List Leagues Table
 
 Add League
 **********
-   .. figure:: add_league.png
+
+.. figure:: add_league.png
       :scale: 100 %
       :align: center
       :alt: add league into leagues table
@@ -27,7 +28,8 @@ Add League
 
 Delete and Update League
 ************************
-   .. figure:: delete_edit_league.png
+
+.. figure:: delete_edit_league.png
       :width: 100 %
       :align: center
       :alt: delete or update league from leagues table
@@ -38,7 +40,8 @@ Delete and Update League
 
 Update League
 *************
-   .. figure:: update_league.png
+
+.. figure:: update_league.png
       :scale: 100 %
       :alt: update league
       :align: center
@@ -49,7 +52,8 @@ Update League
 
 Search League
 *************
-   .. figure:: search_league.png
+
+.. figure:: search_league.png
       :width: 100 %
       :align: center
       :alt: search league
@@ -62,7 +66,8 @@ Countries
 _________
 List Countries Table
 ********************
-   .. figure:: countries.png
+
+.. figure:: countries.png
       :width: 100 %
       :align: center
       :alt: countries list
@@ -73,7 +78,8 @@ List Countries Table
 
 Add Country
 ***********
-   .. figure:: add_country.png
+
+.. figure:: add_country.png
       :scale: 100 %
       :align: center
       :alt: add country into countries table
@@ -84,7 +90,8 @@ Add Country
 
 Update Country
 **************
-   .. figure:: update_country.png
+
+.. figure:: update_country.png
       :scale: 100 %
       :alt: update country
       :align: center
@@ -93,7 +100,8 @@ Update Country
 
 Search Country
 **************
-   .. figure:: search_country.png
+
+.. figure:: search_country.png
       :width: 100 %
       :align: center
       :alt: search country
@@ -104,7 +112,8 @@ Messages
 ________
 List Messages Table
 *******************
-   .. figure:: messages.png
+
+.. figure:: messages.png
       :width: 100 %
       :align: center
       :alt: messages list
@@ -115,7 +124,8 @@ List Messages Table
 
 Add Message
 ***********
-   .. figure:: add_message.png
+
+.. figure:: add_message.png
       :scale: 100 %
       :align: center
       :alt: add message into messages table
@@ -126,7 +136,8 @@ Add Message
 
 Search Message
 **************
-   .. figure:: search_message.png
+
+.. figure:: search_message.png
       :width: 100 %
       :align: center
       :alt: search message
