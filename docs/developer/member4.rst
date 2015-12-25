@@ -5,8 +5,8 @@ Parts Implemented by İhsan HALICI
 Code and Database Definitions
 *****************************
 
-1.1 Database Definitions
-------------------------
+Database Definitions
+--------------------
 
 .. code-block:: python
 
@@ -18,8 +18,8 @@ Code and Database Definitions
 **League and Country variables are defined as integer. Becaues they are referenced from the Leagues and Countries Tables.**
 **And ID of the Lagues and Countries table is referenced, so they are defined as integer.**
 
-1.2 PYTHON CODE EXPLANATIONS
-----------------------------
+PYTHON CODE EXPLANATIONS
+------------------------
 
 .. code
 
@@ -91,8 +91,8 @@ Code and Database Definitions
 TABLE EXPLANATIONS
 ******************
 
-2.1 TEAMS TABLE EXPLANATIONS
-----------------------------
+TEAMS TABLE EXPLANATIONS
+------------------------
 Teams Table includes the columns below
 
 ID (SERIAL PRIMARY KEY)
@@ -107,8 +107,8 @@ COUNTRY (INT)
    Teams Table
 
 
-2.2 MATCHES TABLE EXPLANATIONS
-------------------------------
+MATCHES TABLE EXPLANATIONS
+--------------------------
 Matches Table includes the columns below
 
 ID (SERIAL PRIMARY KEY)
@@ -122,8 +122,8 @@ LEAGUE (INT)
    Matches Table
 
 
-2.3 COMPETITION TABLE EXPLANATIONS
-----------------------------------
+COMPETITION TABLE EXPLANATIONS
+------------------------------
 Competition Table includes the columns below
 
 ID (SERIAL PRIMARY KEY)
