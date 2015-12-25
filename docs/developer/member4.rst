@@ -27,6 +27,9 @@ COLOURS (VARCHAR(50))
 LEAGUE (INT)
 COUNTRY (INT)
 
+.. figure:: teams.png
+
+   Teams Table
 
 
 3.MATCHES TABLE EXPLANATIONS
@@ -39,6 +42,10 @@ AWAY (VARCHAR(50))
 REFEREE (VARCHAR(50))
 LEAGUE (INT)
 
+.. figure:: matches.png
+
+   Matches Table
+
 
 4.COMPETITION TABLE EXPLANATIONS
 ********************************
@@ -47,6 +54,10 @@ Competition Table includes the columns below
 ID (SERIAL PRIMARY KEY)
 NAME (VARCHAR(100))
 TYPE (VARCHAR(50))
+
+.. figure:: competition.png
+
+   Competition Table
 
 
 5.PYTHON CODE EXPLANATIONS
