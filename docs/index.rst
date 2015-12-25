@@ -12,8 +12,7 @@ Welcome to itucsdb1505's documentation!
    * Çağhan ÇAĞLAR
 
 
-Water Polo
-----------
+**Water Polo**
 
 Our project is a fixture management tool for Water Polo.
 

@@ -2,7 +2,7 @@ Parts Implemented by Emin OCAK
 ==============================
 Leagues
 ~~~~~~~
-List leagues table
+List Leagues Table
 ------------------
    .. figure:: leagues.png
       :width: 100 %
@@ -57,7 +57,7 @@ Search League
 
 Countries
 ~~~~~~~~~
-List countries table
+List Countries Table
 --------------------
    .. figure:: countries.png
       :width: 100 %
@@ -66,7 +66,7 @@ List countries table
       :alt: countries list
 
       List countries table
-   Countries in the database is listed on this page as the same league table.
+* Countries in the database is listed on this page as the same league table.
 
 Add Country
 -----------
@@ -76,7 +76,7 @@ Add Country
       :alt: add country into countries table
 
       Add Country
-Adding page has also validation controls. Unlike the league table, even if coordinate textbox is empty, 0 is set as default.
+* Adding page has also validation controls. Unlike the league table, even if coordinate textbox is empty, 0 is set as default.
 
 Update Country
 --------------
@@ -99,7 +99,7 @@ Search Country
 
 Messages
 ~~~~~~~~
-List messages table
+List Messages Table
 -------------------
    .. figure:: messages.png
       :width: 100 %
@@ -108,7 +108,7 @@ List messages table
       :alt: messages list
 
       List messages table
-Messages can be displayed with the help of slider panel.
+* Messages can be displayed with the help of slider panel.
 
 Add Message
 -----------
@@ -118,7 +118,7 @@ Add Message
       :alt: add message into messages table
 
       Add Message
-Home page has a *"message panel"* to post the message. Here, *"delete all"* button is located to delete all of the written words. Also it has a *"send"* button to send message.
+* Home page has a *"message panel"* to post the message. Here, *"delete all"* button is located to delete all of the written words. Also it has a *"send"* button to send message.
 
 Search Message
 --------------
