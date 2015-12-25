@@ -2,7 +2,7 @@ Parts Implemented by Emre EROĞLU
 ================================
 
 Database Initialization
-=======================
+_______________________
 Initialization operation is executing initialDB.sql file and committing it to database.
 
 **This class helps initialization of the database.**
@@ -43,12 +43,12 @@ Initialization operation is executing initialDB.sql file and committing it to da
       **Sends example data to browser.**
 
 Login Management
-================
+________________
 
 flask-login appliacation is required for session management.
 
 Database Design For Users
--------------------------
+*************************
 
 CREATE DOMAIN AUTH VARCHAR(10) CHECK (VALUE IN ('u', 'm', 'a'));
 
@@ -64,7 +64,7 @@ AGE column was INT value I did not changed it when I made it DATE.
 Has foreign key with countries.
 
 Code Design For Users
----------------------
+*********************
 
 User Managements consist of 2 html files.
 
@@ -140,10 +140,10 @@ def registerPage(errors=None):
 
 
 News Management
-===============
+_______________
 
 Database Design For News
-------------------------
+************************
 
 CREATE TABLE NEWS(ID SERIAL PRIMARY KEY, TITLE CHAR(50), CONTENT TEXT, USER_ID INT);
 
@@ -152,7 +152,7 @@ It has PRIMARY KEY ID as SERIAL type.
 It has foreign key with users.
 
 Code Design For News
---------------------
+____________________
 
 News consists of 2 html files.
 
