@@ -20,7 +20,7 @@ Matches
 Here waterpolo funs can follow the all matches in the waterpolo leagues. They can do all operations(add,delete,update,search).
 But we can come back to the initial values with INITIALIZE DB.
 
-.. figure:: matches.png
+   .. figure:: matches.png
       :width: 100 %
       :align: center
       :height: 250px
@@ -34,7 +34,7 @@ Competition
 Here users can see the all competitions in the waterpolo environment. So, they learn the different types of tournament.
 They can do all operations(add,delete,update,search). But we can come back to the initial values with INITIALIZE DB.
 
-.. figure:: competition.png
+   .. figure:: competition.png
       :width: 100 %
       :align: center
       :height: 250px

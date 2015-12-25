@@ -6,7 +6,7 @@
 -----------------------
 Pool Table consists of 5 attributes.
 
-.. figure:: pooltable.png
+   .. figure:: pooltable.png
 
    Pool Table
 
@@ -22,7 +22,7 @@ Pool Table consists of 5 attributes.
 
 **Sql statement that initialize the Pool table:**
 
-.. code-block:: python
+   .. code-block:: python
 
    DROP TABLE IF EXISTS POOL;
    CREATE TABLE POOL(NAME VARCHAR(40) NOT NULL, COUNTRY_ID INT,
@@ -35,7 +35,7 @@ Pool Table consists of 5 attributes.
 ------------------------
 Stats Table consists of 6 attributes.
 
-.. figure:: statstable.png
+   .. figure:: statstable.png
 
    Stats Table
 
@@ -53,7 +53,7 @@ Stats Table consists of 6 attributes.
 
 **Sql statement that initialize the Stats table:**
 
-.. code-block:: python
+   .. code-block:: python
 
    DROP TABLE IF EXISTS STATS;
    CREATE TABLE STATS(PLAYER_ID INT,LEAGUE_ID INT, GOAL INT DEFAULT 0,
@@ -71,7 +71,7 @@ Stats Table consists of 6 attributes.
 There are 2 'Post' method possibilities for Pool page. Since this page initially lists the pools, update and delete options are available at the beginning. These options are coded in the pools.html file with values 'deletePoolbyid' and 'updatePoolbyid'. If one of these values are sended in the form necessary sql querry is done properly. If these values are not in form value then it is obvious that 'Get' method is used, so all datas of the pools in database is fetched and sended to the pools.html file for listing operation.
 This kind of implementation of 'Get' method prevents the failures for the case of Update and Delete button clicks without any radio option selected.
 
-.. code-block:: python
+   .. code-block:: python
 
    @app.route('/Pools', methods=['GET', 'POST'])
    def pool_list():
@@ -128,7 +128,7 @@ This kind of implementation of 'Get' method prevents the failures for the case o
 
 Search option in Pool page is implemented by making a query by taking keyword value within the search textbox as name attribute of the Pools. In order to prevent whole database listing of search with empty keyword is prevented by the control of the length of the keyword. After a succesful query, Pool page is rendered with the name constrainted datas in the database.
 
-.. code-block:: python
+   .. code-block:: python
 
    @app.route('/SearchPool' , methods=['POST'])
    def pool_search():
@@ -154,7 +154,7 @@ Search option in Pool page is implemented by making a query by taking keyword va
 
 At Add Pool page, country list is fetched from database and provided to user as selection option. After the input entering process of user is finished posted form values in html file are assigned to variables and proper sql query is made with these variables. Since try-catch blocks are used wrong queries are prevented and page is redirected if necessary.
 
-.. code-block:: python
+   .. code-block:: python
 
    @app.route('/AddPool', methods=['GET', 'POST'])
    def pool_edit():
@@ -193,7 +193,7 @@ At Add Pool page, country list is fetched from database and provided to user as 
 
 At Update Pool page, html design is in same form as Pool Adding page except this page takes the attribute values of the tuple that will be updated and fills the necessary parts automatically for making this page easy o use for user. When the form data is posted to this function, it makes an update query with the provided form data.
 
-.. code-block:: python
+   .. code-block:: python
 
    @app.route('/UpdatePool', methods=['POST'])
    def pool_update():
@@ -220,7 +220,7 @@ At Update Pool page, html design is in same form as Pool Adding page except this
 Statistics page initialy takes league lists from league table for selection option in 'statistics.html' file. After the 2 selection is made by user, these values posted to the same page. Values at the html file are assigned to the variables for sql queries from the join of Stats and Players tables. Players that satisfies selection constraints listed according to the stat type (goal,assist or save) in decreasing order.
 Delete and update operations serves as almost same way as described in the Pool page.
 
-.. code-block:: python
+   .. code-block:: python
 
    @app.route('/Statistic',methods=['GET', 'POST'])
    def statistics():
@@ -289,7 +289,7 @@ as name attribute of the Player. In order to prevent whole database listing of s
 vented by the control of the length of the keyword. After a succesful query, Statistic page is rendered with the name
 constrainted datas in the database.
 
-.. code-block:: python
+   .. code-block:: python
 
    @app.route('/SearchStat' , methods=['POST'])
    def stat_search():
@@ -316,7 +316,7 @@ At Update Statistic page, html design is in same form as Statistic Adding page e
 of the tuple that will be updated and fills the necessary parts automatically for making this page easy o use for
 user. When the form data is posted to this function, it makes an update query with the provided form data.
 
-.. code-block:: python
+   .. code-block:: python
 
    @app.route('/UpdateStats', methods=['GET', 'POST'])
    def stat_update():
@@ -344,7 +344,7 @@ entering process of user is finished posted form values in html file are assigne
 is made with these variables. Since try-catch blocks are used wrong queries are prevented and page is redirected
 if necessary.
 
-.. code-block:: python
+   .. code-block:: python
 
    @app.route('/AddStat', methods=['GET', 'POST'])
    def stat_add():

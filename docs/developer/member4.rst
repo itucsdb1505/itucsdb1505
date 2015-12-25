@@ -7,11 +7,11 @@ DEVELOPER EXPLANATIONS OF THE TEAMS, MATCHES AND COMPETITION TABLES
 
 1.Database Definitions
 **********************
-.. code-block:: python
+   .. code-block:: python
 
-CREATE TABLE TEAMS(ID SERIAL PRIMARY KEY, NAME VARCHAR(50) NOT NULL, FOUNDATION_YEAR INT NOT NULL, COLOURS VARCHAR(50), LEAGUE INT NOT NULL, COUNTRY INT NOT NULL);
-CREATE TABLE MATCHES(ID SERIAL PRIMARY KEY, HOME VARCHAR(50) NOT NULL, AWAY VARCHAR(50) NOT NULL, REFEREE VARCHAR(50), LEAGUE INT NOT NULL);
-CREATE TABLE COMPETITION(ID SERIAL PRIMARY KEY, NAME VARCHAR(100) NOT NULL, TYPE VARCHAR(50) NOT NULL);
+      CREATE TABLE TEAMS(ID SERIAL PRIMARY KEY, NAME VARCHAR(50) NOT NULL, FOUNDATION_YEAR INT NOT NULL, COLOURS VARCHAR(50), LEAGUE INT NOT NULL, COUNTRY INT NOT NULL);
+      CREATE TABLE MATCHES(ID SERIAL PRIMARY KEY, HOME VARCHAR(50) NOT NULL, AWAY VARCHAR(50) NOT NULL, REFEREE VARCHAR(50), LEAGUE INT NOT NULL);
+      CREATE TABLE COMPETITION(ID SERIAL PRIMARY KEY, NAME VARCHAR(100) NOT NULL, TYPE VARCHAR(50) NOT NULL);
 
 **Here ID SERIAL PRIMARY KEY definition is done for all tables. This does the increasing one-by-one order for the tuples.**
 **League and Country variables are defined as integer. Becaues they are referenced from the Leagues and Countries Tables.**
@@ -28,7 +28,7 @@ COLOURS (VARCHAR(50))
 LEAGUE (INT)
 COUNTRY (INT)
 
-.. figure:: teams.png
+   .. figure:: teams.png
 
    Teams Table
 
@@ -43,7 +43,7 @@ AWAY (VARCHAR(50))
 REFEREE (VARCHAR(50))
 LEAGUE (INT)
 
-.. figure:: matches.png
+   .. figure:: matches.png
 
    Matches Table
 
@@ -56,7 +56,7 @@ ID (SERIAL PRIMARY KEY)
 NAME (VARCHAR(100))
 TYPE (VARCHAR(50))
 
-.. figure:: competition.png
+   .. figure:: competition.png
 
    Competition Table
 
