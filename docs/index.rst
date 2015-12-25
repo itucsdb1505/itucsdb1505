@@ -8,8 +8,8 @@ Welcome to itucsdb1505's documentation!
    * Emre EROĞLU
    * Nurullah TOPALOĞLU
    * Emin OCAK
-   * Member 4
-   * Member 5
+   * İhsan HALICI
+   * Çağhan ÇAĞLAR
 
 
 Water Polo
